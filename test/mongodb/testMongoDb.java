@@ -1,5 +1,6 @@
 import com.mongodb.*;
 import com.mongodb.client.*;
+import org.bson.*;
 
 public class testMongoDb {
 
@@ -7,14 +8,14 @@ public class testMongoDb {
         try {
             MongoClient mongo = new MongoClient("localhost", 27017);
             MongoDatabase db = mongo.getDatabase("testchan");   
-            System.out.println("Connected");
+            MongoCollection<Document> coll = db.getCollection("labmember");
+            //MongoCollection<Document> collection = database.getCollection("test");
 
-            MongoIterable<String> colls = db.listCollectionNames();
-            MongoCursor<String> itr = colls.iterator();
-            System.out.print("COLLECTIONS: ");
-            for(String s : colls ){
-                System.out.println(" > > >" + s);
-            }
+            Document doc = new Document();
+            doc.append("name", "kitaba");
+            doc.append("team", "marshmallow-warriors");
+
+            coll.insertOne(doc);
 
             mongo.close();
         } catch (Exception e) {
