@@ -5,7 +5,7 @@ import jp.ac.oit.igakilab.labshop.member.MemberData;
 import jp.ac.oit.igakilab.labshop.webservice.forms.MemberDataForm;
 
 public class WebMemberManager {
-	WebMemberManager(){}
+	public WebMemberManager(){}
 
 	public boolean addMember(MemberDataForm form)
 	throws ExcuteFailedException{
@@ -13,6 +13,7 @@ public class WebMemberManager {
 		MemberDBController dbc = new MemberDBController();
 
 		if( dbc.isIdRegisted(data.getId()) ){
+			dbc.close();
 			throw new ExcuteFailedException("idがすでに登録されています");
 		}
 		boolean rs = dbc.addMember(data);
@@ -35,6 +36,7 @@ public class WebMemberManager {
 		MemberDBController dbc = new MemberDBController();
 
 		if( !dbc.isIdRegisted(form.getId()) ){
+			dbc.close();
 			throw new ExcuteFailedException("idが登録されていません");
 		}
 		boolean rs = dbc.updateMemberData(MemberDataForm.toMemberData(form));
@@ -48,6 +50,7 @@ public class WebMemberManager {
 		MemberDBController dbc = new MemberDBController();
 
 		if( !dbc.isIdRegisted(id) ){
+			dbc.close();
 			throw new ExcuteFailedException("idが登録されていません");
 		}
 		boolean rs = dbc.deleteMember(id);
@@ -61,6 +64,7 @@ public class WebMemberManager {
 		MemberDBController dbc = new MemberDBController();
 
 		if( !dbc.isIdRegisted(id) ){
+			dbc.close();
 			throw new ExcuteFailedException("idが登録されていません");
 		}
 

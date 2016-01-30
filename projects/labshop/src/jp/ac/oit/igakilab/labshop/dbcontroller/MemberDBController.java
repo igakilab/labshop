@@ -96,7 +96,8 @@ public class MemberDBController extends DBConnector{
 	}
 
 	public boolean updateMemberData(MemberData data){
-		UpdateResult result = collection.updateOne(
+		System.out.println(Filters.eq("id", data.getId()));
+		UpdateResult result = collection.replaceOne(
 			Filters.eq("id", data.getId()), toDocument(data));
 
 		return result.getMatchedCount() == 1;
