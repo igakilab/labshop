@@ -1,0 +1,7 @@
+jp.igakilab.labshop.
+	webservice
+	dbcontroller
+	item
+	shopping
+	stock
+	member
