@@ -12,8 +12,12 @@
     <create creator="new" javascript="WeightTransition">
       <param name="class" value="jp.ac.oit.igakilab.dwr.multiple.WeightTransition"/>
     </create>
+    <create creator="new" javascript="WebMemberManager">
+      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebMemberManager"/>
+    </create>
     <convert converter="bean" match="jp.ac.oit.igakilab.dwr.multiple.*" />
     <convert converter="exception" match="java.lang.Exception" />
     <convert converter="bean" match="java.lang.StackTraceElement"/>
+    <convert converter="bean" match="jp.ac.oit.igakilab.labshop.webservice.forms*"/>
   </allow>
 </dwr>
