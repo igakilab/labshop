@@ -1,0 +1,130 @@
+<html lang="ja">
+  <head>
+  	<title>ラボショップシステム</title>
+  	<meta charset="utf-8"/>
+    <script type="text/javascript" src="../dwr/engine.js"></script>
+    <script type="text/javascript" src="../dwr/util.js"></script>
+    <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.serialize.js"></script>
+    <script type="text/javascript" src="../dwr/interface/WebAccountManager.js"></script>
+    <script type="text/javascript">
+
+    $(function(){
+		
+    });
+
+    function updateAccountListTable(){
+    	var table = $("#account_list_table");
+
+    	table.empty();
+    	table.append(
+    		$("<tr></tr>")
+    			.append($("<th></th>").text("ID"))
+    			.append($("<th></th>").text("日時"))
+    			.append($("<th></th>").text("購入者ID"))
+    			.append($("<th></th>").text("商品ID"))
+    			.append($("<th></th>").text("購入価格"))
+    			.append($("<th></th>").text("取り消し"))
+    	);
+
+    	WebItemManager.getAllAccountList({
+    		callback: function(data){
+    			for(var i=0; i<data.length; i++){
+    				table.append(
+    					$("<tr></tr>")
+    						.append($("<td></td>").text(data[i].id))
+    						.append($("<td></td>").text(data[i].timestamp))
+    						.append($("<td></td>").text(data[i].memberId))
+    						.append($("<td></td>").text(data[i].itemId))
+    						.append($("<td></td>").text(data[i].sellPrice))
+    						.append($("<td></td>").append(
+    							$("<button></button>")
+    								.attr("type", "button")
+    								.attr("onclick", "deleteAccount(" + data[i].id + ")");
+    								.text("削除")
+    						))
+    				);
+    			}
+    		},
+    		errorHandler: function(msg){
+    			alert(msg);
+    		}
+    	});
+    }
+
+    function registAccount(){
+    	var formData = $('#account_info_form').serializeJson();
+    	console.log("input data(add): " + formData);
+
+    	WebAccountManager.addAccount(formData, {
+    		callback: function(data){
+    			if( data == null ){
+    				alert("登録に失敗しました");
+    				return;
+    			}
+    			var dataStr = "";
+    			dataStr += "id[" + data.id + "]";
+    			dataStr += "time[" + data.timestamp + "]";
+    			$("#message").text("登録が完了しました: " + dataStr);
+    		},
+    		errorHandler: function(msg){
+    			alert(msg);
+    		}
+    	});
+    }
+
+    function deleteAccount(int acc_id){
+    	WebAccountManager.deleteAccount(acc_id, {
+    		callback: function(rs){
+    			if( rs ) alert("削除が完了しました");
+    			else alert("不明なエラー");
+    		},
+    		errorHandler: function(msg){
+    			alert(msg);
+    		}
+    	});
+    }
+    </script>
+
+    <style>
+    td, th{
+    	background-color: #ccf;
+    	width: 200px;
+    }
+    </style>
+
+  </head>
+  <body>
+    <h3>井垣研 ラボショップシステム</h3>
+    <h1>伝票一覧</h1>
+    <hr/>
+
+	<p>伝票の記録を確認できます</p>
+
+	<h4>新規登録</h4>
+	<form id="account_info_form">
+	<table id="account_info_table">
+		<tr>
+		<th>購入者ID</th>
+		<th>商品ID</th>
+		<th>購入価格</th>
+		<th>登録ボタン</th>
+		</tr>
+		<tr>
+		<td style="text-align:center;"><input type="text" name="memberId" value=""/></td>
+		<td style="text-align:center;"><input type="text" name="itemId" value=""/></td>
+		<td style="text-align:center;"><input type="text" name="sellPrice" value=""/></td>
+		<td style="text-align:center;"><input type="button" value="登録" onclick="registAccount()"/></td>
+		</tr>
+	</table>
+	</form>
+
+	<div id="message" style="background-color:#cfc;">ここに出力</div>
+
+	<h4>伝票リスト</h4>
+	<table id="account_list_table"></table>
+
+
+
+  </body>
+</html>
