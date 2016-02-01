@@ -10,7 +10,7 @@
     <script type="text/javascript">
 
     $(function(){
-		
+		updateAccountListTable();
     });
 
     function updateAccountListTable(){
@@ -27,7 +27,7 @@
     			.append($("<th></th>").text("取り消し"))
     	);
 
-    	WebItemManager.getAllAccountList({
+    	WebAccountManager.getAllAccountList({
     		callback: function(data){
     			for(var i=0; i<data.length; i++){
     				table.append(
@@ -40,7 +40,7 @@
     						.append($("<td></td>").append(
     							$("<button></button>")
     								.attr("type", "button")
-    								.attr("onclick", "deleteAccount(" + data[i].id + ")");
+    								.attr("onclick", "deleteAccount(" + data[i].id + ")")
     								.text("削除")
     						))
     				);
@@ -66,6 +66,7 @@
     			dataStr += "id[" + data.id + "]";
     			dataStr += "time[" + data.timestamp + "]";
     			$("#message").text("登録が完了しました: " + dataStr);
+    			updateAccountListTable();
     		},
     		errorHandler: function(msg){
     			alert(msg);
@@ -73,11 +74,12 @@
     	});
     }
 
-    function deleteAccount(int acc_id){
+    function deleteAccount(acc_id){
     	WebAccountManager.deleteAccount(acc_id, {
     		callback: function(rs){
     			if( rs ) alert("削除が完了しました");
     			else alert("不明なエラー");
+    			updateAccountListTable();
     		},
     		errorHandler: function(msg){
     			alert(msg);
