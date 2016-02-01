@@ -18,6 +18,9 @@
     <create creator="new" javascript="WebItemManager">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebItemManager"/>
     </create>
+    <create creator="new" javascript="WebAccountManager">
+      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebAccountManager"/>
+    </create>
     <!-- テスト用 -->
     <create creator="new" javascript="TestDBCounter">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.TestDBCounter"/>

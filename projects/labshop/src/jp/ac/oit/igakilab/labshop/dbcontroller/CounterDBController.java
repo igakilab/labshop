@@ -108,6 +108,19 @@ public class CounterDBController extends DBConnector{
 		);
 	}
 
+	public int retrieveCounter(String key){
+		if( isKeyRegisted(key) ){
+			DBCounter counter = toDBCounter(
+				collection.find(Filters.eq("key", key)).first()
+			);
+
+			if( counter != null ){
+				return counter.getCounter();
+			}
+		}
+		return -1;
+	}
+
 	public int popCounter(String key){
 		if( isKeyRegisted(key) ){
 			DBCounter counter = toDBCounter(
@@ -120,7 +133,7 @@ public class CounterDBController extends DBConnector{
 			}
 			return tmp;
 		}
-		return 0;
+		return -1;
 	}
 
 	public void resetCounter(String key){

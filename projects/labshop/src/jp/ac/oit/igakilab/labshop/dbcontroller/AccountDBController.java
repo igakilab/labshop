@@ -23,6 +23,7 @@ public class AccountDBController extends DBConnector {
 	public static String COUNTER_KEY = "account";
 	public static int COUNTER_MIN = 10000000;
 	public static int COUNTER_MAX = 99999999;
+	public static int IDGEN_OVERFLOW = 1000;
 
 	/* static methods */
 	public static Document toDocument(AccountData data){
@@ -92,9 +93,12 @@ public class AccountDBController extends DBConnector {
 		return toAccountData(result);
 	}
 
-	public AccountData addAccount(AccountData acc, boolean auto_num){
+	public AccountData addAccount(AccountData acc, boolean auto_num, boolean auto_stamp){
 		if( auto_num ){
 			acc.setId(popCounter());
+		}
+		if( auto_stamp ){
+			acc.setTimestamp();
 		}
 		if( !isIdRegisted(acc.getId()) ){
 			collection.insertOne(toDocument(acc));
@@ -118,7 +122,14 @@ public class AccountDBController extends DBConnector {
 		return result.getDeletedCount() == 1;
 	}
 
-	public AccountData getItemById(int acc_id){
+	public AccountData publishUniqueIdAccount(){
+		AccountData acc = new AccountData();
+		acc.setId(popCounter());
+
+		return acc;
+	}
+
+	public AccountData getAccountById(int acc_id){
 		return toAccountData(
 			collection.find(Filters.eq("id", acc_id)).first()
 		);
@@ -144,13 +155,26 @@ public class AccountDBController extends DBConnector {
 
 	public int popCounter(){
 		CounterDBController cdb = new CounterDBController(this);
-		if( cdb.isKeyRegisted(COUNTER_KEY) ){
+		if( !cdb.isKeyRegisted(COUNTER_KEY) ){
 			refreshCounter();
 		}
 		int cnt = cdb.popCounter(COUNTER_KEY);
 		if( isIdRegisted(cnt) ){
 			refreshCounter();
 			cnt = cdb.popCounter(COUNTER_KEY);
+		}
+		return cnt;
+	}
+
+	public int retrieveCounter(){
+		CounterDBController cdb = new CounterDBController(this);
+		if( !cdb.isKeyRegisted(COUNTER_KEY) ){
+			refreshCounter();
+		}
+		int cnt = cdb.retrieveCounter(COUNTER_KEY);
+		if( isIdRegisted(cnt) ){
+			refreshCounter();
+			cnt = cdb.retrieveCounter(COUNTER_KEY);
 		}
 		return cnt;
 	}
