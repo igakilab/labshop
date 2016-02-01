@@ -149,7 +149,7 @@ public class AccountDBController extends DBConnector {
 		}
 
 		DBCounter counter = new DBCounter(
-			COUNTER_KEY, max_id, COUNTER_MIN, COUNTER_MAX);
+			COUNTER_KEY, max_id + 1, COUNTER_MIN, COUNTER_MAX);
 		cdb.upsertDBCounter(counter);
 	}
 
