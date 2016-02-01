@@ -22,7 +22,7 @@ public class DateAccountDBController extends AccountDBController {
 		return Filters.and(f_begin, f_end);
 	}
 
-	/*コンストラクタ*/
+	/* */
 	public DateAccountDBController(){
 		super();
 	}
