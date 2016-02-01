@@ -1,5 +1,6 @@
 package jp.ac.oit.igakilab.labshop.dbcontroller;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class CounterDBController extends DBConnector{
 			.append("key", cnt.getKey())
 			.append("counter", cnt.getCounter())
 			.append("minValue", cnt.getMinValue())
-			.append("maxValue", cnt.getMinValue());
+			.append("maxValue", cnt.getMaxValue());
 
 		return doc;
 	}
@@ -80,20 +81,6 @@ public class CounterDBController extends DBConnector{
 		return list;
 	}
 
-	public DBCounter getDBCounter(String key_val){
-		return toDBCounter(
-			collection.find(Filters.eq("key", key_val)).first()
-		);
-	}
-
-	public void upsertDBCounter(DBCounter counter){
-		if( isKeyRegisted(counter.getKey()) ){
-			collection.replaceOne(Filters.eq("key", counter.getKey()), toDocument(counter));
-		}else{
-			collection.insertOne(toDocument(counter));
-		}
-	}
-
 	public void createCounter(String key, int init_c, int min, int max){
 		if( !isKeyRegisted(key) ){
 			DBCounter counter = new DBCounter(key, init_c, min, max);
@@ -107,16 +94,29 @@ public class CounterDBController extends DBConnector{
 		}
 	}
 
+	public void upsertDBCounter(DBCounter counter){
+		if( isKeyRegisted(counter.getKey()) ){
+			collection.replaceOne(Filters.eq("key", counter.getKey()), toDocument(counter));
+		}else{
+			collection.insertOne(toDocument(counter));
+		}
+	}
+
+	public DBCounter getDBCounter(String key_val){
+		return toDBCounter(
+			collection.find(Filters.eq("key", key_val)).first()
+		);
+	}
+
 	public int popCounter(String key){
 		if( isKeyRegisted(key) ){
 			DBCounter counter = toDBCounter(
 				collection.findOneAndUpdate(Filters.eq("key", key), Updates.inc("counter", 1)));
-
 			int tmp = counter.getCounter();
 
-			if( tmp == counter.getMaxValue() ){
-				counter.reset();
-				upsertDBCounter(counter);
+			if( tmp >= counter.getMaxValue() ){
+				int min = counter.getMinValue();
+				collection.findOneAndUpdate(Filters.eq("key", key), Updates.set("counter", min));
 			}
 			return tmp;
 		}

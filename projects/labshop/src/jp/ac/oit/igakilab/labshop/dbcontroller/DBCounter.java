@@ -22,7 +22,7 @@ public class DBCounter {
 	public DBCounter(String key, int ic, int min, int max){
 		this();
 		setKey(key);
-		setCounter(ic);
+		setCounter(Math.max(min, Math.min(ic, max)));
 		setMinValue(min);
 		setMaxValue(max);
 	}

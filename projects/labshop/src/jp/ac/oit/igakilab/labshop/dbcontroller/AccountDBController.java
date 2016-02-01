@@ -57,16 +57,6 @@ public class AccountDBController extends DBConnector {
 		return datas;
 	}
 
-	public static int popCounter(DBConnector con){
-		CounterDBController dbc = new CounterDBController(con);
-		if( !dbc.isKeyRegisted(COUNTER_KEY) ){
-			int max_id = new AccountDBController(con).getIdMax();
-			dbc.createCounter(
-				COUNTER_KEY, Math.max(COUNTER_MIN, max_id), COUNTER_MIN, COUNTER_MAX);
-		}
-		return dbc.popCounter(COUNTER_KEY);
-	}
-
 	/* constructors */
 	private MongoCollection<Document> collection;
 
@@ -92,18 +82,8 @@ public class AccountDBController extends DBConnector {
 		}
 	}
 
-	public int getIdMax(){
-		Document id_max = collection.aggregate(
-			Collections.singletonList(
-				Aggregates.group(null, Accumulators.max("max_id", "$id"))
-			)
-		).first();
-
-		if( id_max != null ){
-			return id_max.getInteger("max_id", 0);
-		}else{
-			return 0;
-		}
+	public boolean isIdRegisted(int id_val){
+		return collection.count(Filters.eq("id", id_val)) > 0;
 	}
 
 	public List<AccountData> getAllAccountList(){
@@ -112,15 +92,26 @@ public class AccountDBController extends DBConnector {
 		return toAccountData(result);
 	}
 
-	public boolean updateItemData(AccountData data){
-		System.out.println(Filters.eq("id", data.getId()));
+	public AccountData addAccount(AccountData acc, boolean auto_num){
+		if( auto_num ){
+			acc.setId(popCounter());
+		}
+		if( !isIdRegisted(acc.getId()) ){
+			collection.insertOne(toDocument(acc));
+			return acc;
+		}else{
+			return null;
+		}
+	}
+
+	public boolean updateAccount(AccountData data){
 		UpdateResult result = collection.replaceOne(
 			Filters.eq("id", data.getId()), toDocument(data));
 
 		return result.getMatchedCount() == 1;
 	}
 
-	public boolean deleteMember(int acc_id){
+	public boolean deleteAccount(int acc_id){
 		DeleteResult result = collection.deleteOne(
 			Filters.eq("id", acc_id));
 
@@ -131,6 +122,37 @@ public class AccountDBController extends DBConnector {
 		return toAccountData(
 			collection.find(Filters.eq("id", acc_id)).first()
 		);
+	}
+
+	public void refreshCounter(){
+		CounterDBController cdb = new CounterDBController(this);
+		Document id_max_row = collection.aggregate(
+			Collections.singletonList(
+				Aggregates.group(null, Accumulators.max("max_id", "$id"))
+			)
+		).first();
+		int max_id = 0;
+		if( id_max_row != null ) max_id = id_max_row.getInteger("max_id", 0);
+		if( max_id >= COUNTER_MAX ){
+			System.err.println("FATAL: ID GENERATE ERROR (in accountdbcontroller)");
+		}
+
+		DBCounter counter = new DBCounter(
+			COUNTER_KEY, max_id, COUNTER_MIN, COUNTER_MAX);
+		cdb.upsertDBCounter(counter);
+	}
+
+	public int popCounter(){
+		CounterDBController cdb = new CounterDBController(this);
+		if( cdb.isKeyRegisted(COUNTER_KEY) ){
+			refreshCounter();
+		}
+		int cnt = cdb.popCounter(COUNTER_KEY);
+		if( isIdRegisted(cnt) ){
+			refreshCounter();
+			cnt = cdb.popCounter(COUNTER_KEY);
+		}
+		return cnt;
 	}
 
 	public MongoCollection<Document> getCollection(){
