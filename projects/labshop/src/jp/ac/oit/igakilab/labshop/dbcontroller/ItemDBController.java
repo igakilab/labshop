@@ -30,12 +30,14 @@ public class ItemDBController extends DBConnector {
 	}
 
 	public static ItemData toItemData(Document doc){
-		ItemData data = new ItemData(
-			doc.getInteger("id", 0), doc.getString("name"));
+		if( doc != null ){
+			ItemData data = new ItemData(
+				doc.getInteger("id", 0), doc.getString("name"));
+			data.setPrice(doc.getInteger("price", 0));
+			return data;
+		}
 
-		data.setPrice(doc.getInteger("price", 0));
-
-		return data;
+		return null;
 	}
 
 	public static List<ItemData> toItemData(FindIterable<Document> list){
@@ -81,6 +83,14 @@ public class ItemDBController extends DBConnector {
 		return toItemData(result);
 	}
 
+	public boolean addItem(ItemData data){
+		if( !isIdRegisted(data.getId()) ){
+			collection.insertOne(toDocument(data));
+			return true;
+		}
+		return false;
+	}
+
 	public boolean updateItemData(ItemData data){
 		System.out.println(Filters.eq("id", data.getId()));
 		UpdateResult result = collection.replaceOne(
@@ -89,7 +99,7 @@ public class ItemDBController extends DBConnector {
 		return result.getMatchedCount() == 1;
 	}
 
-	public boolean deleteMember(int item_id){
+	public boolean deleteItem(int item_id){
 		DeleteResult result = collection.deleteOne(
 			Filters.eq("id", item_id));
 
@@ -97,15 +107,9 @@ public class ItemDBController extends DBConnector {
 	}
 
 	public ItemData getItemById(int item_id){
-		FindIterable<Document> result =
-			collection.find(Filters.eq("id", item_id));
-
-		Document doc = result.iterator().tryNext();
-		if( doc != null ){
-			return toItemData(doc);
-		}else{
-			return null;
-		}
+		return toItemData(
+			collection.find(Filters.eq("id", item_id)).first()
+		);
 	}
 
 	public void close(){
