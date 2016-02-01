@@ -28,13 +28,16 @@ public class CounterDBController extends DBConnector{
 	}
 
 	public static DBCounter toDBCounter(Document doc){
-		DBCounter cnt = new DBCounter(
-			doc.getString("key"),
-			doc.getInteger("counter", 0),
-			doc.getInteger("minValue", 0),
-			doc.getInteger("maxValue", Integer.MAX_VALUE));
+		if( doc != null ){
+			DBCounter cnt = new DBCounter(
+				doc.getString("key"),
+				doc.getInteger("counter", 0),
+				doc.getInteger("minValue", 0),
+				doc.getInteger("maxValue", Integer.MAX_VALUE));
+			return cnt;
+		}
 
-		return cnt;
+		return null;
 	}
 
 	/* constructors */
@@ -78,14 +81,9 @@ public class CounterDBController extends DBConnector{
 	}
 
 	public DBCounter getDBCounter(String key_val){
-		FindIterable<Document> result = collection.find(Filters.eq("id", key_val));
-
-		Document doc = result.iterator().tryNext();
-		if( doc != null ){
-			return toDBCounter(doc);
-		}else{
-			return null;
-		}
+		return toDBCounter(
+			collection.find(Filters.eq("key", key_val)).first()
+		);
 	}
 
 	public void upsertDBCounter(DBCounter counter){

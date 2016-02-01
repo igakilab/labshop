@@ -1,17 +1,19 @@
 package jp.ac.oit.igakilab.labshop.dbcontroller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.bson.Document;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
-import jp.ac.oit.igakilab.labshop.item.ItemData;
 import jp.ac.oit.igakilab.labshop.shopping.AccountData;
 
 public class AccountDBController extends DBConnector {
@@ -36,15 +38,18 @@ public class AccountDBController extends DBConnector {
 	}
 
 	public static AccountData toAccountData(Document doc){
-		AccountData data = new AccountData(
-			doc.getInteger("id", 0), doc.getDate("timestamp"),
-			doc.getInteger("memberId", 0), doc.getInteger("itemId", 0),
-			doc.getInteger("sellPrice", 0));
+		if( doc != null ){
+			AccountData data = new AccountData(
+				doc.getInteger("id", 0), doc.getDate("timestamp"),
+				doc.getInteger("memberId", 0), doc.getInteger("itemId", 0),
+				doc.getInteger("sellPrice", 0));
+			return data;
+		}
 
-		return data;
+		return null;
 	}
 
-	public static List<AccountData> toItemData(FindIterable<Document> list){
+	public static List<AccountData> toAccountData(FindIterable<Document> list){
 		List<AccountData> datas = new ArrayList<AccountData>();
 		for(Document doc : list){
 			datas.add(toAccountData(doc));
@@ -52,11 +57,14 @@ public class AccountDBController extends DBConnector {
 		return datas;
 	}
 
-	public static int popCounter(DBConnector client){
-		CounterDBController cdb = new CounterDBController(client);
-		if( !cdb.isKeyRegisted(COUNTER_KEY) ){
-
+	public static int popCounter(DBConnector con){
+		CounterDBController dbc = new CounterDBController(con);
+		if( !dbc.isKeyRegisted(COUNTER_KEY) ){
+			int max_id = new AccountDBController(con).getIdMax();
+			dbc.createCounter(
+				COUNTER_KEY, Math.max(COUNTER_MIN, max_id), COUNTER_MIN, COUNTER_MAX);
 		}
+		return dbc.popCounter(COUNTER_KEY);
 	}
 
 	/* constructors */
@@ -84,17 +92,27 @@ public class AccountDBController extends DBConnector {
 		}
 	}
 
-	public void createCounter(){
+	public int getIdMax(){
+		Document id_max = collection.aggregate(
+			Collections.singletonList(
+				Aggregates.group(null, Accumulators.max("max_id", "$id"))
+			)
+		).first();
 
+		if( id_max != null ){
+			return id_max.getInteger("max_id", 0);
+		}else{
+			return 0;
+		}
 	}
 
-	public List<ItemData> getAllItemList(){
+	public List<AccountData> getAllAccountList(){
 		FindIterable<Document> result = collection.find();
 
-		return toItemData(result);
+		return toAccountData(result);
 	}
 
-	public boolean updateItemData(ItemData data){
+	public boolean updateItemData(AccountData data){
 		System.out.println(Filters.eq("id", data.getId()));
 		UpdateResult result = collection.replaceOne(
 			Filters.eq("id", data.getId()), toDocument(data));
@@ -102,23 +120,21 @@ public class AccountDBController extends DBConnector {
 		return result.getMatchedCount() == 1;
 	}
 
-	public boolean deleteMember(int item_id){
+	public boolean deleteMember(int acc_id){
 		DeleteResult result = collection.deleteOne(
-			Filters.eq("id", item_id));
+			Filters.eq("id", acc_id));
 
 		return result.getDeletedCount() == 1;
 	}
 
-	public ItemData getItemById(int item_id){
-		FindIterable<Document> result =
-			collection.find(Filters.eq("id", item_id));
+	public AccountData getItemById(int acc_id){
+		return toAccountData(
+			collection.find(Filters.eq("id", acc_id)).first()
+		);
+	}
 
-		Document doc = result.iterator().tryNext();
-		if( doc != null ){
-			return toItemData(doc);
-		}else{
-			return null;
-		}
+	public MongoCollection<Document> getCollection(){
+		return collection;
 	}
 
 	public void close(){
