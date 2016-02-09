@@ -142,10 +142,12 @@ public class AggregateAccountDB extends AccountDBController {
 
 	public List<HashMap<String, Integer>> getMemberChargeList(Bson filter){
 		AggregateIterable<Document> result;
-		result = getCollection().aggregate(Arrays.asList(
+		List<? extends Bson> query = Arrays.asList(
 			Aggregates.match(filter),
 			Aggregates.group("memberId", Accumulators.sum("sumPrice", "$sellPrice"))
-		));
+		);
+
+		result = getCollection().aggregate(query);
 
 		List<HashMap<String, Integer>> list = new ArrayList<HashMap<String, Integer>>();
 		for(Document doc : result){
@@ -153,6 +155,28 @@ public class AggregateAccountDB extends AccountDBController {
 			tmp.put("memberId", doc.getInteger("_id"));
 			tmp.put("sumPrice", doc.getInteger("sumPrice"));
 			list.add(tmp);
+		}
+
+		return list;
+	}
+
+	public List<HashMap<String, Integer>> getItemSalesList(Bson filter){
+		List<? extends Bson> query = Arrays.asList(
+			Aggregates.match(filter),
+			Aggregates.group("itemId", Arrays.asList(
+				Accumulators.sum("qty", 1),
+				Accumulators.sum("sumPrice", "$sellPrice")
+			))
+		);
+
+		AggregateIterable<Document> result = getCollection().aggregate(query);
+
+		List<HashMap<String, Integer>> list = new ArrayList<HashMap<String, Integer>>();
+		for(Document doc : result){
+			HashMap<String, Integer> tmp = new HashMap<String, Integer>();
+			tmp.put("itemId", doc.getInteger("_id"));
+			tmp.put("qty", doc.getInteger("qty"));
+			tmp.put("sumPrice", doc.getInteger("sumPrice"));
 		}
 
 		return list;
