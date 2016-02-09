@@ -2,7 +2,6 @@ package jp.ac.oit.igakilab.labshop.dbcontroller.extension;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,70 +19,6 @@ import jp.ac.oit.igakilab.labshop.dbcontroller.DBConnector;
 import jp.ac.oit.igakilab.labshop.shopping.AccountData;
 
 public class AggregateAccountDB extends AccountDBController {
-
-	public static Bson dateFilter(Calendar start, Calendar end){
-		Bson f_dstart = null;
-		Bson f_dend = null;
-		if( start != null ){
-			f_dstart = Filters.gte("timestamp", start);
-			if( end == null ){
-				return f_dstart;
-			}
-		}
-		if( end != null ){
-			f_dend = Filters.lte("timestamp", end);
-			if( start == null ){
-				return f_dend;
-			}
-		}
-		if( start != null && end != null ){
-			return Filters.and(f_dstart, f_dend);
-		}else{
-			return null;
-		}
-	}
-
-	public static Bson monthDateFilter(Calendar start, Calendar end){
-		Calendar tmp = Calendar.getInstance();
-		Bson f_mstart = null;
-		Bson f_mend = null;
-		if( start != null ){
-			tmp.clear();
-			tmp.set(start.get(Calendar.YEAR), start.get(Calendar.MONTH), 1);
-			f_mstart = Filters.gte("timestamp", tmp);
-			if( end == null ){
-				return f_mstart;
-			}
-		}
-		if( end != null ){
-			tmp.clear();
-			tmp.set(end.get(Calendar.YEAR), end.get(Calendar.MONTH + 1), 1);
-			tmp.add(Calendar.MONTH, 1);
-			f_mend = Filters.lt("timestamp", tmp);
-			if( start == null ){
-				return f_mend;
-			}
-		}
-		if( start != null && end != null ){
-			return Filters.and(f_mstart, f_mend);
-		}else{
-			return null;
-		}
-	}
-
-	public static Bson monthDateFilter(Calendar month){
-		return monthDateFilter(month, month);
-	}
-
-	public static Calendar monthDate(int year, int month){
-		Calendar tmp = Calendar.getInstance();
-		tmp.clear();
-		tmp.set(year, month, 1);
-		return tmp;
-	}
-
-
-
 	public AggregateAccountDB(){
 		super();
 	}
