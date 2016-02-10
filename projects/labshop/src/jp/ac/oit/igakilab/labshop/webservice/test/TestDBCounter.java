@@ -1,4 +1,4 @@
-package jp.ac.oit.igakilab.labshop.webservice;
+package jp.ac.oit.igakilab.labshop.webservice.test;
 
 import jp.ac.oit.igakilab.labshop.dbcontroller.CounterDBController;
 import jp.ac.oit.igakilab.labshop.dbcontroller.DBCounter;
