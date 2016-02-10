@@ -48,13 +48,13 @@ public class DateFilters {
 		Bson f_mstart = null;
 		Bson f_mend = null;
 		if( start != null ){
-			f_mstart = Filters.gte("timestamp", genMonthDate(start));
+			f_mstart = Filters.gte(field, genMonthDate(start));
 			if( end == null ){
 				return f_mstart;
 			}
 		}
 		if( end != null ){
-			f_mend = Filters.lt("timestamp", genMonthDate(end));
+			f_mend = Filters.lt(field, genMonthDate(end));
 			if( start == null ){
 				return f_mend;
 			}
