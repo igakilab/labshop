@@ -1,0 +1,115 @@
+<html lang="ja">
+  <head>
+  	<title>ラボショップシステム</title>
+  	<meta charset="utf-8"/>
+    <script type="text/javascript" src="../dwr/engine.js"></script>
+    <script type="text/javascript" src="../dwr/util.js"></script>
+    <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.serialize.js"></script>
+    <script type="text/javascript" src="../dwr/interface/TestAggregateAccount.js"></script>
+    <script type="text/javascript">
+
+    $(function(){
+    });
+
+    function setMemberPriceTable(){
+    	var target_year = $("#member_price_form_year").val();
+    	var target_month = $("#member_price_form_month").month();
+
+    	if( target_year < 1970 || target_year > 2016 ){
+    		alert("年の指定を確認して下さい");
+    		return;
+    	}
+    	if( target_month < 1 || target_month > 12 ){
+    		alert("月の指定を確認して下さい");
+    		return;
+    	}
+
+    	TestAggregateAccount.getMemberPriceList(target_year, target_month, {
+    		callback: function(ret){
+    			var table = $("#member_price_table");
+    			table.empty();
+    			table.append($("<tr></tr>")
+    				.append($("<th></th>").text("メンバーid"))
+    				.append($("<th></th>").text("請求金額"))
+    			);
+
+    			for(var i=0; i<ret.length; i++){
+    				table.append($("<tr></tr>")
+    					.append($("<td></td>").append(
+    						$("<a></a>")
+    							.attr("href", "javascript:void(0);")
+    							.attr("onclick", "setMemberAccountList("
+    								+ ret.memberId + ","
+    								+ target_year + ","
+    								+ target_month + ")")
+    							.text(ret.memberId)
+    					)
+    					.append($("<td></td>").text(ret.sumPrice))
+    					)
+    				);
+    			}
+    		}
+    	});
+    }
+
+    function setMemberAccountList(mid, year, month){
+    	TestAggregateAccount.getMemberAccountList(mid, year, month, {
+    		callback: function(data){
+    			var table = $("#member_detail_table");
+    			table.empty();
+    	    	table.append(
+    	    		$("<tr></tr>")
+    	    			.append($("<th></th>").text("ID"))
+    	    			.append($("<th></th>").text("日時"))
+    	    			.append($("<th></th>").text("購入者ID"))
+    	    			.append($("<th></th>").text("商品ID"))
+    	    			.append($("<th></th>").text("購入価格"))
+    	    	);
+
+    			for(var i=0; i<data.length; i++){
+    				table.append(
+    					$("<tr></tr>")
+    						.append($("<td></td>").text(data[i].id))
+    						.append($("<td></td>").text(data[i].timestamp))
+    						.append($("<td></td>").text(data[i].memberId))
+    						.append($("<td></td>").text(data[i].itemId))
+    						.append($("<td></td>").text(data[i].sellPrice))
+    				);
+    	    	}
+    	    }
+    	});
+    }
+    </script>
+
+    <style>
+    td, th{
+    	background-color: #ccf;
+    	width: 200px;
+    }
+    </style>
+
+  </head>
+  <body>
+    <h3>井垣研 ラボショップシステム</h3>
+    <h1>アイテム一覧</h1>
+    <hr/>
+
+	<p>メンバーごとの請求額を集計できます</p>
+	<form id="member_price_form">
+	<input id="member_price_form_year" type="text"/>
+	<input id="member_price_form_month" type="text"/>
+	<input id="member_price_form_submit" type="button" value="取得" onclick="setMemberPriceTable()"/>
+	</form>
+
+	<h4>メンバー請求額</h4>
+	<table id="member_price_table"></table>
+
+	<h4>メンバー請求詳細</h4>
+	<table id="member_detail_table"></table>
+
+
+
+
+  </body>
+</html>
