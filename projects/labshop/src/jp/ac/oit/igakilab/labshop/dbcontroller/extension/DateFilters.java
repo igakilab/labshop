@@ -1,6 +1,9 @@
 package jp.ac.oit.igakilab.labshop.dbcontroller.extension;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.bson.conversions.Bson;
 
@@ -31,13 +34,13 @@ public class DateFilters {
 		Bson f_dend = null;
 
 		if( start != null ){
-			f_dstart = Filters.gte(field, start);
+			f_dstart = Filters.gte(field, start.getTime());
 			if( end == null ){
 				return f_dstart;
 			}
 		}
 		if( end != null ){
-			f_dend = Filters.lte(field, end);
+			f_dend = Filters.lte(field, end.getTime());
 			if( start == null ){
 				return f_dend;
 			}
@@ -55,7 +58,7 @@ public class DateFilters {
 		Bson f_dend = null;
 
 		if( start != null ){
-			f_dstart = Filters.gte(field, date(start));
+			f_dstart = Filters.gte(field, date(start).getTime());
 			if( end == null ){
 				return f_dstart;
 			}
@@ -63,7 +66,7 @@ public class DateFilters {
 		if( end != null ){
 			Calendar tmp = date(end);
 			tmp.add(Calendar.DATE, 1);
-			f_dend = Filters.lt(field, tmp);
+			f_dend = Filters.lt(field, tmp.getTime());
 			if( start == null ){
 				return f_dend;
 			}
@@ -79,7 +82,8 @@ public class DateFilters {
 		Bson f_mstart = null;
 		Bson f_mend = null;
 		if( start != null ){
-			f_mstart = Filters.gte(field, month(start));
+			f_mstart = Filters.gte(field, month(start).getTime());
+			printDate("START > ", month(start).getTime());
 			if( end == null ){
 				return f_mstart;
 			}
@@ -87,7 +91,8 @@ public class DateFilters {
 		if( end != null ){
 			Calendar tmp = month(end);
 			tmp.add(Calendar.MONTH, 1);
-			f_mend = Filters.lt(field, tmp);
+			f_mend = Filters.lt(field, tmp.getTime());
+			printDate("END > ", tmp.getTime());
 			if( start == null ){
 				return f_mend;
 			}
@@ -101,5 +106,10 @@ public class DateFilters {
 
 	public static Bson oneMonth(String field, Calendar month){
 		return betweenMonth(field, month, month);
+	}
+
+	public static void printDate(String str, Date d){
+		DateFormat df = new SimpleDateFormat("[yyyy/MM/dd HH:mm:ss]");
+		System.out.println(str + df.format(d));
 	}
 }
