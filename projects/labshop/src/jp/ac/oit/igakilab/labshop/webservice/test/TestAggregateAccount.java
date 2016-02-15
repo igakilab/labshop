@@ -1,8 +1,14 @@
 package jp.ac.oit.igakilab.labshop.webservice.test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+import org.bson.conversions.Bson;
+
+import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Filters;
 
 import jp.ac.oit.igakilab.labshop.dbcontroller.extension.AggregateAccountDB;
 import jp.ac.oit.igakilab.labshop.dbcontroller.extension.DateFilters;
@@ -74,5 +80,9 @@ public class TestAggregateAccount {
 		aadb.close();
 
 		return AccountDataForm.toAccountDataForm(result.toArray(new AccountData[result.size()]));
+	}
+
+	public AccountDataForm[] getFebruaryAccountList(){
+		return null;
 	}
 }
