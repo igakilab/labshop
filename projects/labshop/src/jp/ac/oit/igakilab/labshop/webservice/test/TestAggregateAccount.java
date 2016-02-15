@@ -1,14 +1,8 @@
 package jp.ac.oit.igakilab.labshop.webservice.test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
-import org.bson.conversions.Bson;
-
-import com.mongodb.client.model.Aggregates;
-import com.mongodb.client.model.Filters;
 
 import jp.ac.oit.igakilab.labshop.dbcontroller.extension.AggregateAccountDB;
 import jp.ac.oit.igakilab.labshop.dbcontroller.extension.DateFilters;
@@ -33,7 +27,7 @@ public class TestAggregateAccount {
 		List<ItemSalesForm> form_list = new ArrayList<ItemSalesForm>();
 		for(HashMap<String, Integer> set : list){
 			form_list.add(
-				new ItemSalesForm(set.get("itemId"), set.get("qty"), set.get("sellPrice"))
+				new ItemSalesForm(set.get("itemId"), set.get("qty"), set.get("sumPrice"))
 			);
 		}
 

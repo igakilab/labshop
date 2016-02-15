@@ -1,9 +1,6 @@
 package jp.ac.oit.igakilab.labshop.dbcontroller.extension;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import org.bson.conversions.Bson;
 
@@ -83,7 +80,6 @@ public class DateFilters {
 		Bson f_mend = null;
 		if( start != null ){
 			f_mstart = Filters.gte(field, month(start).getTime());
-			printDate("START > ", month(start).getTime());
 			if( end == null ){
 				return f_mstart;
 			}
@@ -92,7 +88,6 @@ public class DateFilters {
 			Calendar tmp = month(end);
 			tmp.add(Calendar.MONTH, 1);
 			f_mend = Filters.lt(field, tmp.getTime());
-			printDate("END > ", tmp.getTime());
 			if( start == null ){
 				return f_mend;
 			}
@@ -106,10 +101,5 @@ public class DateFilters {
 
 	public static Bson oneMonth(String field, Calendar month){
 		return betweenMonth(field, month, month);
-	}
-
-	public static void printDate(String str, Date d){
-		DateFormat df = new SimpleDateFormat("[yyyy/MM/dd HH:mm:ss]");
-		System.out.println(str + df.format(d));
 	}
 }
