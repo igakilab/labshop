@@ -10,17 +10,21 @@ public class DBConnector {
 
 	/* インスタンス */
 	private MongoClient client;
+	private boolean closable;
 
 	public DBConnector(){
 		client = new MongoClient(DEFAULT_HOST, DEFAULT_HOST_PORT);
+		closable = true;
 	}
 
 	public DBConnector(String host, int port){
 		client = new MongoClient(host, port);
+		closable = true;
 	}
 
 	public DBConnector(DBConnector conec){
 		client = conec.getClient();
+		closable = false;
 	}
 
 	public MongoClient getClient(){
@@ -32,7 +36,10 @@ public class DBConnector {
 	}
 
 	public void close(){
-		client.close();
-		client = null;
+		if( closable ){
+			client.close();
+			client = null;
+			closable = false;
+		}
 	}
 }
