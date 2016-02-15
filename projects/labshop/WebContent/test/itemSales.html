@@ -1,0 +1,77 @@
+<html lang="ja">
+  <head>
+  	<title>ラボショップシステム</title>
+  	<meta charset="utf-8"/>
+    <script type="text/javascript" src="../dwr/engine.js"></script>
+    <script type="text/javascript" src="../dwr/util.js"></script>
+    <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.serialize.js"></script>
+    <script type="text/javascript" src="../dwr/interface/TestAggregateAccount.js"></script>
+    <script type="text/javascript">
+
+    $(function(){
+    });
+
+    function setItemSalesTable(){
+    	var target_year = $("#item_sales_form_year").val();
+    	var target_month = $("#item_sales_form_month").val();
+
+    	if( target_year < 1970 || target_year > 2016 ){
+    		alert("年の指定を確認して下さい");
+    		return;
+    	}
+    	if( target_month < 1 || target_month > 12 ){
+    		alert("月の指定を確認して下さい");
+    		return;
+    	}
+
+    	TestAggregateAccount.getItemSalesList(target_year, target_month, {
+    		callback: function(ret){
+    			var table = $("#item_sales_table");
+    			table.empty();
+    			table.append($("<tr></tr>")
+    				.append($("<th></th>").text("商品id"))
+    				.append($("<th></th>").text("売上数量"))
+    				.append($("<th></th>").text("合計金額"))
+    			);
+
+    			for(var i=0; i<ret.length; i++){
+    				table.append($("<tr></tr>")
+    					.append($("<td></td>").text(ret[i].id))
+    					.append($("<td></td>").text(ret[i].qty))
+    					.append($("<td></td>").text(ret[i].price))
+    				);
+    			}
+    		}
+    	});
+    }
+    </script>
+
+    <style>
+    td, th{
+    	background-color: #ccf;
+    	width: 200px;
+    }
+    </style>
+
+  </head>
+  <body>
+    <h3>井垣研 ラボショップシステム</h3>
+    <h1>アイテム一覧</h1>
+    <hr/>
+
+	<p>商品ごとの売上を集計できます</p>
+	<form id="item_sales_form">
+	<input id="item_sales_form_year" type="text"/>
+	<input id="item_sales_form_month" type="text"/>
+	<input id="item_sales_form_submit" type="button" value="取得" onclick="setItemSalesTable()"/>
+	</form>
+
+	<h4>商品売上データ</h4>
+	<table id="item_sales_table"></table>
+
+
+
+
+  </body>
+</html>

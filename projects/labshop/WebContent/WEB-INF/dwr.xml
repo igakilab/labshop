@@ -23,12 +23,15 @@
     </create>
     <!-- テスト用 -->
     <create creator="new" javascript="TestDBCounter">
-      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.TestDBCounter"/>
+      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.test.TestDBCounter"/>
+    </create>
+    <create creator="new" javascript="TestAggregateAccount">
+      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.test.TestAggregateAccount"/>
     </create>
     <convert converter="bean" match="jp.ac.oit.igakilab.dwr.multiple.*" />
     <convert converter="exception" match="java.lang.Exception" />
     <convert converter="bean" match="java.lang.StackTraceElement"/>
-    <convert converter="bean" match="jp.ac.oit.igakilab.labshop.webservice.forms*"/>
+    <convert converter="bean" match="jp.ac.oit.igakilab.labshop.webservice.forms.*"/>
     <!-- テスト用 -->
    	<convert converter="bean" match="jp.ac.oit.igakilab.labshop.dbcontroller.DBCounter"/>
   </allow>

@@ -1,5 +1,7 @@
 package jp.ac.oit.igakilab.labshop.shopping;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -71,6 +73,12 @@ public class AccountData {
 	}
 	public void setSellPrice(int sellPrice) {
 		this.sellPrice = sellPrice;
+	}
+
+	public String toString(){
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		return String.format("ACCOUNT[ID:%d, ITEM:%d MEMBER:%d, PRICE:%d DATE:%s]\n",
+			id, itemId, memberId, sellPrice, df.format(timestamp));
 	}
 
 
