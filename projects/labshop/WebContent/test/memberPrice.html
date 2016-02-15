@@ -14,7 +14,7 @@
 
     function setMemberPriceTable(){
     	var target_year = $("#member_price_form_year").val();
-    	var target_month = $("#member_price_form_month").month();
+    	var target_month = $("#member_price_form_month").val();
 
     	if( target_year < 1970 || target_year > 2016 ){
     		alert("年の指定を確認して下さい");
@@ -40,13 +40,12 @@
     						$("<a></a>")
     							.attr("href", "javascript:void(0);")
     							.attr("onclick", "setMemberAccountList("
-    								+ ret.memberId + ","
+    								+ ret[i].id + ","
     								+ target_year + ","
     								+ target_month + ")")
-    							.text(ret.memberId)
-    					)
-    					.append($("<td></td>").text(ret.sumPrice))
-    					)
+    							.text(ret[i].id)
+    					))
+    					.append($("<td></td>").text(ret[i].price))
     				);
     			}
     		}
