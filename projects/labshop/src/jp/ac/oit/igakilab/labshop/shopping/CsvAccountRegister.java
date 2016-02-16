@@ -15,7 +15,7 @@ import jp.sf.orangesignal.csv.handlers.StringArrayListHandler;
 
 public class CsvAccountRegister {
 	static void outputMessage(String str){
-		System.out.println(str);
+		System.err.println(str);
 	}
 
 	private boolean strictry;
@@ -33,7 +33,7 @@ public class CsvAccountRegister {
 	public void openDBControllers(){
 		adb = new AccountDBController();
 		idb = new ItemDBController(adb);
-		mdb = new MemberDBController(mdb);
+		mdb = new MemberDBController(adb);
 	}
 
 	public void closeDBControllers(){
@@ -54,11 +54,11 @@ public class CsvAccountRegister {
 		try{
 			cal.clear();
 			cal.set(Calendar.YEAR, Integer.parseInt(tokens[0]));
-			cal.set(Calendar.MONTH, Integer.parseInt(tokens[1]));
+			cal.set(Calendar.MONTH, Integer.parseInt(tokens[1]) - 1);
 			cal.set(Calendar.DATE, Integer.parseInt(tokens[2]));
 
-			mid = Integer.parseInt(tokens[3]);
-			iid = Integer.parseInt(tokens[4]);
+			iid = Integer.parseInt(tokens[3]);
+			mid = Integer.parseInt(tokens[4]);
 			price = Integer.parseInt(tokens[5]);
 		}catch(NumberFormatException e0){
 			outputMessage("数値変換に失敗しました");
@@ -80,14 +80,15 @@ public class CsvAccountRegister {
 	}
 
 
-	public boolean loadCsv(String filePath){
+	public boolean loadCsv(String filePath)
+	throws IOException{
 		List<String[]> csvData;
-		try{
+		/*try{*/
 			csvData = Csv.load(new File(filePath), new CsvConfig(), new StringArrayListHandler());
-		}catch(IOException e0){
+		/*}catch(IOException e0){
 			outputMessage("ファイルの読み込みに失敗しました");
 			return false;
-		}
+		}*/
 
 		List<AccountData> dataList = new ArrayList<AccountData>();
 		for(int i=0; i<csvData.size(); i++){
