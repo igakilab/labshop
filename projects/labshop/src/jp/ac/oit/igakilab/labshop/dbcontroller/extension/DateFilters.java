@@ -1,6 +1,9 @@
 package jp.ac.oit.igakilab.labshop.dbcontroller.extension;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.bson.conversions.Bson;
 
@@ -8,7 +11,7 @@ import com.mongodb.client.model.Filters;
 
 public class DateFilters {
 	public static Calendar month(Calendar cal){
-		return month(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH));
+		return month(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1);
 	}
 
 	public static Calendar month(int year, int month){
@@ -16,13 +19,13 @@ public class DateFilters {
 	}
 
 	public static Calendar date(Calendar cal){
-		return date(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+		return date(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DATE));
 	}
 
 	public static Calendar date(int year, int month, int date){
 		Calendar cal = Calendar.getInstance();
 		cal.clear();
-		cal.set(year, month, date);
+		cal.set(year, month-1, date);
 		return cal;
 	}
 
@@ -80,6 +83,7 @@ public class DateFilters {
 		Bson f_mend = null;
 		if( start != null ){
 			f_mstart = Filters.gte(field, month(start).getTime());
+			//printDate("START", month(start).getTime());
 			if( end == null ){
 				return f_mstart;
 			}
@@ -87,6 +91,7 @@ public class DateFilters {
 		if( end != null ){
 			Calendar tmp = month(end);
 			tmp.add(Calendar.MONTH, 1);
+			//printDate("END", tmp.getTime());
 			f_mend = Filters.lt(field, tmp.getTime());
 			if( start == null ){
 				return f_mend;
@@ -101,5 +106,10 @@ public class DateFilters {
 
 	public static Bson oneMonth(String field, Calendar month){
 		return betweenMonth(field, month, month);
+	}
+
+	public static void printDate(String msg, Date d){
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		System.out.println(msg + ">" + df.format(d));
 	}
 }
