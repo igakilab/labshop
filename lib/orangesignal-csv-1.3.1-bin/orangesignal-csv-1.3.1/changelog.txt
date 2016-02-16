@@ -1,0 +1,237 @@
+OrangeSignal CSV 変更履歴
+========================================
+http://orangesignal.sourceforge.jp/csv/
+
+
+バージョン 1.3.1
+----------------
+
+全般
+* pom.xml 修正
+
+パッケージ jp.sf.orangesignal.csv
+* CsvReader - close() 後の読込み操作で IOException がスローされず NullPointerException がスローされる不具合を修正
+* CsvWriter - close() 後の書込み操作で IOException がスローされず NullPointerException がスローされる不具合を修正
+
+
+バージョン 1.3.0
+----------------
+
+全般
+* offset、limit に関するメソッドをインタフェースへ抽出
+
+パッケージ jp.sf.orangesignal.csv
+* Csv - #20805 圧縮形式ファイルでの複数エントリ + offset, limit 併用時に期待動作が異なる不具合修正
+* CsvListHandler へ offset、limit に関するメソッドを抽出
+* CsvListHandler へスカラー副問い合わせ実行可否についてのメソッド load(CsvReader, boolean)、processScalar(List<T> list) メソッド追加
+* StringArrayListHandler、ColumnPositionMapListHandler、ColumnNameMapListHandler へ setOffset、setLimit メソッド追加
+
+パッケージ jp.sf.orangesignal.csv.handlers
+* AbstractCsvListHandler クラス追加
+* BeanListHandlerSupport - 非推奨の converter(CsvValueConverter)、getConverter() メソッドを削除
+* SimpleCsvValueConverter - dateFormat の非推奨扱いを解除
+
+パッケージ jp.sf.orangesignal.csv.manager
+* filter、order、offset、limit に関するメソッドを CsvLoader へ抽出
+
+
+バージョン 1.2.9
+----------------
+
+パッケージ jp.sf.orangesignal.csv
+* CsvConfig#utf8bomPolicy 追加
+* CsvReader - BOM (Byte Order Mark) 付き UTF-8 に対応
+* CsvWriter - BOM (Byte Order Mark) 付き UTF-8 に対応
+* BeanListHandler, ColumnNameMappingBeanListHandler, ColumnPositionMappingBeanListHandler, CsvEntityListHandler - offset, limit 併用時の並び替え機能の不具合修正
+
+パッケージ jp.sf.orangesignal.csv.handlers
+* BeanOrder - Javadoc 不要箇所を削除
+* BeanOrderComparator - スローされる例外について Javadoc 加筆
+
+
+バージョン 1.2.8
+----------------
+
+全般
+* pom.xml 修正
+* Java プログラム要素の並び替え機能追加
+
+パッケージ jp.sf.orangesignal.csv.handlers
+* BeanOrder, BeanOrderComparator クラス追加
+* BeanListHandler, ColumnNameMappingBeanListHandler, ColumnPositionMappingBeanListHandler, CsvEntityListHandler の読込み操作で Java プログラム要素の並び替え機能をサポート
+
+パッケージ jp.sf.orangesignal.csv.manager
+* CsvBeanLoader, CsvColumnNameMappingBeanLoader, CsvColumnPositionMappingBeanLoader, CsvEntityLoader で Java プログラム要素の並び替え機能をサポート
+
+
+バージョン 1.2.7
+----------------
+
+全般
+* Javadoc のスタイルを OrangeSignal サイトと揃えました。
+
+パッケージ jp.sf.orangesignal.csv
+* CsvReader - 同一の囲み文字とエスケープ文字を指定した場合に、直後の改行が正しく認識されない不具合を再修正
+
+
+バージョン 1.2.6
+----------------
+
+全般
+* pom.xml 修正
+
+パッケージ jp.sf.orangesignal.csv
+* CsvReader - 同一の囲み文字とエスケープ文字を指定した場合に、直後の改行が正しく認識されない不具合を修正
+
+
+バージョン 1.2.5
+----------------
+
+全般
+* Maven2 リポジトリ対応
+
+パッケージ jp.sf.orangesignal.csv
+* CsvReader - ホワイトスペースのみの項目が期待した処理にならない問題対応
+
+
+バージョン 1.2.4
+----------------
+
+パッケージ jp.sf.orangesignal.csv.filters
+* 不具合修正 - jp.sf.orangesignal.csv.filters.SimpleBeanFilter#in(String, String[]) を可変長配列パラメータへ変更
+
+パッケージ jp.sf.orangesignal.csv.handlers
+* DI/AOP 対応 - jp.sf.orangesignal.csv.handlers.BeanListHandlerSupport#setValueParserMapping(Map) 追加
+* DI/AOP 対応 - jp.sf.orangesignal.csv.handlers.BeanListHandlerSupport#setValueFormatterMapping(Map) 追加
+* DI/AOP 対応 - jp.sf.orangesignal.csv.handlers.BeanListHandlerSupport#setValueConverter(CsvValueConverter) 追加
+* DI/AOP 対応 - jp.sf.orangesignal.csv.handlers.BeanListHandlerSupport#setOffset(int) 追加
+* DI/AOP 対応 - jp.sf.orangesignal.csv.handlers.BeanListHandlerSupport#setLimit(int) 追加
+* DI/AOP 対応 - jp.sf.orangesignal.csv.handlers.ColumnNameMappingBeanListHandler#setColumnMapping(Map) 追加
+* DI/AOP 対応 - jp.sf.orangesignal.csv.handlers.ColumnPositionMappingBeanListHandler#setColumnMapping(Map) 追加
+* 機能改善 - SimpleCsvValueConverter に列挙型のサポートを追加
+
+
+バージョン 1.2.3
+----------------
+
+全般
+* jp.sf.orangesignal.csv.filters パッケージ追加
+
+パッケージ jp.sf.orangesignal.csv
+* javadoc 修正 - Csv
+
+パッケージ jp.sf.orangesignal.csv.annotation
+* javadoc 修正 - package-info
+
+パッケージ jp.sf.orangesignal.csv.handlers
+* リファクタリング - BeanListHandlerSupport, BeanListHandler, ColumnNameMappingBeanListHandler, ColumnPositionMappingBeanListHandler, CsvEntityListHandler
+* リファクタリング - BeanListHandlerSupport 例外メッセージ変更
+* リファクタリング - BeanListHandlerSupport#getOffset()、#getLimit() 削除
+* データフィルタサポート - StringArrayListHandler, ColumnPositionMapListHandler, ColumnPositionMappingBeanListHandler, BeanListHandler, ColumnNameMapListHandler, ColumnNameMappingBeanListHandler, CsvEntityListHandler
+* Bean フィルタサポート - BeanListHandlerSupport, BeanListHandler, ColumnNameMapListHandler, ColumnNameMappingBeanListHandler, CsvEntityListHandler
+
+パッケージ jp.sf.orangesignal.csv.manager
+* データフィルタサポート - CsvBeanLoader, CsvBeanSaver, CsvColumnNameMappingBeanLoader, CsvColumnNameMappingBeanSaver, CsvColumnPositionMappingBeanLoader, CsvColumnPositionMappingBeanSaver, CsvEntityLoader, CsvEntitySaver
+* Bean フィルタサポート - CsvBeanLoader, CsvBeanSaver, CsvColumnNameMappingBeanLoader, CsvColumnNameMappingBeanSaver, CsvColumnPositionMappingBeanLoader, CsvColumnPositionMappingBeanSaver, CsvEntityLoader, CsvEntitySaver
+* CsvLoader / CsvSaver 実装クラスのコンストラクタスコープを protected へ修正
+
+
+バージョン 1.2.2
+----------------
+
+全般
+* DI/AOP 対応
+* アノテーション複数列対応
+* Serializable / toString サポート
+* offset / limit サポート拡充
+
+パッケージ jp.sf.orangesignal.csv
+* DI/AOP 対応 - CsvConfig#setIgnoreCaseNullString メソッド追加
+
+パッケージ jp.sf.orangesignal.csv.annotation
+* アノテーション複数列対応 - CsvColumn#format, #language, #country, #timezone, #currency 追加
+* アノテーション複数列対応 - CsvColumns サポート
+
+パッケージ jp.sf.orangesignal.csv.entryfilters
+* Serializable / toString サポート - AbstractEntryFilter 追加
+* Serializable / toString サポート - DirectoryEntryFilter, EntryNameFilter, PrefixEntryNameFilter, RegexEntryNameFilter, SuffixEntryNameFilter
+
+パッケージ jp.sf.orangesignal.csv.handlers
+* アノテーション複数列対応 - CsvEntityListHandler
+* offset / limit サポート拡充 - StringArrayListHandler, ColumnNameMapListHandler, ColumnPositionMapListHandler
+
+
+バージョン 1.2.1
+----------------
+
+パッケージ jp.sf.orangesignal.csv
+* 圧縮データのエンコーディング指定メソッドを追加
+
+パッケージ jp.sf.orangesignal.csv.annotation
+* CsvColumns アノテーション追加
+
+パッケージ jp.sf.orangesignal.csv.handlers
+* BeanListHandler の javadoc 関連項目欄加筆
+* ColumnNameMappingBeanListHandler の javadoc 関連項目欄加筆
+* ColumnPositionMappingBeanListHandler の javadoc 関連項目欄加筆
+* CsvEntityListHandler の javadoc 関連項目欄加筆
+* BeanListHandlerSupport, BeanListHandler, ColumnNameMappingBeanListHandler, ColumnPositionMappingBeanListHandler, CsvEntityListHandler へ offset と limit サポート追加
+* BeanListHandlerSupport, BeanListHandler, ColumnNameMappingBeanListHandler, ColumnPositionMappingBeanListHandler スペルミス修正 formater -> formatter
+
+パッケージ jp.sf.orangesignal.csv.manager
+* CsvLoader へ圧縮データのエンコーディング指定メソッドを追加
+* CsvSaver へ圧縮データのエンコーディング指定メソッドを追加
+* CsvLoader の実装を容易にするためのテンプレートクラス CsvLoaderSupport を追加
+* CsvSaver の実装を容易にするためのテンプレートクラス CsvSaverSupport を追加
+* CsvLoaderSupport を CsvBeanLoader, CsvColumnNameMappingBeanLoader, CsvColumnPositionMappingBeanLoader, CsvEntityLoader へ適用
+* CsvSaverSupport を CsvBeanSaver, CsvColumnNameMappingBeanSaver, CsvColumnPositionMappingBeanSaver, CsvEntitySaver へ適用
+* CsvBeanSaver, CsvColumnNameMappingBeanSaver, CsvColumnPositionMappingBeanSaver, CsvEntitySaver へ offset と limit サポート追加
+
+
+バージョン 1.2.0
+----------------
+
+パッケージ jp.sf.orangesignal.csv.handlers
+* Java プログラム要素のリストと区切り文字形式データアクセスを行うハンドラへ java.text.Format での変換機能を追加
+* SimpleCsvValueConverter#convert(Object) で日時書式による変換機能を追加
+* BeanListHandlerSupport いくつかのメソッドを廃止とし、削除候補とした。
+* BeanListHandlerSupport へ項目値変換用のテンプレートメソッドを追加
+* BeanListHandler#format(String, Format) メソッド追加
+* ColumnNameMappingBeanListHandler#addColumn(String, String, Format) メソッド追加 
+* ColumnPositionMappingBeanListHandler#addColumn(String, Format) メソッド追加
+* ColumnPositionMappingBeanListHandler#addColumn(int, String, Format) メソッド追加
+
+パッケージ jp.sf.orangesignal.csv.manager
+* CsvBeanLoader#format(String, Format) メソッド追加
+* CsvBeanSaver#format(String, Format) メソッド追加
+* CsvColumnNameMappingBeanManager, CsvColumnNameMappingBeanLoader, CsvColumnNameMappingBeanSaver 追加
+* CsvColumnPositionMappingBeanManager, CsvColumnPositionMappingBeanLoader, CsvColumnPositionMappingBeanSaver 追加
+
+
+バージョン 1.1.0
+----------------
+
+パッケージ jp.sf.orangesignal.csv
+* QuotePolicy 列挙型を追加
+* CsvConfig、CsvWriter へ QuotePolicy サポートを追加
+* CsvConfig#clone() メソッドサポートを追加
+* CsvReader、CsvWriter - インスタンス構築時に CsvConfig 設定を検証するようにした。
+* CsvReader、CsvWriter - 囲み文字無効時にエスケープ化された区切り文字の入出力サポートを追加
+
+パッケージ jp.sf.orangesignal.csv.handlers
+* ColumnNameMapListHandler 追加
+* ColumnPositionMapListHandler 追加
+
+パッケージ jp.sf.orangesignal.csv.annotation
+* CsvEntity の Javadoc 修正
+
+
+バージョン 1.0.1
+----------------
+
+全般
+* Javadoc 文言修正
+* サイトページ文言修正
+
+パッケージ jp.sf.orangesignal.csv.handlers
+* SimpleCsvValueConverter へ java.util.Date と派生クラスの簡易変換処理追加
