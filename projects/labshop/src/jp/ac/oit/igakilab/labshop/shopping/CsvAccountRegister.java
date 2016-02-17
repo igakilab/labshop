@@ -9,13 +9,14 @@ import java.util.List;
 import jp.ac.oit.igakilab.labshop.dbcontroller.AccountDBController;
 import jp.ac.oit.igakilab.labshop.dbcontroller.ItemDBController;
 import jp.ac.oit.igakilab.labshop.dbcontroller.MemberDBController;
+import jp.ac.oit.igakilab.marsh.util.DebugLog;
 import jp.sf.orangesignal.csv.Csv;
 import jp.sf.orangesignal.csv.CsvConfig;
 import jp.sf.orangesignal.csv.handlers.StringArrayListHandler;
 
 public class CsvAccountRegister {
 	static void outputMessage(String str){
-		System.err.println(str);
+		DebugLog.logm("CsvAccountRegister", str);
 	}
 
 	private boolean dependencyCheck;
