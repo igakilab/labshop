@@ -18,16 +18,15 @@ public class CsvAccountRegister {
 		System.err.println(str);
 	}
 
-	private boolean strictry;
+	private boolean dependencyCheck;
 	private AccountData[] accountList;
 	private AccountDBController adb;
 	private ItemDBController idb;
 	private MemberDBController mdb;
 
 	public CsvAccountRegister(){
-		strictry = true;
+		dependencyCheck = true;
 		accountList = null;
-		openDBControllers();
 	}
 
 	public void openDBControllers(){
@@ -38,8 +37,11 @@ public class CsvAccountRegister {
 
 	public void closeDBControllers(){
 		mdb.close();
+		mdb = null;
 		idb.close();
+		idb = null;
 		adb.close();
+		adb = null;
 	}
 
 	public AccountData token2AccountData(String[] tokens){
@@ -90,6 +92,10 @@ public class CsvAccountRegister {
 			return false;
 		}*/
 
+		if( dependencyCheck ){
+			openDBControllers();
+		}
+
 		List<AccountData> dataList = new ArrayList<AccountData>();
 		for(int i=0; i<csvData.size(); i++){
 			String[] row = csvData.get(i);
@@ -97,12 +103,16 @@ public class CsvAccountRegister {
 				AccountData acc = token2AccountData(row);
 				if( acc == null ){
 					outputMessage("行" + i + ": 変換失敗");
-				}else if( strictry && !isDependencyRightness(acc) ){
+				}else if( dependencyCheck && !isDependencyRightness(acc) ){
 					outputMessage("行" + i + ": id依存関係不正");
 				}else{
 					dataList.add(acc);
 				}
 			}
+		}
+
+		if( dependencyCheck ){
+			closeDBControllers();
 		}
 
 		accountList = dataList.toArray(new AccountData[dataList.size()]);
@@ -111,16 +121,14 @@ public class CsvAccountRegister {
 	}
 
 	public void applyToDB(){
+		openDBControllers();
 		for(AccountData acc : accountList){
 			adb.addAccount(acc, true, false);
 		}
+		closeDBControllers();
 	}
 
 	public AccountData[] getAccountList(){
 		return accountList;
-	}
-
-	public void close(){
-		closeDBControllers();
 	}
 }
