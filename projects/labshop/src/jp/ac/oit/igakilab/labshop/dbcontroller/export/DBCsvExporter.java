@@ -48,7 +48,8 @@ public abstract class DBCsvExporter {
 		while( (tmp = reader.readValues()) != null ){
 			cntRow++;
 
-			if( tmp.get(0).charAt(0) == '#' ) continue;
+			if( tmp.size() <= 0 ) continue;
+			if( tmp.get(0).length() > 0 && tmp.get(0).charAt(0) == '#' ) continue;
 
 			Document doc;
 			try{
@@ -58,13 +59,15 @@ public abstract class DBCsvExporter {
 				continue;
 			}
 
-			if( dbc.isInsertable(doc) ){
+			if( !dbc.isInsertable(doc) ){
 				outputMessage(cntRow, "挿入できません");
 				continue;
 			}
 
 			dbc.getCollection().insertOne(doc);
 		}
+
+		reader.close();
 	}
 
 	public void exportCsv(String fileName)
@@ -87,5 +90,7 @@ public abstract class DBCsvExporter {
 
 			writer.writeValues(tmp);
 		}
+
+		writer.close();
 	}
 }
