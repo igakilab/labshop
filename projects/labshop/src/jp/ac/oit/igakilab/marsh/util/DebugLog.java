@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import jp.ac.oit.igakilab.labshop.LabshopProperties;
+
 public class DebugLog {
 	public static final int LS_INFO = 101;
 	public static final int LS_WARN = 102;
@@ -13,7 +15,7 @@ public class DebugLog {
 	public static final int LS_EXCEPTION = 104;
 	public static final int LS_FATAL = 105;
 
-	public static String LOG_DIR = "logs/";
+	public static String LOG_DIR = LabshopProperties.ROOT_DIR_PATH + "log/";
 	public static String DEFAULT_NAME = "default";
 
 	public static String getSubjectString(int code){
