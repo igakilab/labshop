@@ -93,7 +93,6 @@ public class TestAggregateAccount {
 			throw new Exception("ロードエラー");
 		}
 		AccountData[] list = register.getAccountList();
-		register.close();
 		return AccountDataForm.toAccountDataForm(list);
 	}
 
@@ -103,7 +102,6 @@ public class TestAggregateAccount {
 		if( register.loadCsv(fileName) ){
 			register.applyToDB();
 		}
-		register.close();
 		return true;
 	}
 
