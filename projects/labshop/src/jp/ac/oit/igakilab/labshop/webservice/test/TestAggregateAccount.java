@@ -1,5 +1,7 @@
 package jp.ac.oit.igakilab.labshop.webservice.test;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,9 +9,13 @@ import java.util.List;
 import jp.ac.oit.igakilab.labshop.dbcontroller.extension.AggregateAccountDB;
 import jp.ac.oit.igakilab.labshop.dbcontroller.extension.DateFilters;
 import jp.ac.oit.igakilab.labshop.shopping.AccountData;
+import jp.ac.oit.igakilab.labshop.shopping.CsvAccountRegister;
 import jp.ac.oit.igakilab.labshop.webservice.forms.AccountDataForm;
 import jp.ac.oit.igakilab.labshop.webservice.forms.ItemSalesForm;
 import jp.ac.oit.igakilab.labshop.webservice.forms.MemberPriceForm;
+import jp.sf.orangesignal.csv.Csv;
+import jp.sf.orangesignal.csv.CsvConfig;
+import jp.sf.orangesignal.csv.handlers.StringArrayListHandler;
 
 public class TestAggregateAccount {
 	public static MemberPriceForm[] toMemberPriceForm(List<HashMap<String, Integer>> list){
@@ -78,5 +84,32 @@ public class TestAggregateAccount {
 
 	public AccountDataForm[] getFebruaryAccountList(){
 		return null;
+	}
+
+	public AccountDataForm[] loadCsv(String fileName)
+	throws Exception{
+		CsvAccountRegister register = new CsvAccountRegister();
+		if( !register.loadCsv(fileName) ){
+			throw new Exception("ロードエラー");
+		}
+		AccountData[] list = register.getAccountList();
+		return AccountDataForm.toAccountDataForm(list);
+	}
+
+	public boolean applyCsvAccount(String fileName)
+	throws IOException{
+		CsvAccountRegister register = new CsvAccountRegister();
+		if( register.loadCsv(fileName) ){
+			register.applyToDB();
+		}
+		return true;
+	}
+
+	public void outputTextFile()
+	throws IOException {
+		String[] row1 = {"working directry", "is here"};
+		List<String[]> data = new ArrayList<String[]>();
+		data.add(row1);
+		Csv.save(data, new File("output.csv"), new CsvConfig(), new StringArrayListHandler());
 	}
 }
