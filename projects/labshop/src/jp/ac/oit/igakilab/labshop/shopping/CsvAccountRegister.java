@@ -100,7 +100,7 @@ public class CsvAccountRegister {
 		List<AccountData> dataList = new ArrayList<AccountData>();
 		for(int i=0; i<csvData.size(); i++){
 			String[] row = csvData.get(i);
-			if( row.length > 0 || row[0].charAt(0) == '#' ){
+			if( row.length > 0 && row[0].length() > 0 && row[0].charAt(0) != '#' ){
 				AccountData acc = token2AccountData(row);
 				if( acc == null ){
 					outputMessage("行" + i + ": 変換失敗");
