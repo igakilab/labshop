@@ -11,9 +11,11 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
+import jp.ac.oit.igakilab.labshop.dbcontroller.export.DBCsvExportable;
 import jp.ac.oit.igakilab.labshop.member.MemberData;
 
-public class MemberDBController extends DBConnector{
+public class MemberDBController extends DBConnector
+implements DBCsvExportable{
 	/* static values */
 	public static String DB_NAME = "labshop";
 	public static String COLLECTION_NAME = "member";
@@ -120,6 +122,18 @@ public class MemberDBController extends DBConnector{
 		}else{
 			return null;
 		}
+	}
+
+	public MongoCollection<Document> getCollection(){
+		return collection;
+	}
+
+	public boolean isInsertable(Document doc){
+		Integer id = doc.getInteger("id");
+		if( id != null && !isIdRegisted(id) ){
+			return true;
+		}
+		return false;
 	}
 
 	public void close(){
