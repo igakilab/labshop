@@ -13,6 +13,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Sorts;
 
 import jp.ac.oit.igakilab.labshop.dbcontroller.AccountDBController;
 import jp.ac.oit.igakilab.labshop.dbcontroller.DBConnector;
@@ -49,7 +50,7 @@ public class AggregateAccountDB extends AccountDBController {
 		FindIterable<Document> result;
 		if( filter != null ){
 			result = getCollection().find(
-				Filters.and(Filters.eq("memberId", id), filter));
+				Filters.and(Filters.eq("memberId", id), filter)).sort(Sorts.ascending("timestamp"));
 		}else{
 			result = getCollection().find(Filters.eq("memberId", id));
 		}
