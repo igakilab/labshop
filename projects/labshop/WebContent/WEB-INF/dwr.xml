@@ -24,6 +24,9 @@
     <create creator="new" javascript="DBCsvManager">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.config.DBCsvManager"/>
     </create>
+    <create creator="new" javascript="WebAccountHistory">
+      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebAccountHistory"/>
+    </create>
     <!-- テスト用 -->
     <create creator="new" javascript="TestDBCounter">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.test.TestDBCounter"/>
