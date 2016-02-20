@@ -1,0 +1,67 @@
+<html lang="ja">
+  <head>
+  	<title>ラボショップシステム</title>
+  	<meta charset="utf-8"/>
+
+	<link rel="stylesheet" href="../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../css/github-markdown.css" type="text/css"/>
+
+    <script type="text/javascript" src="../dwr/engine.js"></script>
+    <script type="text/javascript" src="../dwr/util.js"></script>
+    <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.serialize.js"></script>
+    <script type="text/javascript">
+	function setResult(result){
+		if( result.isErr ){
+			alert(result.errMessage);
+			return;
+		}
+
+		$("#result_memberName").empty();
+		$("#result_memberName").text(result.memberName + " さんの利用履歴");
+
+		var table = $("#result_historyTable");
+		table.empty();
+		table.append(LabshopUtil.createLabelsRow(table,["日付", "商品名", "金額"]));
+		for(var i=0; i<result.histories.length; i++){
+			table.append(
+				JsAccountHistory.createHistoryRow(result.histories[i])
+			);
+		}
+
+		$("#result_sumPrice").empty();
+		$("#result_sumPrice").text("利用金額は " + result.sumPrice + " 円です");
+	}
+    </script>
+  </head>
+
+	<body>
+	<header>
+		<h1>井垣ラボ　ショップシステム</h1>
+	</header>
+
+	<div class="page_centering markdown-body">
+
+	<!-- タイトル -->
+	<h1>利用履歴確認ページ</h1>
+	<p>検索したい月とidを選択し、検索ボタンをクリックしてください</p>
+
+	<!-- フォーム -->
+	<select id="form_year">
+		<option value="2016">2016</option>
+	</select> 年
+	<select id="form_month">
+		<option value="1">1</option>
+	</select> 月
+	<button type="button" onclick="searchButtonPressed()">検索</button>
+
+	<!-- 結果出力 -->
+	<hr/>
+	<p>検索結果</p>
+	<h3 id="result_memberName"></h3>
+	<table id="result_historyTable"></table>
+	<h3 id="result_sumPrice"></h3>
+
+	</div>
+  </body>
+</html>
