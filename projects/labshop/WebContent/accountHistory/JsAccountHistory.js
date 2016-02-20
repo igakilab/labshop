@@ -1,7 +1,7 @@
 var JsAccountHistory = {};
 
-JsAccountHistory.getHistory(mid, f_callback){
-	WebAccountHistory.getHistory(mid, {
+JsAccountHistory.getHistory(year, month, mid, f_callback){
+	WebAccountHistory.getHistory(year, month, mid, {
 		callback: function(ret){
 			var result = {};
 			result.histories = ret;
@@ -10,7 +10,7 @@ JsAccountHistory.getHistory(mid, f_callback){
 			for(var i=0; i<ret.length; i++){
 				result.sumPrice += ret.sellPrice;
 			}
-			JsAccountHistory.getMemberName(mid, f_callback, result);
+			JsAccountHistory.getMemberName(mid f_callback, result);
 		},
 		errorHandler: function(msg){
 			var result = {}
@@ -47,5 +47,9 @@ JsAccountHistory.getMemberName(mid, f_callback, ac_result){
 JsAccountHistory.createHistoryRow(historyAccountDataForm){
 	var row = $("<tr></tr>");
 	var tmp = historyAccountDataForm;
-	var date_str = tmp.getDate() +
+	var date_str = tmp.timestamp.getMonth() + "/" + tmp.timestamp.getDate();
+	row.append($("<td></td>").text(date_str))
+		.append($("<td></td>").text(tmp.itemName))
+		.append($("<td></td>").text(tmp.sellPrice));
+	return row;
 }

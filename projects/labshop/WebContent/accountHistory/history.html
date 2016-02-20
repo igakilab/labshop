@@ -32,6 +32,13 @@
 		$("#result_sumPrice").empty();
 		$("#result_sumPrice").text("利用金額は " + result.sumPrice + " 円です");
 	}
+
+	function searchButtonPressed(){
+		var mid = $("#form_mid").val();
+		var year = $("#form_year").val();
+		var month = $("#form_month").val();
+		JsAccountHistory.getHistory(year, month, mid, setResult);
+	}
     </script>
   </head>
 
@@ -47,6 +54,7 @@
 	<p>検索したい月とidを選択し、検索ボタンをクリックしてください</p>
 
 	<!-- フォーム -->
+	メンバーID<input type="text" id="form_mid"/><br/>
 	<select id="form_year">
 		<option value="2016">2016</option>
 	</select> 年
