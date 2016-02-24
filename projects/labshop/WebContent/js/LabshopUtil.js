@@ -8,7 +8,7 @@ LabshopUtil.createLabelsRow = function(labels){
 	return row;
 }
 
-LabshopUtil.addMonthOptions(jquery_object){
+LabshopUtil.addMonthOptions = function(jquery_object){
 	for(var i=1; i<=12; i++){
 		jquery_object.append(
 			$("<option></option>")
@@ -16,4 +16,8 @@ LabshopUtil.addMonthOptions(jquery_object){
 				.text(i)
 		);
 	}
+}
+
+LabshopUtil.shimpleErrorHandler = function(message){
+	alert(message);
 }
