@@ -65,7 +65,7 @@ public class AggregateAccountDB extends AccountDBController {
 		FindIterable<Document> result;
 		if( filter != null ){
 			result = getCollection().find(
-				Filters.and(Filters.eq("itemId", id), filter));
+				Filters.and(Filters.eq("itemId", id), filter)).sort(Sorts.ascending("timestamp"));
 		}else{
 			result = getCollection().find(Filters.eq("itemId", id));
 		}
