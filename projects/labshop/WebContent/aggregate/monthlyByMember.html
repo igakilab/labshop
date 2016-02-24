@@ -24,6 +24,8 @@
     }
 
     function setMemberPriceListCallback(year, month, reply){
+    	$("#result_memberName").empty();
+    	$("#result_accounts").empty();
     	$("#result_date").text(year + "年 " + month + "月");
     	var table =$("#result_table");
     	table.empty();
@@ -37,7 +39,12 @@
     			createMemberPriceRow(year, month, reply[i])
     		);
     	}
-    	$("#result_sumPrice").text("合計金額は " + sum + " 円です");
+    	table.append($("<tr></tr>")
+    		.append($("<td></td>")
+    			.attr("colspan", "2")
+    			.css("text-align", "right")
+    			.text("合計金額"))
+    		.append($("<td></td>").text(sum)));
     }
 
     function createMemberPriceRow(year, month, namedMemberPriceForm){
@@ -45,7 +52,7 @@
     	return $("<tr></tr>")
     		.append($("<td></td>")
     			.append($("<a></a>")
-					.attr("href", "javascript:void(0);")
+					.attr("href", "#result_memberName")
     				.attr("onclick", "setMemberAccount(" + year +
     					"," + month + "," + tmp.id + ",\"" + tmp.memberName + "\");")
     				.text(tmp.id)))
@@ -63,19 +70,25 @@
     }
 
     function setMemberAccountCallback(id, name, reply){
-    	$("#result_memberName").empty();
-    	$("#result_accounts").empty();
     	$("#result_memberName").text(name + "(" + id + ")");
 		var table = $("#result_accounts")
 		table.empty();
 		table.append(
 			LabshopUtil.createLabelsRow(["id", "日付", "商品id", "商品名", "販売価格"])
 		);
+		var sum = 0;
 		for(var i=0; i<reply.length; i++){
+			sum += reply[i].sellPrice;
 			table.append(
 				createAccountRow(reply[i])
 			);
 		}
+    	table.append($("<tr></tr>")
+    		.append($("<td></td>")
+    			.attr("colspan", "4")
+    			.css("text-align", "right")
+    			.text("合計金額"))
+    		.append($("<td></td>").text(sum)));
     }
 
     function createAccountRow(namedAccountDataForm){
@@ -127,11 +140,13 @@
 	<hr/>
 	<h3 id="result_date"></h3>
 	<table id="result_table"></table>
-	<h3 id="result_sumPrice" class="text-right"></h3>
 
 	<hr/>
 	<h3 id="result_memberName"></h3>
 	<table id="result_accounts"></table>
+
+	<br/>
+	<i class="text-center">igakilab labshop system</i>
 
 	</div>
   </body>
