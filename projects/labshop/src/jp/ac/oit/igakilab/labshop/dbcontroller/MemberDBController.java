@@ -26,6 +26,10 @@ implements DBCsvExportable{
 			doc.getInteger("id", 0), doc.getString("name"));
 
 		data.setIsAdmin(doc.getBoolean("isAdmin", false));
+		String ph = doc.getString("passwordHash");
+		if( ph != null ){
+			data.setPasswordHash(ph);
+		}
 
 		return data;
 	}
@@ -43,6 +47,9 @@ implements DBCsvExportable{
 		doc.append("id", data.getId())
 			.append("name", data.getName())
 			.append("isAdmin", data.getIsAdmin());
+		if( data.getPasswordHash() != null ){
+			doc.append("passwordHash", data.getPasswordHash());
+		}
 
 		return doc;
 	}
