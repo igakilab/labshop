@@ -11,7 +11,7 @@
     <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="../js/jquery.serialize.js"></script>
 	<script type="text/javascript" src="../js/LabshopUtil.js"></script>
-	<script type="text/javascript" src="../dwr/interfaces/WebAccountAggregate.js"></script>
+	<script type="text/javascript" src="../dwr/interface/WebAccountAggregate.js"></script>
 
     <script type="text/javascript">
     function setMemberPriceList(year, month){
@@ -28,7 +28,7 @@
     	var table =$("#result_table");
     	table.empty();
     	table.append(
-    		LabshopUtil.createLabelsRow(["id", "名前", "利用金額"]);
+    		LabshopUtil.createLabelsRow(["id", "名前", "利用金額"])
     	);
     	var sum = 0;
     	for(var i=0; i<reply.length; i++){
@@ -45,23 +45,26 @@
     	return $("<tr></tr>")
     		.append($("<td></td>")
     			.append($("<a></a>")
+					.attr("href", "javascript:void(0);")
     				.attr("onclick", "setMemberAccount(" + year +
-    					"," + month + "," + tmp.memberId + "," + tmp.memberName + ");")
-    				.text(tmp.memberId)))
+    					"," + month + "," + tmp.id + ",\"" + tmp.memberName + "\");")
+    				.text(tmp.id)))
     		.append($("<td></td>").text(tmp.memberName))
     		.append($("<td></td>").text(tmp.price));
     }
 
     function setMemberAccount(year, month, id, name){
-		WebAccountAggregate.getMonthlyMemberAccount(year, month, id, {
+		WebAccountAggregate.getMonthlyMemberAccounts(year, month, id, {
 			callback: function(ret){
 				setMemberAccountCallback(id, name, ret);
 			},
-			errorHandler: Labshop.simpleErrorHandler
+			errorHandler: LabshopUtil.simpleErrorHandler
 		});
     }
 
     function setMemberAccountCallback(id, name, reply){
+    	$("#result_memberName").empty();
+    	$("#result_accounts").empty();
     	$("#result_memberName").text(name + "(" + id + ")");
 		var table = $("#result_accounts")
 		table.empty();
@@ -93,6 +96,10 @@
     	var month = $("#form_month").val();
     	setMemberPriceList(year, month);
     }
+
+    $(document).ready(function(){
+		LabshopUtil.addMonthOptions($("#form_month"));
+    });
     </script>
   </head>
 

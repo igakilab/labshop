@@ -13,7 +13,7 @@ public class ItemSalesForm {
 
 	public ItemSalesForm(int i0, int c0, int p0){
 		setId(i0);
-		setqty(c0);
+		setQty(c0);
 		setPrice(p0);
 	}
 
@@ -24,10 +24,10 @@ public class ItemSalesForm {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getqty() {
+	public int getQty() {
 		return qty;
 	}
-	public void setqty(int qty) {
+	public void setQty(int qty) {
 		this.qty = qty;
 	}
 	public int getPrice() {
