@@ -31,6 +31,12 @@
 				JsAccountHistory.createHistoryRow(result.histories[i])
 			);
 		}
+		if( result.histories.length <= 0 ){
+			table.append(
+				$("<td></td>").attr("colspan", "4")
+					.text("履歴がありません")
+			);
+		}
 
 		$("#result_sumPrice").empty();
 		$("#result_sumPrice").text("利用金額は " + result.sumPrice + " 円です");

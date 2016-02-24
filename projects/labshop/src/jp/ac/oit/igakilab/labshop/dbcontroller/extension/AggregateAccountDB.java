@@ -80,7 +80,8 @@ public class AggregateAccountDB extends AccountDBController {
 		AggregateIterable<Document> result;
 		List<? extends Bson> query = Arrays.asList(
 			Aggregates.match(filter),
-			Aggregates.group("$memberId", Accumulators.sum("sumPrice", "$sellPrice"))
+			Aggregates.group("$memberId", Accumulators.sum("sumPrice", "$sellPrice")),
+			Aggregates.sort(Sorts.ascending("_id"))
 		);
 
 		result = getCollection().aggregate(query);
@@ -102,7 +103,8 @@ public class AggregateAccountDB extends AccountDBController {
 			Aggregates.group("$itemId", Arrays.asList(
 				Accumulators.sum("qty", 1),
 				Accumulators.sum("sumPrice", "$sellPrice")
-			))
+			)),
+			Aggregates.sort(Sorts.ascending("_id"))
 		);
 
 		AggregateIterable<Document> result = getCollection().aggregate(query);

@@ -10,7 +10,55 @@
     <script type="text/javascript" src="dwr/util.js"></script>
     <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="js/jquery.serialize.js"></script>
+    <script type="text/javascript" src="js/LabshopUtil.js"></script>
+    <script type="text/javascript" src="dwr/interface/WebSimpleAuthentication.js"></script>
+    <script type="text/javascript" src="dwr/interface/WebAccountAggregate.js"></script>
     <script type="text/javascript">
+    function pressAuthButton(){
+    	var pass = prompt("パスワードを入力", "");
+    	if( pass !== null ){
+    		WebSimpleAuthentication.getUrl(pass, {
+    			callback: function(url){
+    				window.location.href = url;
+    			},
+    			errorHandler: function(msg){alert(msg);}
+    		});
+    	}
+    }
+
+    function setClaimList(result){
+		var table = $("#claimList_table");
+		table.empty();
+		table.append(
+			LabshopUtil.createLabelsRow(["名前(id)", "利用金額"])
+		);
+		for(var i=0; i<result.length; i++){
+			table.append(
+				createClaimRow(result[i])
+			);
+		}
+    }
+
+    function loadClaimList(){
+    	var year = 2016;
+    	var month = 1;
+    	$("#claimList_month").text(year + " 年 " + month + " 月の利用金額");
+    	WebAccountAggregate.getMonthlyMemberPriceList(year, month, {
+    		callback: setClaimList,
+    		errorHandler: function(msg){alert(msg);}
+    	});
+    }
+
+    function createClaimRow(namedMemberPriceForm){
+    	var tmp = namedMemberPriceForm;
+    	return $("<tr></tr>")
+    		.append($("<td></td>").text(tmp.memberName + " (" + tmp.id + ")"))
+    		.append($("<td></td>").text(tmp.price));
+    }
+
+    $(document).ready(function(){
+    	loadClaimList();
+    });
     </script>
   </head>
 
@@ -29,6 +77,16 @@
 	<p>ただいま利用履歴表示ページを試験運用しています。<br/>
 	下記のリンクからジャンプすることができます</p>
 	<a href="accountHistory/history.html">利用履歴確認ページ</a>
+
+	<h2>最近の利用金額</h2>
+	<p>今月の請求額一覧です。<br/>
+	<h3 id="claimList_month"></h3>
+	<table id="claimList_table"></table>
+
+	<h2>管理者用ページ</h2>
+	<p>テスト/管理用ページです<br/>
+	パスワード認証が必要です</p>
+	<a href="javascript:void(0);" onclick="pressAuthButton()">パスワード認証</a>
 
 	</div>
   </body>

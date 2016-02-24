@@ -10,7 +10,7 @@ header {
 .page_centering{
 	margin: 0 auto;
 	padding: 10px 0;
-	width: 800px;
+	max-width: 800px;
 }
 
 .text-center{

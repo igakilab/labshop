@@ -27,6 +27,12 @@
     <create creator="new" javascript="WebAccountHistory">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebAccountHistory"/>
     </create>
+    <create creator="new" javascript="WebAccountAggregate">
+      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebAccountAggregate"/>
+    </create>
+    <create creator="new" javascript="WebSimpleAuthentication">
+      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebSimpleAuthentication"/>
+    </create>
     <!-- テスト用 -->
     <create creator="new" javascript="TestDBCounter">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.test.TestDBCounter"/>
