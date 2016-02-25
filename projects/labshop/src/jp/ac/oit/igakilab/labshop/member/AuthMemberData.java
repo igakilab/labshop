@@ -4,7 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class AuthMemberData extends MemberData {
-	public static String HASH_ALGORITHM = "MD5";
+	public static String HASH_ALGORITHM = "SHA-1";
 
 	public static String hashString(String s0){
 		byte[] result = null;
