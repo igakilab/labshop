@@ -82,12 +82,11 @@ public class SessionManager {
 		return session;
 	}
 
-	public static void main(String[] args){
-		SessionManager manager = new SessionManager();
-		SessionData ns = manager.issueSession(100101, "");
-		System.out.println("ID : " + ns.getId());
-		System.out.println("MI : " + ns.getMemberId());
-		System.out.println("DD : " + ns.getDueDate());
+	public boolean isSessionRegisted(String sid){
+		SessionDBController sdb = new SessionDBController();
+		boolean res = sdb.isIdRegisted(sid);
+		sdb.close();
+		return res;
 	}
 
 
