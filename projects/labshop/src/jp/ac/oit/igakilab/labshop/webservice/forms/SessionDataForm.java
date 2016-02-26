@@ -8,26 +8,26 @@ import jp.ac.oit.igakilab.labshop.member.MemberData;
 import jp.ac.oit.igakilab.labshop.sessions.SessionData;
 
 public class SessionDataForm {
-	private String sessionId;
+	private String id;
 	private int memberId;
 	private String memberName;
 	private boolean isAdmin;
 	private Date dueDate;
 
 	public SessionDataForm(){
-		setSessionId("");
+		setId("");
 		setMemberId(0);
 		setMemberName("unknown");
 		setIsAdmin(false);
 		setDueDate(null);
 	}
 
-	public String getSessionId() {
-		return sessionId;
+	public String getId() {
+		return id;
 	}
 
-	public void setSessionId(String sessionId) {
-		this.sessionId = sessionId;
+	public void setId(String sessionId) {
+		this.id = sessionId;
 	}
 
 	public int getMemberId() {
@@ -68,7 +68,7 @@ public class SessionDataForm {
 		if( data == null ) return null;
 
 		SessionDataForm form = new SessionDataForm();
-		form.setSessionId(data.getId());
+		form.setId(data.getId());
 		form.setMemberId(data.getMemberId());
 		form.setDueDate(data.getDueDate());
 		if( dbc != null ){
