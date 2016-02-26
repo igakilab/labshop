@@ -1,5 +1,6 @@
 package jp.ac.oit.igakilab.labshop.sessions;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class SessionData {
@@ -62,5 +63,17 @@ public class SessionData {
 
 	public void setDueDate(Date dueDate) {
 		this.dueDate = dueDate;
+	}
+
+	public void setDueDateInSecond(int sec){
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.SECOND, sec);
+		setDueDate(cal.getTime());
+	}
+
+	public void setDueDateInNumOfDate(int day){
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, day);
+		setDueDate(cal.getTime());
 	}
 }
