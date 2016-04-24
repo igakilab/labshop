@@ -1,0 +1,49 @@
+<html lang="ja">
+  <head>
+  	<title>ラボショップシステム</title>
+  	<meta charset="utf-8"/>
+
+	<link rel="stylesheet" href="../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../css/github-markdown.css" type="text/css"/>
+
+    <script type="text/javascript" src="dwr/engine.js"></script>
+    <script type="text/javascript" src="dwr/util.js"></script>
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/jquery.serialize.js"></script>
+    <script type="text/javascript" src="js/LabshopUtil.js"></script>
+    <script type="text/javascript" src="dwr/interface/WebSimpleAuthentication.js"></script>
+    <script type="text/javascript" src="dwr/interface/WebAccountAggregate.js"></script>
+    <script type="text/javascript">
+
+    </script>
+  </head>
+
+	<body>
+	<header>
+		<h1>igakilab. labshop</h1>
+	</header>
+
+	<div class="page_centering markdown-body">
+
+	<h2>メンバーマイページ</h2>
+	<table>
+		<tr>
+			<td rowspan="2" width="200px"><img width="200px" src="../images/pict.png"></td>
+			<td id="info_memberId">65535</td>
+		</tr>
+		<tr><td id="info_memberName">山田 太郎</td></tr>
+	</table>
+	<p style="text-align: right;">
+		<a href="#" onclick="logoutButtonPressed()">ログアウト</a>
+	</p>
+
+	<h2>利用履歴</h2>
+	<p>利用履歴を確認したい月を選択して、取得を押してください。</p>
+	<select id="history_form_year"></select> 年
+	<select id="history_form_month"></select> 月
+	<button type="button" onclick="historyGetButtonPressed()">取得</button>
+
+
+	</div>
+  </body>
+</html>
