@@ -17,7 +17,7 @@
 
     function createButtonPressed(){
     	var input = $("#create_form").serializeJson();
-    	LabshopSession.openSession(
+    	LabshopSession.openClientSession(
     		input.memberId, input.passwd, createSessionCallback);
     }
 
@@ -41,7 +41,7 @@
     }
 
     function closeButtonPressed(){
-    	LabshopSession.closeSession(closeSessionCallback);
+    	LabshopSession.closeClientSession(closeSessionCallback);
     }
 
     function closeSessionCallback(ret){
@@ -49,6 +49,28 @@
     		$("#session_close_result").text("正常終了: " + ret.result);
     	}else{
     		$("#session_close_result").text("異常終了: " + ret.result);
+    	}
+    }
+
+    function showButtonPressed(){
+    	LabshopSession.getClientSessionStatus(showSessionCallback);
+    }
+
+    function showSessionCallback(status){
+    	$("#session_show_opened").text(status.isOpened);
+
+    	if( status.isOpened ){
+    		$("#session_show_id").text(status.session.id);
+    		$("#session_show_memberId").text(status.session.memberId);
+    		$("#session_show_memberName").text(status.session.memberName);
+    		$("#session_show_isAdmin").text(status.session.isAdmin);
+    		$("#session_show_dateDue").text(status.session.dueDate);
+    	}else{
+    		$("#session_show_id").text("");
+    		$("#session_show_memberId").text("");
+    		$("#session_show_memberName").text("");
+    		$("#session_show_isAdmin").text("");
+    		$("#session_show_dateDue").text("");
     	}
     }
 
@@ -95,6 +117,21 @@
     	<td><button type="button" onclick="closeButtonPressed()">クローズ</button></td>
     	<td id="session_close_result"></td>
     </tr>
+    </table>
+
+    <hr/>
+
+    <h4>セッション情報</h4>
+    <button type="button" onclick="showButtonPressed()">
+    ローカルのセッション状態を表示する</button>
+    <table>
+    	<tr><th>項目</th><th>値</th></tr>
+    	<tr><td>セッションの開通</td><td id="session_show_opened"></td></tr>
+    	<tr><td>セッションID</td><td id="session_show_id"></td></tr>
+    	<tr><td>認証メンバーID</td><td id="session_show_memberId"></td></tr>
+    	<tr><td>認証メンバー名</td><td id="session_show_memberName"></td></tr>
+    	<tr><td>認証権限</td><td id="session_show_isAdmin"></td></tr>
+    	<tr><td>セッションの期限</td><td id="session_show_dateDue"></td></tr>
     </table>
 
 
