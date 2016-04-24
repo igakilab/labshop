@@ -29,7 +29,7 @@
 
     function setMemberProfile(session_state){
     	if( !session_state.isOpened ){
-    		window.location.href = "login.html";
+    		location.replace("login.html");
     	}
 
     	LOGIN_MEMBER_ID = session_state.session.memberId;

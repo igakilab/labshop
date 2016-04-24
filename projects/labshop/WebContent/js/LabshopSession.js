@@ -73,7 +73,7 @@ LabshopSession.isClientSessionOpened = function(f_callback){
 LabshopSession.getClientSessionId = function(){
 	var cookieData = $.cookie("sessionId");
 
-	if( cookieData == undefined && cookieData == "" ){
+	if( cookieData == undefined || cookieData == "" ){
 		return {exist: false};
 	}else{
 		return {exist: true, sessionId: cookieData};
