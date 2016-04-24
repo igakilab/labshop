@@ -1,0 +1,102 @@
+<html lang="ja">
+  <head>
+  	<title>ラボショップシステム</title>
+  	<meta charset="utf-8"/>
+    <script type="text/javascript" src="../dwr/engine.js"></script>
+    <script type="text/javascript" src="../dwr/util.js"></script>
+    <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.serialize.js"></script>
+    <script type="text/javascript" src="../js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../dwr/interface/WebSessionManager.js"></script>
+    <script type="text/javascript" src="../js/LabshopSession.js"></script>
+    <script type="text/javascript">
+
+    $(function(){
+
+    });
+
+    function createButtonPressed(){
+    	var input = $("#create_form").serializeJson();
+    	LabshopSession.openSession(
+    		input.memberId, input.passwd, createSessionCallback);
+    }
+
+    function createSessionCallback(ret){
+    	if( ret.isErr ){
+    		$("#session_create_result")
+    			.text("生成に失敗しました: " + ret.errMsg);
+    	}else{
+    		$("#session_create_result")
+    			.text("生成に成功しました SESSION_ID: " + ret.session.id);
+    	}
+    }
+
+    function getButtonPressed(){
+    	var sid = LabshopSession.sessionCookieGet();
+    	if( sid == undefined ){
+    		$("#session_get_result").text("NO SESSION");
+    		return;
+    	}
+    	$("#session_get_result").text(sid);
+    }
+
+    function closeButtonPressed(){
+    	LabshopSession.closeSession(closeSessionCallback);
+    }
+
+    function closeSessionCallback(ret){
+    	if( !ret.isError ){
+    		$("#session_close_result").text("正常終了: " + ret.result);
+    	}else{
+    		$("#session_close_result").text("異常終了: " + ret.result);
+    	}
+    }
+
+    </script>
+
+    <style>
+    td, th{
+    	background-color: #fcf;
+    	width: 200px;
+    }
+    </style>
+
+  </head>
+  <body>
+    <h3>井垣研 ラボショップシステム</h3>
+    <h1>セッションテスト</h1>
+    <hr/>
+
+	<h4>セッションの生成</h4>
+    <table>
+    <tr>
+    	<td>セッション生成</td>
+    	<td>
+    		<form id="create_form">
+    			メンバーID:<input type="text" name="memberId" value=""/><br/>
+				パスワード:<input type="password" name="passwd" value=""/>
+    		</form>
+    	</td>
+    	<td><button type="button" onclick="createButtonPressed()">生成</button></td>
+    </tr>
+    <tr>
+    </table>
+    <p id="session_create_result"></p>
+
+    <h4>セッションの取得</h4>
+    <table>
+    <tr>
+    	<td>セッションの取得</td>
+    	<td><button type="button" onclick="getButtonPressed()">取得</button></td>
+    	<td id="session_get_result"></td>
+    </tr>
+    <tr>
+    	<td>セッションのクローズ</td>
+    	<td><button type="button" onclick="closeButtonPressed()">クローズ</button></td>
+    	<td id="session_close_result"></td>
+    </tr>
+    </table>
+
+
+  </body>
+</html>

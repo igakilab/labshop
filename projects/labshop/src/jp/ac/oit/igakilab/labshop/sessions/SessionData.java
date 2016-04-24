@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class SessionData {
-	public static int DEFAULT_SESSIONID_LENGTH= 16;
+	public static int DEFAULT_SESSIONID_LENGTH = 7;
 
 	public static String generateSessionId(){
 		StringBuilder stb = new StringBuilder();

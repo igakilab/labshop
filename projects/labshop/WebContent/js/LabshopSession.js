@@ -4,7 +4,7 @@ LabshopSession.defaultSessionExpires = 7;
 
 LabshopSession.sessionCookieSet = function(session){
 	$.cookie("sessionId", session.id, {
-		expires : this.defaultSessionExpires,
+		expires : LabshopSession.defaultSessionExpires,
 		path : "/",
 	});
 }
@@ -14,13 +14,13 @@ LabshopSession.sessionCookieGet = function(){
 }
 
 LabshopSession.sessionCookieClear = function(){
-	$.cookie("sessionId", "");
+	$.removeCookie("sessionId", {path: "/"});
 }
 
 LabshopSession.openSession = function(mid, passwd, f_callback){
 	WebSessionManager.openSession(mid, passwd, {
 		callback : function(ret){
-			this.sessionCookieSet(ret);
+			LabshopSession.sessionCookieSet(ret);
 			f_callback({isErr:false, session:ret});
 		},
 		errorHandler : function(msg){
