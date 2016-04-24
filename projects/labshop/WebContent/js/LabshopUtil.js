@@ -18,6 +18,18 @@ LabshopUtil.addMonthOptions = function(jquery_object){
 	}
 }
 
+LabshopUtil.addSelectOptions = function(jquery_object, options){
+	if( !$.isArray(options) ) return;
+
+	for(var i=0; i<options.length; i++){
+		jquery_object.append(
+			$("<option></option>")
+				.attr("value", options[i])
+				.text(options[i])
+		);
+	}
+}
+
 LabshopUtil.shimpleErrorHandler = function(message){
 	alert(message);
 }

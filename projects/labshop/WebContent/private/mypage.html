@@ -6,15 +6,90 @@
 	<link rel="stylesheet" href="../css/style.css" type="text/css"/>
 	<link rel="stylesheet" href="../css/github-markdown.css" type="text/css"/>
 
-    <script type="text/javascript" src="dwr/engine.js"></script>
-    <script type="text/javascript" src="dwr/util.js"></script>
-    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
-    <script type="text/javascript" src="js/jquery.serialize.js"></script>
-    <script type="text/javascript" src="js/LabshopUtil.js"></script>
-    <script type="text/javascript" src="dwr/interface/WebSimpleAuthentication.js"></script>
-    <script type="text/javascript" src="dwr/interface/WebAccountAggregate.js"></script>
+    <script type="text/javascript" src="../dwr/engine.js"></script>
+    <script type="text/javascript" src="../dwr/util.js"></script>
+    <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.serialize.js"></script>
+    <script type="text/javascript" src="../js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../dwr/interface/WebSessionManager.js"></script>
+    <script type="text/javascript" src="../dwr/interface/WebAccountHistory.js"></script>
+    <script type="text/javascript" src="../js/LabshopUtil.js"></script>
+    <script type="text/javascript" src="../js/LabshopSession.js"></script>
+    <script type="text/javascript" src="../accountHistory/JsAccountHistory.js"></script>
     <script type="text/javascript">
+    var LOGIN_MEMBER_ID;
 
+    function init(){
+    	LabshopUtil.addSelectOptions($("#history_form_year"), ["2016"]);
+    	LabshopUtil.addSelectOptions($("#history_form_month"),
+    		["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]);
+
+    	LabshopSession.getClientSessionStatus(setMemberProfile);
+    }
+
+    function setMemberProfile(session_state){
+    	if( !session_state.isOpened ){
+    		window.location.href = "login.html";
+    	}
+
+    	LOGIN_MEMBER_ID = session_state.session.memberId;
+    	$("#info_memberId").text(session_state.session.memberId);
+    	$("#info_memberName").text(session_state.session.memberName);
+    }
+
+    function historyGetButtonPressed(){
+    	var year = $("#history_form_year").val();
+    	var month = $("#history_form_month").val();
+
+    	$("#history_date").text(year + "年 " + month + "月");
+    	$("#history_table").empty();
+    	JsAccountHistory.getHistory(year, month, LOGIN_MEMBER_ID, getHistoryCallback);
+    }
+
+    function getHistoryCallback(result){
+		if( result.isErr ){
+			alert("エラーが発生しました");
+			return;
+		}
+
+		var table = $("#history_table");
+		table.append(
+			LabshopUtil.createLabelsRow(["日時", "商品ID", "商品名", "価格"]));
+		for(var i=0; i<result.histories.length; i++){
+			table.append(
+				createHistoryTableRow(result.histories[i]));
+		}
+		table.append(
+			$("<tr></tr>").append(
+				$("<td></td>").attr("colspan", "3").text("合計金額"))
+				.append($("<td></td>").text(result.sumPrice))
+		)
+    }
+
+    function createHistoryTableRow(account){
+    	var dateStr = (account.timestamp.getMonth()+1) + " / " + account.timestamp.getDate();
+    	return $("<tr></tr>")
+    		.append($("<td></td>").text(dateStr))
+    		.append($("<td></td>").text(account.itemId))
+    		.append($("<td></td>").text(account.itemName))
+    		.append($("<td></td>").text(account.sellPrice));
+    }
+
+    function logoutButtonPressed(){
+    	LabshopSession.closeClientSession(function(ret){
+    		if( ret.result ){
+    			alert("ログアウトしました");
+    			window.location.href="../index.html";
+    		}else{
+    			alert("ログアウトに失敗しています");
+    			window.location.href="../index.html";
+    		}
+    	});
+    }
+
+    $(document).ready(function(){
+    	init();
+    });
     </script>
   </head>
 
@@ -26,12 +101,15 @@
 	<div class="page_centering markdown-body">
 
 	<h2>メンバーマイページ</h2>
+	<p style="text-align: right;">
+		<a href="../index.html">トップへ戻る</a>
+	</p>
 	<table>
 		<tr>
 			<td rowspan="2" width="200px"><img width="200px" src="../images/pict.png"></td>
-			<td id="info_memberId">65535</td>
+			<td id="info_memberId"></td>
 		</tr>
-		<tr><td id="info_memberName">山田 太郎</td></tr>
+		<tr><td id="info_memberName"></td></tr>
 	</table>
 	<p style="text-align: right;">
 		<a href="#" onclick="logoutButtonPressed()">ログアウト</a>
@@ -42,6 +120,9 @@
 	<select id="history_form_year"></select> 年
 	<select id="history_form_month"></select> 月
 	<button type="button" onclick="historyGetButtonPressed()">取得</button>
+
+	<h3 id="history_date"></h3>
+	<table id="history_table"></table>
 
 
 	</div>

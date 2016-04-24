@@ -12,6 +12,7 @@
     <script type="text/javascript" src="../js/jquery.serialize.js"></script>
     <script type="text/javascript" src="../js/jquery.cookie.js"></script>
     <script type="text/javascript" src="../dwr/interface/WebSessionManager.js"></script>
+    <script type="text/javascript" src="../js/LabshopUtil.js"></script>
     <script type="text/javascript" src="../js/LabshopSession.js"></script>
     <script type="text/javascript">
     function init(){
@@ -62,12 +63,12 @@
 
 		<form id="login_form">
 			<h6>メンバーID</h6>
-			<input type="text" name="memberId"/>
+			<input type="text" name="memberId" tabindex="1"/>
 			<h6>パスワード</h6>
-			<input type="password" name="passwd"/>
+			<input type="password" name="passwd" tabindex="2"/>
 		</form>
 
-		<button type="button" onclick="loginButtonPressed()">ログイン</button>
+		<button type="button" onclick="loginButtonPressed()" tabindex="3">ログイン</button>
 	</div>
 
 	</div>
