@@ -11,8 +11,20 @@
     <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="../js/jquery.serialize.js"></script>
     <script type="text/javascript" src="../js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../dwr/interface/WebSessionManager.js"></script>
     <script type="text/javascript" src="../js/LabshopSession.js"></script>
     <script type="text/javascript">
+    function init(){
+    	LabshopSession.getClientSessionStatus(loginCheck);
+    }
+
+    function loginCheck(result){
+    	if( result.isOpened ){
+    		$("#message_area").text("すでにログインしています");
+    		window.location.href="mypage.html";
+    	}
+    }
+
 	function loginButtonPressed(){
 		var input = $("#login_form").serializeJson();
 
@@ -20,13 +32,18 @@
 			input.memberId, input.passwd, loginCallback);
 	}
 
-	function loginCallBack(result){
+	function loginCallback(result){
 		if( result.isErr ){
 			$("#message_area").html("ログインできませんでした<br/>" + result.errMsg);
 		}else{
 			window.location.href="mypage.html";
 		}
 	}
+
+	$(document).ready(function(){
+		init();
+	});
+
     </script>
   </head>
 
