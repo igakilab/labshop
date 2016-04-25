@@ -1,6 +1,5 @@
 package jp.ac.oit.igakilab.labshop.webservice;
 
-import jp.ac.oit.igakilab.labshop.dbcontroller.DBConnector;
 import jp.ac.oit.igakilab.labshop.sessions.SessionData;
 import jp.ac.oit.igakilab.labshop.sessions.SessionManager;
 import jp.ac.oit.igakilab.labshop.webservice.forms.SessionDataForm;
@@ -16,30 +15,34 @@ public class WebSessionManager {
 		}
 
 		SessionData session = manager.issueSession(member_id, passwd);
-		DBConnector dbc = new DBConnector();
-		SessionDataForm form = SessionDataForm.getInstance(session, dbc);
+		SessionDataForm form = SessionDataForm.getInstance(session,
+			manager.getDBConnector());
 
-		dbc.close();
+		manager.close();
 		return form;
 	}
 
 
 	public boolean isSessionOpened(String sid){
 		SessionManager manager = new SessionManager();
-		return manager.isSessionRegisted(sid);
+		boolean isRegisted = manager.isSessionRegisted(sid);
+		manager.close();
+		return isRegisted;
 	}
 
 	public SessionDataForm getSessionData(String sid){
 		SessionManager manager = new SessionManager();
-		DBConnector dbc = new DBConnector();
 		SessionDataForm form =
-			SessionDataForm.getInstance(manager.getSession(sid), dbc);
-		dbc.close();
+			SessionDataForm.getInstance(
+				manager.getSession(sid), manager.getDBConnector());
+		manager.close();
 		return form;
 	}
 
 	public boolean closeSession(String sid){
 		SessionManager manager = new SessionManager();
-		return manager.removeSession(sid);
+		boolean iss = manager.removeSession(sid);
+		manager.close();
+		return iss;
 	}
 }
