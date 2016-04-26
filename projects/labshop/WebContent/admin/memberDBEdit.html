@@ -23,28 +23,28 @@
     <script type="text/javascript">
 
     $(function(){
-    	initItemDataForm();
-    	updateItemList();
+    	initMemberDataForm();
+    	updateMemberList();
     });
 
-    function initItemDataForm(itemId){
-    	if( itemId !== undefined ){
+    function initMemberDataForm(memberId){
+    	if( memberId !== undefined ){
     		var sid = labshop.getClientSessionId();
-    		labshop.getItemData(sid, itemId, initItemDataFormCallback);
+    		labshop.getMemberData(sid, memberId, initMemberDataFormCallback);
     	}
-    	initItemDataFormCallback();
+    	initMemberDataFormCallback();
     }
 
-	function initItemDataFormCallback(ret){
+	function initMemberDataFormCallback(ret){
 		var input_id = $("<input></input>")
 			.attr("type", "text")
 			.attr("name", "id");
 		var input_name = $("<input></input>")
 			.attr("type", "text")
 			.attr("name", "name");
-		var input_price = $("<input></input>")
-			.attr("type", "text")
-			.attr("name", "price");
+		var input_isAdmin = $("<input></input>")
+			.attr("type", "checkbox")
+			.attr("name", "isAdmin");
 		var button_submit = $("<button></button>")
 			.attr("type", "button")
 			.attr("onclick", "addButtonPressed()")
@@ -59,53 +59,53 @@
 			input_id.val(ret.data.id)
 				.attr("readonly", "readonly");
 			input_name.val(ret.data.name);
-			input_price.val(ret.data.price);
+			if( ret.data.isAdmin ) input_isAdmin.attr("checked", "checked");
 			button_submit.attr("onclick", "updateButtonPressed()")
 				.text("更新");
 		}
 
-		$("#itemDataForm_id_cell").empty()
+		$("#memberDataForm_id_cell").empty()
 			.append(input_id);
-		$("#itemDataForm_name_cell").empty()
+		$("#memberDataForm_name_cell").empty()
 			.append(input_name);
-		$("#itemDataForm_price_cell").empty()
-			.append(input_price);
-		$("#itemDataForm_submit_wrap").empty()
+		$("#memberDataForm_isAdmin_cell").empty()
+			.append(input_isAdmin);
+		$("#memberDataForm_submit_wrap").empty()
 			.append(button_submit);
     }
 
-	function updateItemList(){
+	function updateMemberList(){
 		var sid = labshop.getClientSessionId();
-		labshop.getItemList(sid, updateItemListCallback);
+		labshop.getMemberList(sid, updateMemberListCallback);
 	}
 
-	function updateItemListCallback(ret){
+	function updateMemberListCallback(ret){
 		if( ret.isErr ){
 			alert(ret.errMsg + ": " + labshop.getClientSessionId());
 			return;
 		}
 
-		var itemList = ret.list;
-		var table = $("#itemListTable");
+		var memberList = ret.list;
+		var table = $("#memberListTable");
 
 		table.empty();
-		table.append(labshop.createLabelsRow(["ID", "アイテム名", "販売価格", "操作"]));
+		table.append(labshop.createLabelsRow(["ID", "メンバー名", "権限", "操作"]));
 
-		for(var i=0; i<itemList.length; i++){
+		for(var i=0; i<memberList.length; i++){
 			var btn_edit = $("<button></button>").text("編集")
 				.attr("type", "button")
-				.attr("onclick", "editButtonPressed(" + itemList[i].id + ")")
+				.attr("onclick", "editButtonPressed(" + memberList[i].id + ")")
 			var btn_remove = $("<button></button>").text("削除")
 				.attr("type", "button")
-				.attr("onclick", "removeButtonPressed(" + itemList[i].id + ")");
+				.attr("onclick", "removeButtonPressed(" + memberList[i].id + ")");
 
 			table.append(
 				$("<tr></tr>").append(
-					$("<td></td>").text(itemList[i].id)
+					$("<td></td>").text(memberList[i].id)
 				).append(
-					$("<td></td>").text(itemList[i].name)
+					$("<td></td>").text(memberList[i].name)
 				).append(
-					$("<td></td>").text(itemList[i].price)
+					$("<td></td>").text(memberList[i].isAdmin)
 				).append(
 					$("<td></td>").append(btn_edit)
 						.append(btn_remove)
@@ -115,38 +115,38 @@
 	}
 
 	function createButtonPressed(){
-		initItemDataForm();
+		initMemberDataForm();
 	}
 
 	function addButtonPressed(){
-		var input = $("#itemDataForm").serializeJson();
+		var input = $("#memberDataForm").serializeJson();
 		var sid = labshop.getClientSessionId();
-		labshop.editItemDB(sid, "add", input, editExcuteCallback);
+		labshop.editMemberDB(sid, "add", input, editExcuteCallback);
 	}
 
 	function updateButtonPressed(){
-		var input = $("#itemDataForm").serializeJson();
+		var input = $("#memberDataForm").serializeJson();
 		var sid = labshop.getClientSessionId();
-		labshop.editItemDB(sid, "update", input, editExcuteCallback);
+		labshop.editMemberDB(sid, "update", input, editExcuteCallback);
 	}
 
-	function editButtonPressed(itemId){
-		initItemDataForm(itemId);
+	function editButtonPressed(memberId){
+		initMemberDataForm(memberId);
 	}
 
-	function removeButtonPressed(itemId){
-		if( !confirm("ID番号[" + itemId + "]のデータを削除してもよろしいですか？") ){
+	function removeButtonPressed(memberId){
+		if( !confirm("ID番号[" + memberId + "]のデータを削除してもよろしいですか？") ){
 			return;
 		}
 
 		var sid = labshop.getClientSessionId();
-		labshop.editItemDB(sid, "remove", {id: itemId}, editExcuteCallback);
+		labshop.editMemberDB(sid, "remove", {id: memberId}, editExcuteCallback);
 	}
 
 	function editExcuteCallback(ret){
 		if( ret.isErr ){ alert(ret.errMsg); return;}
 		if( !ret.isSuccess ){ alert("処理が正常に終了しませんでした"); }
-		updateItemList();
+		updateMemberList();
 	}
     </script>
 
@@ -159,27 +159,27 @@
 	</div>
 
 	<div class="markdown-body page_centering">
-		<h1>item database editor</h1>
+		<h1>member database editor</h1>
 
 		<button type="button" onclick="createButtonPressed()">新規作成</button>
 
-		<form id="itemDataForm">
+		<form id="memberDataForm">
 		<table>
 			<tr><td>ID</td>
-				<td id="itemDataForm_id_cell"></td>
+				<td id="memberDataForm_id_cell"></td>
 			</tr>
-			<tr><td>アイテム名</td>
-				<td id="itemDataForm_name_cell"></td>
+			<tr><td>メンバー名</td>
+				<td id="memberDataForm_name_cell"></td>
 			</tr>
-			<tr><td>標準価格</td>
-				<td id="itemDataForm_price_cell"></td>
+			<tr><td>権限</td>
+				<td id="memberDataForm_isAdmin_cell"></td>
 			</tr>
 		</table>
-		<div id="itemDataForm_submit_wrap"></div>
+		<div id="memberDataForm_submit_wrap"></div>
 		</form>
 
-		<h3>アイテムリスト</h3>
-		<table id="itemListTable"></table>
+		<h3>メンバーリスト</h3>
+		<table id="memberListTable"></table>
 
 	</div>
 
