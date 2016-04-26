@@ -39,6 +39,9 @@
     <create creator="new" javascript="WebSessionManager">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebSessionManager"/>
     </create>
+    <create creator="new" javascript="WebAdminDBEditor">
+      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.admin.WebAdminDBEditor"/>
+    </create>
     <!-- テスト用 -->
     <create creator="new" javascript="TestDBCounter">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.test.TestDBCounter"/>

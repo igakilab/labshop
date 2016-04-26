@@ -1,4 +1,4 @@
-package jp.ac.oit.igakilab.labshop.webservice;
+package jp.ac.oit.igakilab.labshop.webservice.admin;
 
 import java.util.List;
 
@@ -11,6 +11,7 @@ import jp.ac.oit.igakilab.labshop.member.MemberData;
 import jp.ac.oit.igakilab.labshop.sessions.SessionData;
 import jp.ac.oit.igakilab.labshop.sessions.SessionManager;
 import jp.ac.oit.igakilab.labshop.shopping.AccountData;
+import jp.ac.oit.igakilab.labshop.webservice.ExcuteFailedException;
 import jp.ac.oit.igakilab.labshop.webservice.forms.AccountDataForm;
 import jp.ac.oit.igakilab.labshop.webservice.forms.ItemDataForm;
 import jp.ac.oit.igakilab.labshop.webservice.forms.MemberDataForm;
