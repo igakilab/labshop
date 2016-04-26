@@ -1,5 +1,6 @@
 package jp.ac.oit.igakilab.labshop.webservice.admin;
 
+import java.util.Comparator;
 import java.util.List;
 
 import jp.ac.oit.igakilab.labshop.dbcontroller.AccountDBController;
@@ -198,6 +199,13 @@ public class WebAdminDBEditor {
 
 		if( authAdmin(idb, sid) ){
 			List<ItemData> list = idb.getAllItemList();
+
+			list.sort(new Comparator<ItemData>(){
+				public int compare(ItemData o1, ItemData o2){
+					return Integer.compare(o1.getId(), o2.getId());
+				}
+			});
+
 			idb.close();
 			return ItemDataForm.toItemDataForm(list.toArray(new ItemData[list.size()]));
 		}else{
