@@ -3,18 +3,18 @@ var LabshopSession = {};
 LabshopSession.defaultSessionExpires = 7;
 
 LabshopSession.sessionCookieSet = function(session){
-	$.cookie("sessionId", session.id, {
+	$.cookie("session_id", session.id, {
 		expires : LabshopSession.defaultSessionExpires,
 		path : "/",
 	});
 }
 
 LabshopSession.sessionCookieGet = function(){
-	return $.cookie("sessionId");
+	return $.cookie("session_id");
 }
 
 LabshopSession.sessionCookieClear = function(){
-	$.removeCookie("sessionId", {path: "/"});
+	$.removeCookie("session_id", {path: "/"});
 }
 
 LabshopSession.openClientSession = function(mid, passwd, f_callback){
@@ -71,7 +71,7 @@ LabshopSession.isClientSessionOpened = function(f_callback){
 }
 
 LabshopSession.getClientSessionId = function(){
-	var cookieData = $.cookie("sessionId");
+	var cookieData = $.cookie("session_id");
 
 	if( cookieData == undefined || cookieData == "" ){
 		return {exist: false};

@@ -1,5 +1,6 @@
 body{
 	margin:0;
+	background-color: #f6f6f6;
 }
 
 header {
@@ -8,10 +9,15 @@ header {
 	border-bottom: 10px solid #08e;
 }
 
+.page_header{
+	border-top: 10px solid #08e;
+}
+
 .page_centering{
 	margin: 0 auto;
-	padding: 10px 0;
+	padding: 10px;
 	max-width: 800px;
+	background-color: #fff;
 }
 
 .text-center{
