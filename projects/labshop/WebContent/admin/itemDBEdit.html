@@ -23,8 +23,8 @@
     <script type="text/javascript">
 
     $(function(){
-    	updateItemList();
     	initItemDataForm();
+    	updateItemList();
     });
 
     function initItemDataForm(itemId){
@@ -150,11 +150,13 @@
 </head>
 <body>
 	<div class="page_header">
-		<h1>igakilab labshop</h1>
+		<div class="page_centering">
+			<img src="../images/logo2.png"/>
+		</div>
 	</div>
 
 	<div class="markdown-body page_centering">
-		<h2>item database editor</h2>
+		<h1>item database editor</h1>
 
 		<button type="button" onclick="createButtonPressed()">新規作成</button>
 
@@ -177,7 +179,6 @@
 		<table id="itemListTable"></table>
 
 	</div>
-
 
 
   </body>
