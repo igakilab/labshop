@@ -1,0 +1,78 @@
+<html lang="ja">
+  <head>
+  	<title>ラボショップシステム</title>
+  	<meta charset="utf-8"/>
+
+	<link rel="stylesheet" href="../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../css/github-markdown.css" type="text/css"/>
+
+    <script type="text/javascript" src="../dwr/engine.js"></script>
+    <script type="text/javascript" src="../dwr/util.js"></script>
+    <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.serialize.js"></script>
+    <script type="text/javascript" src="../js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../dwr/interface/WebSessionManager.js"></script>
+    <script type="text/javascript" src="../js/LabshopUtil.js"></script>
+    <script type="text/javascript" src="../js/LabshopSession.js"></script>
+    <script type="text/javascript">
+    function init(){
+    	LabshopSession.getClientSessionStatus(loginCheck);
+    }
+
+    function loginCheck(result){
+    	if( result.isOpened ){
+    		$("#message_area").text("すでにログインしています");
+    		window.location.href="mypage.html";
+    	}
+    }
+
+	function loginButtonPressed(){
+		var input = $("#login_form").serializeJson();
+
+		LabshopSession.openClientSession(
+			input.memberId, input.passwd, loginCallback);
+	}
+
+	function loginCallback(result){
+		if( result.isErr ){
+			$("#message_area").html("ログインできませんでした<br/>" + result.errMsg);
+		}else{
+			window.location.href="mypage.html";
+		}
+	}
+
+	$(document).ready(function(){
+		init();
+	});
+
+    </script>
+  </head>
+
+	<body>
+	<header>
+		<h1>igakilab. labshop</h1>
+	</header>
+
+	<div class="page_centering markdown-body">
+
+	<div class="text-center">
+		<h2>ログイン</h2>
+		<img src="../images/logo.png" alt="logo"/>
+
+		<p id="message_area" style="background-color: #fcc; color: #c00;"></p>
+
+		<form id="login_form">
+			<h6>メンバーID</h6>
+			<input type="text" name="memberId" tabindex="1"/>
+			<h6>パスワード</h6>
+			<input type="password" name="passwd" tabindex="2"/>
+		</form>
+
+		<button type="button" onclick="loginButtonPressed()" tabindex="3">ログイン</button>
+
+		<p><br/><a href="../index.html">トップページへ戻る</a></p>
+	</div>
+
+	</div>
+  </body>
+</html>

@@ -8,6 +8,7 @@ public class MemberData {
 	private int id;
 	private String name;
 	private boolean isAdmin;
+	private String passwordHash;
 
 	public MemberData(){
 		id = 0;
@@ -42,5 +43,12 @@ public class MemberData {
 	}
 	public void setIsAdmin(boolean a0){
 		isAdmin = a0;
+	}
+
+	public String getPasswordHash(){
+		return passwordHash;
+	}
+	public void setPasswordHash(String h0){
+		passwordHash = h0;
 	}
 }

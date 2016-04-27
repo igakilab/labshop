@@ -1,5 +1,24 @@
 var JsAccountHistory = {};
 
+/*
+ * getHistory - result
+ * {
+ *  histories: NamedAccountDataForm[]{
+ *    id: int
+ *    timestamp: date
+ *    memberId: int
+ *    memberName: String
+ *    itemId: int
+ *    itemName: String
+ *    sellPrice: int
+ *  }
+ *  memberId: int
+ *  memberName: String
+ *  sumPrice: int
+ *  isErr: boolean
+ * }
+ */
+
 JsAccountHistory.getHistory = function(year, month, mid, f_callback){
 	WebAccountHistory.getMonthlyHistoryByMemberId(year, month, mid, {
 		callback: function(ret){
