@@ -58,7 +58,7 @@ labshop.closeClientSession = function(fcallback){
 		return {isErr: true, errMsg: "クライアントにセッションがありません"};
 	}
 
-	WebSessionManager.closeSession(localId.value, {
+	WebSessionManager.closeSession(localId, {
 		callback: function(ret){
 			fcallback({isErr: false, result: ret});
 		}
@@ -73,7 +73,7 @@ labshop.getClientSessionState = function(fcallback){
 		return {isErr: false, isOpened: false};
 	}
 
-	WebSessionManager.getSessionData(localId.value, {
+	WebSessionManager.getSessionData(localId, {
 		callback: function(ret){
 			if( ret == null ){
 				fcallback({isErr: false, isOpened: false});
@@ -83,6 +83,24 @@ labshop.getClientSessionState = function(fcallback){
 		},
 		errorHandler: function(msg){
 			fcallback({isErr: false, isOpened: false, errMsg: msg});
+		}
+	});
+}
+
+/*admin tools*/
+labshop.adminGetSession = function(sid, fcallback){
+	var localId = labshop.getClientSessionId();
+
+	if( localId == undefined ){
+		return {isErr: false, errMsg: "セッションidが未定義です"};
+	}
+
+	WebAdminSessionManager.getSessionData(localId, sid, {
+		callback: function(ret){
+			fcallback({isErr:false, session: ret});
+		},
+		errorHandler: function(msg) {
+			fcallback({isErr:true, errMsg:msg})
 		}
 	});
 }
