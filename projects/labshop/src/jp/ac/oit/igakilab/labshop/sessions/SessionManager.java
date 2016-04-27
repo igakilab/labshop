@@ -4,6 +4,7 @@ import jp.ac.oit.igakilab.labshop.dbcontroller.DBConnector;
 import jp.ac.oit.igakilab.labshop.dbcontroller.MemberDBController;
 import jp.ac.oit.igakilab.labshop.dbcontroller.SessionDBController;
 import jp.ac.oit.igakilab.labshop.member.AuthMemberData;
+import jp.ac.oit.igakilab.labshop.member.MemberData;
 
 public class SessionManager {
 	public static int DEFAULT_EXPIRE_DATE = 7;
@@ -84,6 +85,30 @@ public class SessionManager {
 
 	public boolean isSessionRegisted(String sid){
 		return sdb.isIdRegisted(sid);
+	}
+
+	public boolean isSessionAdmin(String sid){
+		if( isSessionRegisted(sid) ){
+			MemberDBController mdb = new MemberDBController(sdb);
+			SessionData data = sdb.getSessionById(sid);
+
+			MemberData member;
+			if( mdb.isIdRegisted(data.getMemberId()) ){
+				member = mdb.getMemberById(data.getMemberId());
+			}else{
+				mdb.close();
+				return false;
+			}
+
+			mdb.close();
+			return member.getIsAdmin();
+		}
+
+		return false;
+	}
+
+	public SessionData[] getSessionList(){
+		return sdb.getAllSessionList().toArray(new SessionData[0]);
 	}
 
 	public DBConnector getDBConnector(){
