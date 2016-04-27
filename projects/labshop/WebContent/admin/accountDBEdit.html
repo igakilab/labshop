@@ -30,28 +30,21 @@
     function initAccountDataForm(accountId){
     	if( accountId !== undefined ){
     		var sid = labshop.getClientSessionId();
-    		labshop.getItemData(sid, accountId, initItemDataFormCallback);
+    		labshop.getAccountData(sid, accountId, initAccountDataFormCallback);
     	}
     	initAccountDataFormCallback();
     }
 
 	function initAccountDataFormCallback(ret){
-		var input_id = $("<input></input>")
-			.attr("type", "text")
-			.attr("name", "id");
-		var input_memberId= $("<input></input>")
-			.attr("type", "text")
-			.attr("name", "memberId");
-		var input_itemId = $("<input></input>")
-			.attr("type", "text")
-			.attr("name", "itemId");
-		var input_sellPrice = $("<input></input>")
-			.attr("type", "text")
-			.attr("name", "sellPrice");
+		var input_memberId= $("#accountDataForm_memberId");
+		var input_itemId = $("#accountDataForm_itemId");
+		var input_sellPrice = $("#accountDataForm_sellPrice");
 		var button_submit = $("<button></button>")
 			.attr("type", "button")
-			.attr("onclick", "addButtonPressed()")
+			.attr("onclick", "registButtonPressed()")
 			.text("追加");
+
+		$("#accountDataForm_registModeArea").text("新規登録");
 
 		if( ret !== undefined ){
 			if( ret.isErr ){
@@ -59,30 +52,23 @@
 				return;
 			}
 
-			input_id.val(ret.data.id)
-				.attr("readonly", "readonly");
 			input_memberId.val(ret.data.memberId);
 			input_itemId.val(ret.data.itemId);
 			input_sellPrice.val(ret.data.sellPrice);
-			button_submit.attr("onclick", "updateButtonPressed()")
+			button_submit.attr("onclick", "updateButtonPressed("+ ret.data.id + ")")
 				.text("更新");
+
+			$("#accountDataForm_registModeArea").text(
+				"登録情報修正 (id:" + ret.data.id + ", timestamp:" + ret.data.timestamp + ")");
 		}
 
-		$("#itemDataForm_id_cell").empty()
-			.append(input_id);
-		$("#itemDataForm_memberId_cell").empty()
-			.append(input_memberId);
-		$("#itemDataForm_itemId_cell").empty()
-			.append(input_itemId);
-		$("#itemDataForm_sellPrice_cell").empty()
-		.append(input_sellPrice);
-		$("#itemDataForm_submit_wrap").empty()
+		$("#accountDataForm_submit_cell").empty()
 			.append(button_submit);
     }
 
 	function updateAccountList(){
 		var sid = labshop.getClientSessionId();
-		labshop.getAccountList(sid, updateItemListCallback);
+		labshop.getAccountList(sid, updateAccountListCallback);
 	}
 
 	function updateAccountListCallback(ret){
@@ -96,7 +82,7 @@
 
 		table.empty();
 		table.append(labshop.createLabelsRow(
-			["ID", "メンバーID", "アイテムID", "購入価格", "操作"]));
+			["ID", "日時", "メンバーID", "アイテムID", "購入価格", "操作"]));
 
 		for(var i=0; i<accountList.length; i++){
 			var btn_edit = $("<button></button>").text("編集")
@@ -110,9 +96,13 @@
 				$("<tr></tr>").append(
 					$("<td></td>").text(accountList[i].id)
 				).append(
-					$("<td></td>").text(accountList[i].name)
+					$("<td></td>").text(accountList[i].timestamp)
 				).append(
-					$("<td></td>").text(accountList[i].price)
+					$("<td></td>").text(accountList[i].memberId)
+				).append(
+					$("<td></td>").text(accountList[i].itemId)
+				).append(
+					$("<td></td>").text(accountList[i].sellPrice)
 				).append(
 					$("<td></td>").append(btn_edit)
 						.append(btn_remove)
@@ -125,22 +115,21 @@
 		initAccountDataForm();
 	}
 
-	function addButtonPressed(){
+	function registButtonPressed(){
 		var input = $("#accountDataForm").serializeJson();
 		var sid = labshop.getClientSessionId();
-		if( $("#chkbox_autoIdRegist").prop("checked") ){
-			labshop.registAccount(sid, input, editExcuteCallback);
-		}else{
-			if( confirm("idは自動付番されません。よろしいですか？") ){
-				labshop.editAccountDB(sid, "insert", input, editExcuteCallback);
-			}
-		}
+		labshop.registAccount(sid, input, registAccountCallback);
 	}
 
-	function updateButtonPressed(){
+	function updateButtonPressed(accountId){
 		var input = $("#accountDataForm").serializeJson();
 		var sid = labshop.getClientSessionId();
-		labshop.editAccountDB(sid, "update", input, editExcuteCallback);
+		labshop.getAccountData(sid, accountId, function(ret){
+			if( ret.isErr ){ alert(ret.errMsg); return;}
+			input.id = ret.data.id;
+			input.timestamp = ret.data.timestamp;
+			labshop.editAccountDB(sid, "update", input, editExcuteCallback);
+		});
 	}
 
 	function editButtonPressed(accountId){
@@ -161,6 +150,13 @@
 		if( !ret.isSuccess ){ alert("処理が正常に終了しませんでした"); }
 		updateAccountList();
 	}
+
+	function registAccountCallback(ret){
+		if( ret.isErr ){ alert(ret.errMsg); return;}
+		alert("(id:" + ret.registedData.id + ", timestamp:" + ret.registedData.timestamp + ")\n" +
+			"新しいアカウントを登録しました");
+		updateAccountList();
+	}
     </script>
 
 </head>
@@ -175,7 +171,11 @@
 		<h1>account database editor</h1>
 
 
+		<p><button type="button" onclick="createButtonPressed()">新規登録</button>
+
 		<form id="accountDataForm">
+		<p id="accountDataForm_registModeArea"></p>
+
 		<table>
 			<tr><th>メンバーID</th>
 			<th>アイテムID</th>
@@ -185,7 +185,7 @@
 				<td><input id="accountDataForm_memberId" type="text" name="memberId"/></td>
 				<td><input id="accountDataForm_itemId" type="text" name="itemId"/></td>
 				<td><input id="accountDataForm_sellPrice" type="text" name="sellPrice"/></td>
-				<td><button type="button" onclick="registButtonPressed()">登録</button>
+				<td id="accountDataForm_submit_cell"></td>
 			</tr>
 		</table>
 		</form>

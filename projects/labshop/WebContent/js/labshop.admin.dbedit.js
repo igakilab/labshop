@@ -67,7 +67,7 @@ labshop.getItemList = function(sid, fcallback){
 }
 
 labshop.editAccountDB = function(sid, cmd, aform, fcallback){
-	WebAdminDBEditor.accountDBEdit(sid, cmd, mform, {
+	WebAdminDBEditor.accountDBEdit(sid, cmd, aform, {
 		callback: function(ret){
 			fcallback({isErr: false, isSuccess: ret});
 		},
@@ -78,7 +78,7 @@ labshop.editAccountDB = function(sid, cmd, aform, fcallback){
 }
 
 labshop.registAccount = function(sid, aform, fcallback){
-	WebAdminDBEditor.registNewAccount(sid, afom, {
+	WebAdminDBEditor.registNewAccount(sid, aform, {
 		callback: function(ret){
 			fcallback({isErr: false, registedData: ret});
 		},
