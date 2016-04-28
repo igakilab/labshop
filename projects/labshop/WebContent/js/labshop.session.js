@@ -92,7 +92,7 @@ labshop.adminGetSession = function(sid, fcallback){
 	var localId = labshop.getClientSessionId();
 
 	if( localId == undefined ){
-		return {isErr: false, errMsg: "セッションidが未定義です"};
+		return {isErr: true, errMsg: "セッションidが未定義です"};
 	}
 
 	WebAdminSessionManager.getSessionData(localId, sid, {
@@ -101,6 +101,40 @@ labshop.adminGetSession = function(sid, fcallback){
 		},
 		errorHandler: function(msg) {
 			fcallback({isErr:true, errMsg:msg})
+		}
+	});
+}
+
+labshop.adminGetSessionList = function(fcallback){
+	var localId = labshop.getClientSessionId();
+
+	if( localId == undefined ){
+		return {isErr: ture, errMsg: "セッションidが未定義です"};
+	}
+
+	WebAdminSessionManager.getSessionList(localId, {
+		callback: function(ret){
+			fcallback({isErr: false, list: ret});
+		},
+		errorHandler: function(msg){
+			fcallback({isErr: true, errMsg: msg});
+		}
+	});
+}
+
+labshop.adminDeleteSession = function(sid, fcallback){
+	var localId = labshop.getClientSessionId();
+
+	if( localId == undefined ){
+		return {isErr: true, errMsg: "セッションidが未定義です"};
+	}
+
+	WebAdminSessionManager.removeSession(localId, sid, {
+		callback: function(ret){
+			fcallback({isErr:false, isSuccess:ret});
+		},
+		errorHandler: function(msg){
+			fcallback({isErr:true, errMsg:msg});
 		}
 	});
 }
