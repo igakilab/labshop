@@ -60,7 +60,7 @@ labshop.closeClientSession = function(fcallback){
 
 	WebSessionManager.closeSession(localId, {
 		callback: function(ret){
-			fcallback({isErr: false, result: ret});
+			fcallback({isErr: false, isSuccess: ret});
 		}
 	});
 }
