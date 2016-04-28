@@ -129,6 +129,10 @@ public class CsvAccountRegister {
 		closeDBControllers();
 	}
 
+	public void setDependencyCheck(boolean b0){
+		dependencyCheck = b0;
+	}
+
 	public AccountData[] getAccountList(){
 		return accountList;
 	}
