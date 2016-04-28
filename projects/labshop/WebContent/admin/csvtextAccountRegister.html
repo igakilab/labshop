@@ -93,7 +93,11 @@
 	}
 
 	function registCallback(result){
-		if( result.isErr ){alert(result.errMsg);return;}
+		if( result.isErr ){
+			alert(result.errMsg);
+			$("#registButtonWrap").text(result.errMsg);
+			return;
+		}
 
 		if( result.isSuccess ){
 			$("#registButtonWrap").text("完了しました");
