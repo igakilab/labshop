@@ -117,6 +117,14 @@ public class WebAdminDBEditor {
 
 		if( authAdmin(mdb, sid) ){
 			List<MemberData> list = mdb.getAllMemberList();
+
+			list.sort(new Comparator<MemberData>(){
+				@Override
+				public int compare(MemberData o1, MemberData o2) {
+					return Integer.compare(o1.getId(), o2.getId());
+				}
+			});
+
 			mdb.close();
 			return MemberDataForm.toMemberDataForm(list.toArray(new MemberData[list.size()]));
 		}else{
