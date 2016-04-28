@@ -33,10 +33,15 @@ public class NamedAccountDataForm extends AccountDataForm{
 		nacc.setId(acc.getId());
 		nacc.setTimestamp(acc.getTimestamp());
 		nacc.setItemId(acc.getItemId());
-		nacc.setItemName(idb.getItemById(acc.getItemId()).getName());
 		nacc.setMemberId(acc.getMemberId());
-		nacc.setMemberName(mdb.getMemberById(acc.getMemberId()).getName());
 		nacc.setSellPrice(acc.getSellPrice());
+
+		if( idb.isIdRegisted(acc.getItemId()) ){
+			nacc.setItemName(idb.getItemById(acc.getItemId()).getName());
+		}
+		if( mdb.isIdRegisted(acc.getMemberId()) ){
+			nacc.setMemberName(mdb.getMemberById(acc.getMemberId()).getName());
+		}
 		return nacc;
 	}
 
@@ -48,10 +53,15 @@ public class NamedAccountDataForm extends AccountDataForm{
 		nacc.setId(acc.getId());
 		nacc.setTimestamp(acc.getTimestamp());
 		nacc.setItemId(acc.getItemId());
-		nacc.setItemName(idb.getItemById(acc.getItemId()).getName());
 		nacc.setMemberId(acc.getMemberId());
-		nacc.setMemberName(mdb.getMemberById(acc.getMemberId()).getName());
 		nacc.setSellPrice(acc.getSellPrice());
+
+		if( idb.isIdRegisted(acc.getItemId()) ){
+			nacc.setItemName(idb.getItemById(acc.getItemId()).getName());
+		}
+		if( mdb.isIdRegisted(acc.getMemberId()) ){
+			nacc.setMemberName(mdb.getMemberById(acc.getMemberId()).getName());
+		}
 		return nacc;
 	}
 
