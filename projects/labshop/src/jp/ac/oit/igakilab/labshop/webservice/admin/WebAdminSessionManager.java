@@ -38,8 +38,10 @@ public class WebAdminSessionManager {
 
 		if( manager.isSessionAdmin(adminSid) ){
 			SessionData[] list = manager.getSessionList();
+			SessionDataForm[] forms =
+				SessionDataForm.getInstance(list, manager.getDBConnector());
 			manager.close();
-			return SessionDataForm.getInstance(list, manager.getDBConnector());
+			return forms;
 		}else{
 			manager.close();
 			throw new ExcuteFailedException(ERRMSG_AUTH_FAILED);

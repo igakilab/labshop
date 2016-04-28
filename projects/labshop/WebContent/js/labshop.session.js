@@ -55,7 +55,7 @@ labshop.closeClientSession = function(fcallback){
 	if( localId != undefined ){
 		labshop.clearSessionCookie();
 	}else{
-		return {isErr: true, errMsg: "クライアントにセッションがありません"};
+		fcallback({isErr: true, errMsg: "クライアントにセッションがありません"});
 	}
 
 	WebSessionManager.closeSession(localId, {
@@ -70,7 +70,8 @@ labshop.getClientSessionState = function(fcallback){
 	var localId = labshop.getClientSessionId();
 
 	if( localId == undefined ){
-		return {isErr: false, isOpened: false};
+		fcallback({isErr: false, isOpened: false});
+		return;
 	}
 
 	WebSessionManager.getSessionData(localId, {
