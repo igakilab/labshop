@@ -12,11 +12,11 @@
     <script type="text/javascript" src="../js/jquery.serialize.js"></script>
     <script type="text/javascript" src="../js/jquery.cookie.js"></script>
     <script type="text/javascript" src="../dwr/interface/WebSessionManager.js"></script>
-    <script type="text/javascript" src="../js/LabshopUtil.js"></script>
-    <script type="text/javascript" src="../js/LabshopSession.js"></script>
+    <script type="text/javascript" src="../js/labshop.js"></script>
+    <script type="text/javascript" src="../js/labshop.session.js"></script>
     <script type="text/javascript">
     function init(){
-    	LabshopSession.getClientSessionStatus(loginCheck);
+    	labshop.getClientSessionState(loginCheck);
     }
 
     function loginCheck(result){
@@ -29,7 +29,7 @@
 	function loginButtonPressed(){
 		var input = $("#login_form").serializeJson();
 
-		LabshopSession.openClientSession(
+		labshop.openClientSession(
 			input.memberId, input.passwd, loginCallback);
 	}
 
