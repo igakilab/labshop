@@ -1,5 +1,8 @@
 package jp.ac.oit.igakilab.labshop.webservice;
 
+import java.util.Comparator;
+import java.util.List;
+
 import org.bson.conversions.Bson;
 
 import com.mongodb.client.model.Filters;
@@ -14,6 +17,17 @@ import jp.ac.oit.igakilab.labshop.webservice.forms.NamedAccountDataForm;
 public class WebAccountListFinder {
 	public static String ERRMSG_AUTH_FAILED = "認証に失敗しました";
 
+	void dateSorting(List<AccountData> list){
+		list.sort(new Comparator<AccountData>(){
+
+			@Override
+			public int compare(AccountData o1, AccountData o2) {
+				return o1.getTimestamp().compareTo(o2.getTimestamp());
+			}
+
+		});
+	}
+
 	public NamedAccountDataForm[] getAccountList(String sid, AccountDataMonthlyQueryForm query)
 	throws ExcuteFailedException{
 		SessionManager sm = new SessionManager();
@@ -25,10 +39,12 @@ public class WebAccountListFinder {
 		Bson filter = Filters.eq("memberId", session.getMemberId());
 
 		AggregateAccountDB aadb = new AggregateAccountDB(sm.getDBConnector());
-		AccountData[] list = aadb.getAccountList(
-			Filters.and(query.getBsonFilter(), filter)).toArray(new AccountData[0]);
+		List<AccountData> list = aadb.getAccountList(
+			Filters.and(query.getBsonFilter(), filter));
+		dateSorting(list);
 		NamedAccountDataForm[] forms =
-			NamedAccountDataForm.toNamedAccountDataForm(list, sm.getDBConnector());
+			NamedAccountDataForm.toNamedAccountDataForm(
+				list.toArray(new AccountData[list.size()]), sm.getDBConnector());
 
 		aadb.close();
 		sm.close();
@@ -43,9 +59,11 @@ public class WebAccountListFinder {
 		}
 
 		AggregateAccountDB aadb = new AggregateAccountDB(sm.getDBConnector());
-		AccountData[] list = aadb.getAccountList(query.getBsonFilter()).toArray(new AccountData[0]);
+		List<AccountData> list = aadb.getAccountList(query.getBsonFilter());
+		dateSorting(list);
 		NamedAccountDataForm[] forms =
-			NamedAccountDataForm.toNamedAccountDataForm(list, sm.getDBConnector());
+			NamedAccountDataForm.toNamedAccountDataForm(
+				list.toArray(new AccountData[list.size()]), sm.getDBConnector());
 
 		aadb.close();
 		sm.close();

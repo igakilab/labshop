@@ -21,7 +21,7 @@ labshop.monthValueToMonthAndDate = function(val){
 		year: Math.floor(val / 12),
 		month: ((val % 12) + 1)
 	};
-}
+};
 
 labshop.getAccountList = function(query, fcallback){
 	var localId = labshop.getClientSessionId();

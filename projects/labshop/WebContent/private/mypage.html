@@ -23,7 +23,6 @@
 
     function init(){
     	HISTORY_MONTH_VALUE = labshop.toMonthValue(2016, 1);
-    	updateHistoryList();
 
     	labshop.getClientSessionState(setMemberProfile);
     }
@@ -36,6 +35,8 @@
     	LOGIN_MEMBER_ID = session_state.session.memberId;
     	$("#info_memberId").text(session_state.session.memberId);
     	$("#info_memberName").text(session_state.session.memberName);
+
+    	updateHistoryList();
     }
 
     function updateHistoryList(){
@@ -117,9 +118,11 @@
   </head>
 
 	<body>
-	<header>
-		<h1>igakilab. labshop</h1>
-	</header>
+	<div class="page_header">
+		<div class="page_centering">
+			<img src="../images/logo2.png"/>
+		</div>
+	</div>
 
 	<div class="page_centering markdown-body">
 
@@ -146,6 +149,8 @@
 
 	<table id="historyTable"></table>
 
+
+	<div class="text-center"><i>igakilab labshop system</i></div>
 
 	</div>
   </body>
