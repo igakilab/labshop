@@ -51,6 +51,9 @@
     <create creator="new" javascript="WebAccountListFinder">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebAccountListFinder"/>
     </create>
+    <create creator="new" javascript="WebMemberConfigure">
+      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebMemberConfigure"/>
+    </create>
     <!-- テスト用 -->
     <create creator="new" javascript="TestDBCounter">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.test.TestDBCounter"/>
