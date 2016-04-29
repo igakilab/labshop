@@ -1,10 +1,15 @@
-package jp.ac.oit.igakilab.labshop.webservice.forms;
+package jp.ac.oit.igakilab.labshop.webservice;
+
+import org.bson.conversions.Bson;
+
+import com.mongodb.client.model.Filters;
 
 import jp.ac.oit.igakilab.labshop.dbcontroller.extension.AggregateAccountDB;
 import jp.ac.oit.igakilab.labshop.sessions.SessionData;
 import jp.ac.oit.igakilab.labshop.sessions.SessionManager;
 import jp.ac.oit.igakilab.labshop.shopping.AccountData;
-import jp.ac.oit.igakilab.labshop.webservice.ExcuteFailedException;
+import jp.ac.oit.igakilab.labshop.webservice.forms.AccountDataMonthlyQueryForm;
+import jp.ac.oit.igakilab.labshop.webservice.forms.NamedAccountDataForm;
 
 public class WebAccountListFinder {
 	public static String ERRMSG_AUTH_FAILED = "認証に失敗しました";
@@ -17,11 +22,11 @@ public class WebAccountListFinder {
 		}
 
 		SessionData session = sm.getSession(sid);
-		int[] memid = {session.getMemberId()};
-		query.setMemberIds(memid);
+		Bson filter = Filters.eq("memberId", session.getMemberId());
 
 		AggregateAccountDB aadb = new AggregateAccountDB(sm.getDBConnector());
-		AccountData[] list = aadb.getAccountList(query.getBsonFilter()).toArray(new AccountData[0]);
+		AccountData[] list = aadb.getAccountList(
+			Filters.and(query.getBsonFilter(), filter)).toArray(new AccountData[0]);
 		NamedAccountDataForm[] forms =
 			NamedAccountDataForm.toNamedAccountDataForm(list, sm.getDBConnector());
 
