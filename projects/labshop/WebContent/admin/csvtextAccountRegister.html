@@ -50,6 +50,7 @@
 		table.append(labshop.createLabelsRow(
 			["ID", "日時", "メンバーID", "メンバー名", "アイテムID", "アイテム名", "購入価格"]));
 
+		var sumPrice = 0;
 		for(var i=0; i<accountList.length; i++){
 			table.append(
 				$("<tr></tr>").append(
@@ -69,7 +70,17 @@
 					$("<td></td>").text(accountList[i].sellPrice)
 				)
 			);
+			sumPrice += accountList[i].sellPrice;
 		}
+
+		table.append(
+			$("<tr></tr>").append(
+				$("<td></td>").text("合計金額")
+					.attr("colspan", "6")
+			).append(
+				$("<td></td>").text(sumPrice)
+			)
+		);
 
 		$("#stateArea").text(accountList.length + " 件が読み込まれました");
 		$("#registButtonWrap").append(
