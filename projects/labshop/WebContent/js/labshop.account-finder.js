@@ -12,18 +12,18 @@
  *   endMonthValue: int
  */
 
-labshop.toMonthValue(year, month){
+labshop.toMonthValue = function(year, month){
 	return (year * 12) + (month - 1);
 };
 
-labshop.monthValueToMonthAndDate(val){
+labshop.monthValueToMonthAndDate = function(val){
 	return {
-		year: (val / 12;
+		year: Math.floor(val / 12),
 		month: ((val % 12) + 1)
 	};
 }
 
-labshop.getAccountList(query, fcallback){
+labshop.getAccountList = function(query, fcallback){
 	var localId = labshop.getClientSessionId();
 	if( localId == undefined ){
 		fcallback({isErr:true, errMsg:"セッションが開いていません"});
@@ -32,7 +32,11 @@ labshop.getAccountList(query, fcallback){
 
 	WebAccountListFinder.getAccountList(localId, query, {
 		callback: function(ret){
-			fcallback({isErr:false, list:ret});
+			var tmp = 0;
+			for(var i=0; i<ret.length; i++){
+				tmp += ret[i].sellPrice;
+			}
+			fcallback({isErr:false, list:ret, sumPrice:tmp});
 		},
 		errorHandler: function(msg){
 			fcallback({isErr:true, errMsg:msg});
@@ -40,7 +44,7 @@ labshop.getAccountList(query, fcallback){
 	});
 };
 
-labshop.adminGetAccountList(query, fcallback){
+labshop.adminGetAccountList = function(query, fcallback){
 	var localId = labshop.getClientSessionId();
 	if( localId == undefined ){
 		fcallback({isErr:true, errMsg:"セッションが開いていません"});
@@ -57,7 +61,7 @@ labshop.adminGetAccountList(query, fcallback){
 	});
 };
 
-labshop.getClientMonthlyAccountList(year, month, fcallback){
+labshop.getClientMonthlyAccountList = function(year, month, fcallback){
 	labshop.getClientSessionState(function(ret){
 		if( ret.isErr ){alert(ret.errMsg);return;}
 
@@ -67,5 +71,5 @@ labshop.getClientMonthlyAccountList(year, month, fcallback){
 		query.endMonthValue = labshop.toMonthValue(year, month);
 
 		labshop.getAccountList(query, fcallback);
-	}
+	});
 };

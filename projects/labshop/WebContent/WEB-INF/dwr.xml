@@ -48,6 +48,9 @@
     <create creator="new" javascript="WebAdminCsvAccountRegister">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.admin.WebAdminCsvAccountRegister"/>
     </create>
+    <create creator="new" javascript="WebAccountListFinder">
+      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebAccountListFinder"/>
+    </create>
     <!-- テスト用 -->
     <create creator="new" javascript="TestDBCounter">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.test.TestDBCounter"/>
