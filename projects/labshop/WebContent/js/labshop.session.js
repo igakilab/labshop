@@ -5,7 +5,7 @@ labshop.SESSION_PATH = "/";
 labshop.SESSION_DEFAULT_EXPIRES = 7;
 
 labshop.setSessionCookie = function(id, isSetExpire){
-	var cookieOption = {}
+	var cookieOption = {};
 
 	cookieOption.path = labshop.SESSION_PATH;
 	if( isSetExpire ){
@@ -13,17 +13,17 @@ labshop.setSessionCookie = function(id, isSetExpire){
 	}
 
 	$.cookie(labshop.SESSION_COOKIE_KEY, id, cookieOption);
-}
+};
 
 labshop.getSessionCookie = function(){
 	return $.cookie(labshop.SESSION_COOKIE_KEY);
-}
+};
 
 labshop.clearSessionCookie = function(){
 	return $.removeCookie(labshop.SESSION_COOKIE_KEY, {
 		path: labshop.SESSION_PATH
 	});
-}
+};
 
 
 labshop.getClientSessionId = function(){
@@ -33,7 +33,7 @@ labshop.getClientSessionId = function(){
 	}else{
 		return sid;
 	}
-}
+};
 
 
 labshop.openClientSession = function(mid, passwd, isHold, fcallback){
@@ -46,7 +46,7 @@ labshop.openClientSession = function(mid, passwd, isHold, fcallback){
 			fcallback({isErr:true, errMsg:msg});
 		}
 	});
-}
+};
 
 
 labshop.closeClientSession = function(fcallback){
@@ -56,6 +56,7 @@ labshop.closeClientSession = function(fcallback){
 		labshop.clearSessionCookie();
 	}else{
 		fcallback({isErr: true, errMsg: "クライアントにセッションがありません"});
+		return;
 	}
 
 	WebSessionManager.closeSession(localId, {
@@ -63,7 +64,7 @@ labshop.closeClientSession = function(fcallback){
 			fcallback({isErr: false, isSuccess: ret});
 		}
 	});
-}
+};
 
 
 labshop.getClientSessionState = function(fcallback){
@@ -86,7 +87,7 @@ labshop.getClientSessionState = function(fcallback){
 			fcallback({isErr: false, isOpened: false, errMsg: msg});
 		}
 	});
-}
+};
 
 /*admin tools*/
 labshop.adminGetSession = function(sid, fcallback){
@@ -104,7 +105,7 @@ labshop.adminGetSession = function(sid, fcallback){
 			fcallback({isErr:true, errMsg:msg})
 		}
 	});
-}
+};
 
 labshop.adminGetSessionList = function(fcallback){
 	var localId = labshop.getClientSessionId();
@@ -121,7 +122,7 @@ labshop.adminGetSessionList = function(fcallback){
 			fcallback({isErr: true, errMsg: msg});
 		}
 	});
-}
+};
 
 labshop.adminDeleteSession = function(sid, fcallback){
 	var localId = labshop.getClientSessionId();
@@ -138,4 +139,4 @@ labshop.adminDeleteSession = function(sid, fcallback){
 			fcallback({isErr:true, errMsg:msg});
 		}
 	});
-}
+};
