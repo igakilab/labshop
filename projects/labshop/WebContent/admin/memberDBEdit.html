@@ -98,6 +98,9 @@
 			var btn_remove = $("<button></button>").text("削除")
 				.attr("type", "button")
 				.attr("onclick", "removeButtonPressed(" + memberList[i].id + ")");
+			var btn_passwdReset = $("<button></button>").text("パスワード初期化")
+				.attr("type", "button")
+				.attr("onclick", "passwordResetButtonPressed(" + memberList[i].id + ")");
 
 			table.append(
 				$("<tr></tr>").append(
@@ -109,6 +112,7 @@
 				).append(
 					$("<td></td>").append(btn_edit)
 						.append(btn_remove)
+						.append(btn_passwdReset)
 				)
 			);
 		}
@@ -141,6 +145,15 @@
 
 		var sid = labshop.getClientSessionId();
 		labshop.editMemberDB(sid, "remove", {id: memberId}, editExcuteCallback);
+	}
+
+	function passwordResetButtonPressed(memberId){
+		if( !confirm("ID番号[" + memberId + "]のパスワードを初期化してもよろしいですか？") ){
+			return;
+		}
+
+		var sid = labshop.getClientSessionId();
+		labshop.editMemberDB(sid, "passwordReset", {id: memberId}, editExcuteCallback);
 	}
 
 	function editExcuteCallback(ret){

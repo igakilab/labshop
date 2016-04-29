@@ -80,6 +80,18 @@ public class WebAdminDBEditor {
 					throw new ExcuteFailedException(ERRMSG_ID_NOTFOUND);
 				}
 
+			}else if( command.equals("passwordReset") ){
+				if( mdb.isIdRegisted(mform.getId()) ){
+					MemberData data = mdb.getMemberById(mform.getId());
+					data.setPasswordHash(null);
+					boolean result = mdb.updateMemberData(data);
+					mdb.close();
+					return result;
+				}else{
+					mdb.close();
+					throw new ExcuteFailedException(ERRMSG_ID_NOTFOUND);
+				}
+
 			}else{
 				mdb.close();
 				throw new ExcuteFailedException(ERRMSG_COMMAND_INVALID);
