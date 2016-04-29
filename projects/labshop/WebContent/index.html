@@ -42,9 +42,7 @@
 		}
     }
 
-    function loadClaimList(){
-    	var year = 2016;
-    	var month = 1;
+    function loadClaimList(year, month){
     	$("#claimList_month").text(year + " 年 " + month + " 月の利用金額");
     	WebAccountAggregate.getMonthlyMemberPriceList(year, month, {
     		callback: setClaimList,
@@ -70,16 +68,18 @@
     }
 
     $(document).ready(function(){
-    	loadClaimList();
+    	loadClaimList(2016, 1);
     	checkLogin();
     });
     </script>
   </head>
 
 	<body>
-	<header>
-		<h1>igakilab. labshop</h1>
-	</header>
+	<div class="page_header">
+		<div class="page_centering">
+			<img src="images/logo2.png"/>
+		</div>
+	</div>
 
 	<div class="page_centering markdown-body">
 
@@ -89,18 +89,27 @@
 
 	<h2>メンバーページ</h2>
 	<p>各メンバー専用マイページです<br/>
-	下記のリンクからジャンプすることができます</p>
+	下記のリンクからジャンプすることができます<br/>
+	今までの利用履歴を確認することができます</p>
 	<blockquote id="login_state" style="background-color: #efc; color:#000;">
 	</blockquote>
 	<a href="private/mypage.html">メンバーページ</a>
 
+	<!--
 	<h2>利用履歴検索</h2>
 	<p>ただいま利用履歴表示ページを試験運用しています。<br/>
 	下記のリンクからジャンプすることができます</p>
 	<a href="accountHistory/history.html">利用履歴確認ページ</a>
+	-->
+
+
 
 	<h2>最近の利用金額</h2>
-	<p>今月の請求額一覧です。<br/>
+	<p>今月の請求額一覧です。</p>
+	<ul>
+		<li><a href="#claimList_month" onclick="loadClaimList(2016, 1)">2016年1月</a></li>
+		<li><a href="#claimList_month" onclick="loadClaimList(2016, 2)">2016年2月</a></li>
+	</ul>
 	<h3 id="claimList_month"></h3>
 	<table id="claimList_table"></table>
 
@@ -110,5 +119,8 @@
 	<a href="javascript:void(0);" onclick="pressAuthButton()">パスワード認証</a>
 
 	</div>
+
+	<div class="page_header text-center markdown-body">
+	<i>igakilab labshop system</i></div>
   </body>
 </html>
