@@ -12,17 +12,6 @@
  *   endMonthValue: int
  */
 
-labshop.toMonthValue = function(year, month){
-	return (year * 12) + (month - 1);
-};
-
-labshop.monthValueToMonthAndDate = function(val){
-	return {
-		year: Math.floor(val / 12),
-		month: ((val % 12) + 1)
-	};
-};
-
 labshop.getAccountList = function(query, fcallback){
 	var localId = labshop.getClientSessionId();
 	if( localId == undefined ){
