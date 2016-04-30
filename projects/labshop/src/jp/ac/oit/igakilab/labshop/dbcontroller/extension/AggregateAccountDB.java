@@ -97,6 +97,31 @@ public class AggregateAccountDB extends AccountDBController {
 		return list;
 	}
 
+	public List<HashMap<String, Integer>> getMemberItemList(int memberId, Bson filter){
+		AggregateIterable<Document> result;
+		List<? extends Bson> query = Arrays.asList(
+			Aggregates.match(Filters.and(Filters.eq("memberId", memberId), filter)),
+			Aggregates.group("$itemId", Arrays.asList(
+				Accumulators.sum("qty", 1),
+				Accumulators.sum("sumPrice", "$sellPrice")
+			)),
+			Aggregates.sort(Sorts.ascending("_id"))
+		);
+
+		result = getCollection().aggregate(query);
+
+		List<HashMap<String, Integer>> list = new ArrayList<HashMap<String, Integer>>();
+		for(Document doc : result){
+			HashMap<String, Integer> tmp = new HashMap<String, Integer>();
+			tmp.put("itemId", doc.getInteger("_id"));
+			tmp.put("qty", doc.getInteger("qty"));
+			tmp.put("sumPrice", doc.getInteger("sumPrice"));
+			list.add(tmp);
+		}
+
+		return list;
+	}
+
 	public List<HashMap<String, Integer>> getItemSalesList(Bson filter){
 		List<? extends Bson> query = Arrays.asList(
 			Aggregates.match(filter),
@@ -120,7 +145,7 @@ public class AggregateAccountDB extends AccountDBController {
 
 		return list;
 	}
-	
-	
+
+
 
 }
