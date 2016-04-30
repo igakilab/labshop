@@ -24,8 +24,8 @@ public class MemberSalesChart {
 	private List<int[]> memberItemPrice;
 	private List<Integer> memberSumPrice;
 
-	private boolean memberListExtend = false;
-	private boolean itemListExtend = false;
+	private boolean memberListExtend;
+	private boolean itemListExtend;
 
 	public MemberSalesChart(){
 		memberList = new ArrayList<Integer>();
@@ -33,6 +33,8 @@ public class MemberSalesChart {
 		memberItemCount = new ArrayList<int[]>();
 		memberItemPrice = new ArrayList<int[]>();
 		memberSumPrice = new ArrayList<Integer>();
+		memberListExtend = true;
+		itemListExtend = true;
 	}
 
 	void initMemberProperty(int len){
@@ -93,7 +95,7 @@ public class MemberSalesChart {
 			//sumPrice設定
 			int mprice = 0;
 			for(HashMap<String, Integer> tmp : aggrMember){
-				if( tmp.get("memberId") == memberList.get(i) ){
+				if( tmp.get("memberId").equals(memberList.get(i)) ){
 					mprice = tmp.get("sumPrice");
 					break;
 				}
