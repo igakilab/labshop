@@ -9,7 +9,7 @@ import org.bson.conversions.Bson;
 
 import jp.ac.oit.igakilab.labshop.dbcontroller.extension.AggregateAccountDB;
 
-public class MemberItemSalesChart {
+public class MemberSalesChart {
 	static Comparator<Integer> INTEGER_COMPARATOR = new Comparator<Integer>(){
 		@Override
 		public int compare(Integer o1, Integer o2) {
@@ -27,8 +27,7 @@ public class MemberItemSalesChart {
 	private boolean memberListExtend = false;
 	private boolean itemListExtend = false;
 
-
-	public MemberItemSalesChart(){
+	public MemberSalesChart(){
 		memberList = new ArrayList<Integer>();
 		itemList = new ArrayList<Integer>();
 		memberItemCount = new ArrayList<int[]>();
