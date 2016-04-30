@@ -24,6 +24,9 @@ public class MemberItemSalesChart {
 	private List<int[]> memberItemPrice;
 	private List<Integer> memberSumPrice;
 
+	private boolean memberListExtend = false;
+	private boolean itemListExtend = false;
+
 
 	public MemberItemSalesChart(){
 		memberList = new ArrayList<Integer>();
@@ -60,20 +63,24 @@ public class MemberItemSalesChart {
 			aadb.getItemSalesList(filter);
 
 		//メンバーリスト整形
-		for(HashMap<String, Integer> mrow : aggrMember){
-			int idx = memberList.indexOf(mrow.get("memberId"));
-			if( idx < 0 ){
-				memberList.add(mrow.get("memberId"));
+		if( memberListExtend ){
+			for(HashMap<String, Integer> mrow : aggrMember){
+				int idx = memberList.indexOf(mrow.get("memberId"));
+				if( idx < 0 ){
+					memberList.add(mrow.get("memberId"));
+				}
 			}
 		}
 		memberList.sort(INTEGER_COMPARATOR);
 		initMemberProperty(memberList.size());
 
 		//アイテムリスト整形
-		for(HashMap<String, Integer> irow : aggrItem){
-			int idx = itemList.indexOf(irow.get("itemId"));
-			if( idx < 0 ){
-				itemList.add(irow.get("itemId"));
+		if( itemListExtend ){
+			for(HashMap<String, Integer> irow : aggrItem){
+				int idx = itemList.indexOf(irow.get("itemId"));
+				if( idx < 0 ){
+					itemList.add(irow.get("itemId"));
+				}
 			}
 		}
 		itemList.sort(INTEGER_COMPARATOR);
@@ -110,6 +117,46 @@ public class MemberItemSalesChart {
 			memberItemCount.set(i, itemCount);
 			memberItemPrice.set(i, itemPrice);
 		}
+	}
+
+	public void clearMemberList(){
+		memberList.clear();
+	}
+
+	public void addMember(int id){
+		if( memberList.indexOf(id) < 0 ){
+			memberList.add(id);
+		}
+	}
+
+	public void addMember(int[] ids){
+		for(int id : ids){
+			addMember(id);
+		}
+	}
+
+	public void clearItemList(){
+		itemList.clear();
+	}
+
+	public void addItem(int id){
+		if( itemList.indexOf(id) < 0 ){
+			itemList.add(id);
+		}
+	}
+
+	public void addItem(int[] ids){
+		for(int id : ids){
+			addItem(id);
+		}
+	}
+
+	public void setMemberListExtend(boolean b){
+		memberListExtend = b;
+	}
+
+	public void setItemListExtend(boolean b){
+		itemListExtend = b;
 	}
 
 	public Integer[] getMemberList(){
