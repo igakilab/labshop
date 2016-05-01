@@ -16,11 +16,11 @@ labshop.getMonthlyMemberSalesChart = function(monthVal, fcallback){
 };
 
 
-labshop.getMonthlyMemberPriceList = function(monthVal, fcallback){
+labshop.getMonthlyMemberPriceList = function(monthVal, isAllMember, fcallback){
 	var localId = labshop.getClientSessionId();
 	if( labshop.assertUndefined(localId, "セッションが開いていません") )return;
 
-	WebAdminAccountAggregate.getMonthlyMemberPriceList(localId, monthVal, {
+	WebAdminAccountAggregate.getMonthlyMemberPriceList(localId, monthVal, isAllMember, {
 		callback: function(ret){
 			var sum = 0;
 			for(var i=0; i<ret.length; i++){

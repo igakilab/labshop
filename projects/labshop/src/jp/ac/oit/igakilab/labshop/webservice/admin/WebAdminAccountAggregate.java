@@ -1,7 +1,9 @@
 package jp.ac.oit.igakilab.labshop.webservice.admin;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,7 +62,7 @@ public class WebAdminAccountAggregate {
 		return form;
 	}
 
-	public NamedMemberPriceForm[] getMonthlyMemberPriceList(String sid, int monthVal){
+	public NamedMemberPriceForm[] getMonthlyMemberPriceList(String sid, int monthVal, boolean isAllMember){
 		AggregateAccountDB aadb = new AggregateAccountDB();
 
 		if( !authAdmin(sid, aadb) ){
@@ -71,15 +73,42 @@ public class WebAdminAccountAggregate {
 			aadb.getMemberChargeList(DateFilters.oneMonth(
 				"timestamp", AccountDataMonthlyQueryForm.toCalendar(monthVal)));
 
-		NamedMemberPriceForm[] forms = new NamedMemberPriceForm[result.size()];
-		for(int i=0; i<result.size(); i++){
-			HashMap<String, Integer> tmp = result.get(i);
-			forms[i] = NamedMemberPriceForm.getInstance(
-				tmp.get("memberId"), tmp.get("sumPrice"), aadb);
+		List<NamedMemberPriceForm> forms = new ArrayList<NamedMemberPriceForm>();
+		if( isAllMember ){
+			MemberDBController mdb = new MemberDBController(aadb);
+			List<MemberData> mlist = mdb.getAllMemberList();
+			for(MemberData md : mlist){
+				forms.add(NamedMemberPriceForm.getInstance(md.getId(), 0, aadb));
+			}
+			mdb.close();
 		}
 
+		for(HashMap<String, Integer> tmp : result){
+			int mid = tmp.get("memberId");
+			int idx = -1;
+			for(int i=0; i<forms.size(); i++){
+				if( forms.get(i).getId() == mid ){
+					idx = i;
+					break;
+				}
+			}
+
+			if( idx < 0 ){
+				forms.add(NamedMemberPriceForm.getInstance(mid, tmp.get("sumPrice"), aadb));
+			}else{
+				forms.get(idx).setPrice(tmp.get("sumPrice"));
+			}
+		}
+
+		forms.sort(new Comparator<NamedMemberPriceForm>(){
+			@Override
+			public int compare(NamedMemberPriceForm o1, NamedMemberPriceForm o2) {
+				return Integer.compare(o1.getId(), o2.getId());
+			}
+		});
+
 		aadb.close();
-		return forms;
+		return forms.toArray(new NamedMemberPriceForm[forms.size()]);
 	}
 
 	public NamedItemSalesForm[] getMonthlyItemSalesList(String sid, int monthVal){
