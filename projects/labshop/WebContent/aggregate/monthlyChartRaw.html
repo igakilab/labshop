@@ -23,8 +23,7 @@
 	<style>
 	table{
 		border-collapse: collapse;
-		table-layout: fixed;
-		overflow: hidden;
+		font-family: monospace;
 	}
 
 	th, td{
@@ -51,7 +50,7 @@
 	<script type="text/javascript">
 
 	$(function(){
-		var urlParam = getUrlParameter();
+		var urlParam = labshop.getUrlParameters();
 		if( urlParam.value != undefined ){
 			var aval = labshop.monthValueToMonthAndDate(urlParam.value);
 			setMemberSalesChart(aval.year, aval.month);
@@ -60,16 +59,6 @@
 		}
 
 	});
-
-	function getUrlParameter(){
-		var arg = new Object;
-		var pair=location.search.substring(1).split('&');
-		for(var i=0;pair[i];i++) {
-		    var kv = pair[i].split('=');
-		    arg[kv[0]]=kv[1];
-		}
-		return arg;
-	}
 
 	function setMemberSalesChart(year, month){
 		$("#chartTitle").text("Monthly Member Sales Chart (" + year + "年" + month + "月)");
@@ -89,8 +78,6 @@
 	<div>
 	<h3 id="chartTitle"></h3>
 	<table id="chartTable">
-	<tr><td>kore1</td><td>kore2</td></tr>
-	<tr><td>kore3</td><td>kore4</td></tr>
 	</table>
 
 	</div>

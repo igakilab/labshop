@@ -56,6 +56,12 @@
 		$("#msgArea").text(TMP_YEAR + "年 " + TMP_MONTH + "月");
 	}
 
+	function viewrawButtonPressed(){
+		var input = $("#dateForm").serializeJson();
+		window.open("monthlyChartRaw.html?value=" +
+			labshop.toMonthValue(input.year, input.month));
+	}
+
 
 
 	</script>
@@ -78,6 +84,8 @@
 			<select id="dateForm_month" name="month"></select>月&nbsp;
 		</form>
 		<button type="button" onclick="getButtonPressed()">取得</button>
+		<a href="javascript:void(0);" onclick="viewrawButtonPressed()">
+		表のみを表示する</a>
 
 		<hr/>
 		<h4 id="msgArea"></h4>
