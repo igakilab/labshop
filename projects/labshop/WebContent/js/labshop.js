@@ -15,6 +15,15 @@ labshop.assertError = function(result){
 	}
 };
 
+labshop.assertUndefined = function(val, errmsg){
+	if( val == undefined ){
+		alert(errmsg);
+		return true;
+	}else{
+		return false;
+	}
+}
+
 labshop.errorObjectCallback = function(cbf, msg){
 	cbf({isErr:true, errMsg:msg});
 	return;
