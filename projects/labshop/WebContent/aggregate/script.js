@@ -6,8 +6,10 @@ function setChartTable(jquery_table_elem, chart){
 	//setHeadItemLabels
 	var hrow1 = $("<tr></tr>");
 	var hrow2 = $("<tr></tr>");
-	hrow1.append([$("<th></th>").attr("rowspan", "2").text("メンバー"),
-	            $("<th></th>").attr("rowspan", "2").text("金額")]);
+	hrow1.append($("<th></th>").text("メンバー")
+		.attr("rowspan", "2").attr("class", "mc_mname"));
+	hrow1.append($("<th></th>").text("金額")
+		.attr("rowspan", "2").attr("class", "mc_mprice"));
 	for(var i=0; i<chart.itemList.length; i++){
 		hrow1.append($("<th></th>").text(chart.itemList[i]));
 		hrow2.append($("<th></th>").text(chart.itemNameList[i]));
@@ -21,8 +23,8 @@ function setChartTable(jquery_table_elem, chart){
 		var memberName = chart.memberList[i] + "(" + chart.memberNameList[i] + ")";
 		var memberObj = chart.members[i];
 
-		mrow.append($("<th></th>").text(memberName));
-		mrow.append($("<th></th>").text(memberObj.sumPrice));
+		mrow.append($("<th></th>").text(memberName).attr("class", "mc_mname"));
+		mrow.append($("<th></th>").text(memberObj.sumPrice).attr("class", "mc_mprice"));
 
 		for(var j=0; j<memberObj.itemCounts.length; j++){
 			if( memberObj.itemCounts[j] > 0 ){
