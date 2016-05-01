@@ -1,20 +1,38 @@
 package jp.ac.oit.igakilab.labshop.webservice.admin;
 
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
+import org.bson.conversions.Bson;
+
+import com.mongodb.client.model.Filters;
+
+import jp.ac.oit.igakilab.labshop.dbcontroller.DBConnector;
 import jp.ac.oit.igakilab.labshop.dbcontroller.MemberDBController;
 import jp.ac.oit.igakilab.labshop.dbcontroller.extension.AggregateAccountDB;
 import jp.ac.oit.igakilab.labshop.dbcontroller.extension.DateFilters;
 import jp.ac.oit.igakilab.labshop.member.MemberData;
 import jp.ac.oit.igakilab.labshop.sessions.SessionManager;
+import jp.ac.oit.igakilab.labshop.shopping.AccountData;
 import jp.ac.oit.igakilab.labshop.shopping.MemberSalesChart;
 import jp.ac.oit.igakilab.labshop.webservice.ExcuteFailedException;
 import jp.ac.oit.igakilab.labshop.webservice.forms.AccountDataMonthlyQueryForm;
 import jp.ac.oit.igakilab.labshop.webservice.forms.MemberSalesChartForm;
+import jp.ac.oit.igakilab.labshop.webservice.forms.NamedAccountDataForm;
+import jp.ac.oit.igakilab.labshop.webservice.forms.NamedItemSalesForm;
+import jp.ac.oit.igakilab.labshop.webservice.forms.NamedMemberPriceForm;
 
 public class WebAdminAccountAggregate {
 	public static String ERRMSG_AUTH_FAILED = "認証に失敗しました";
+
+	boolean authAdmin(String sid, DBConnector dbc){
+		SessionManager sm = new SessionManager(dbc);
+		boolean result = sm.isSessionAdmin(sid);
+		sm.close();
+		return result;
+	}
 
 	public MemberSalesChartForm getMonthlyMemberSalesChart(String sid, int monthVal)
 	throws ExcuteFailedException{
@@ -40,5 +58,104 @@ public class WebAdminAccountAggregate {
 		MemberSalesChartForm form = MemberSalesChartForm.getInstance(chart, sm.getDBConnector());
 		sm.close();
 		return form;
+	}
+
+	public NamedMemberPriceForm[] getMonthlyMemberPriceList(String sid, int monthVal){
+		AggregateAccountDB aadb = new AggregateAccountDB();
+
+		if( !authAdmin(sid, aadb) ){
+			return new NamedMemberPriceForm[0];
+		}
+
+		List<HashMap<String, Integer>> result =
+			aadb.getMemberChargeList(DateFilters.oneMonth(
+				"timestamp", AccountDataMonthlyQueryForm.toCalendar(monthVal)));
+
+		NamedMemberPriceForm[] forms = new NamedMemberPriceForm[result.size()];
+		for(int i=0; i<result.size(); i++){
+			HashMap<String, Integer> tmp = result.get(i);
+			forms[i] = NamedMemberPriceForm.getInstance(
+				tmp.get("memberId"), tmp.get("sumPrice"), aadb);
+		}
+
+		aadb.close();
+		return forms;
+	}
+
+	public NamedItemSalesForm[] getMonthlyItemSalesList(String sid, int monthVal){
+		AggregateAccountDB aadb = new AggregateAccountDB();
+
+		if( !authAdmin(sid, aadb) ){
+			return new NamedItemSalesForm[0];
+		}
+
+		List<HashMap<String, Integer>> result =
+			aadb.getItemSalesList(
+				DateFilters.oneMonth(
+					"timestamp", AccountDataMonthlyQueryForm.toCalendar(monthVal)));
+
+		NamedItemSalesForm[] forms = new NamedItemSalesForm[result.size()];
+		for(int i=0; i<result.size(); i++){
+			HashMap<String, Integer> tmp = result.get(i);
+			forms[i] = NamedItemSalesForm.getInstance(
+				tmp.get("itemId"), tmp.get("qty"), tmp.get("sumPrice"), aadb);
+		}
+
+		aadb.close();
+		return forms;
+	}
+
+	public NamedAccountDataForm[] getMonthlyMemberItemAccounts(String sid, int monthVal, int mid, int iid){
+		AggregateAccountDB aadb = new AggregateAccountDB();
+
+		if( !authAdmin(sid, aadb) ){
+			return new NamedAccountDataForm[0];
+		}
+
+		Bson query= Filters.and(Arrays.asList(
+			Filters.eq("memberId", mid),
+			Filters.eq("itemId", iid),
+			DateFilters.oneMonth("timestamp", AccountDataMonthlyQueryForm.toCalendar(monthVal))
+		));
+
+		List<AccountData> result =aadb.getAccountList(query);
+		NamedAccountDataForm[] forms =  NamedAccountDataForm.toNamedAccountDataForm(
+			result.toArray(new AccountData[result.size()]), aadb);
+		aadb.close();
+		return forms;
+	}
+
+	public NamedAccountDataForm[] getMonthlyMemberAccounts(String sid, int monthVal, int mid){
+		AggregateAccountDB aadb = new AggregateAccountDB();
+
+		if( !authAdmin(sid, aadb) ){
+			return new NamedAccountDataForm[0];
+		}
+
+		List<AccountData> result =
+			aadb.getAccountListByMemberId(mid,
+				DateFilters.oneMonth(
+						"timestamp", AccountDataMonthlyQueryForm.toCalendar(monthVal)));
+		NamedAccountDataForm[] forms =  NamedAccountDataForm.toNamedAccountDataForm(
+			result.toArray(new AccountData[result.size()]), aadb);
+		aadb.close();
+		return forms;
+	}
+
+	public NamedAccountDataForm[] getMonthlyItemAccounts(String sid, int monthVal, int iid){
+		AggregateAccountDB aadb = new AggregateAccountDB();
+
+		if( !authAdmin(sid, aadb) ){
+			return new NamedAccountDataForm[0];
+		}
+
+		List<AccountData> result =
+			aadb.getAccountListByItemId(iid,
+				DateFilters.oneMonth(
+					"timestamp", AccountDataMonthlyQueryForm.toCalendar(monthVal)));
+		NamedAccountDataForm[] forms = NamedAccountDataForm.toNamedAccountDataForm(
+			result.toArray(new AccountData[result.size()]), aadb);
+		aadb.close();
+		return forms;
 	}
 }
