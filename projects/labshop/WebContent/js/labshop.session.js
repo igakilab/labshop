@@ -1,6 +1,6 @@
 /* labshop.session.js */
 
-labshop.SESSION_COOKIE_KEY = "session_id";
+labshop.SESSION_COOKIE_KEY = labshop.MASTER_SESSION_COOKIE_KEY;
 labshop.SESSION_PATH = "/";
 labshop.SESSION_DEFAULT_EXPIRES = 7;
 
@@ -25,7 +25,7 @@ labshop.clearSessionCookie = function(){
 	});
 };
 
-
+/* transfer to labshop.js
 labshop.getClientSessionId = function(){
 	var sid = labshop.getSessionCookie();
 	if( sid == undefined || sid == "" ){
@@ -34,6 +34,7 @@ labshop.getClientSessionId = function(){
 		return sid;
 	}
 };
+*/
 
 
 labshop.openClientSession = function(mid, passwd, isHold, fcallback){

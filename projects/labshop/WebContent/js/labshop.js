@@ -2,6 +2,8 @@
 /* ラボショップの初期化*/
 var labshop = {};
 
+labshop.MASTER_SESSION_COOKIE_KEY = "session_id";
+
 labshop.alertErrorHandle = function(msg){
 	alert(msg);
 };
@@ -41,4 +43,13 @@ labshop.monthValueToMonthAndDate = function(val){
 	};
 };
 
+
+labshop.getClientSessionId = function(){
+	var sid = $.cookie(labshop.MASTER_SESSION_COOKIE_KEY);
+	if( sid == undefined || sid == "" ){
+		return undefined;
+	}else{
+		return sid;
+	}
+};
 
