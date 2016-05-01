@@ -13,12 +13,12 @@ labshop.assertError = function(result){
 	}else{
 		return false;
 	}
-}
+};
 
-labshop.errorObjectCallback(cbf, msg){
+labshop.errorObjectCallback = function(cbf, msg){
 	cbf({isErr:true, errMsg:msg});
 	return;
-}
+};
 
 
 labshop.toMonthValue = function(year, month){

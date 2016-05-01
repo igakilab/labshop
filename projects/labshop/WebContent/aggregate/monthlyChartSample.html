@@ -9,7 +9,7 @@
 
 	<script type="text/javascript" src="../dwr/engine.js"></script>
 	<script type="text/javascript" src="../dwr/util.js"></script>
-	<script type="text/javascript" src="../dwr/interface/WebAdminAccountAggregate.js"></script>
+	<script type="text/javascript" src="../dwr/interface/WebAdminCsvAccountRegister.js"></script>
 
 	<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.serialize.js"></script>
@@ -19,8 +19,6 @@
 	<script type="text/javascript" src="../js/labshop.session.js"></script>
 	<script type="text/javascript" src="../js/labshop.account-aggregate.js"></script>
 
-	<script type="text/javascript" src="script.js"></script>
-
 	<style>
 	.page_wide{
 		padding:0px 20px;
@@ -29,28 +27,6 @@
 	</style>
 
 	<script type="text/javascript">
-	$(function(){
-		labshop.addSelectOptions($("#dateForm_year"),
-			["2016"]);
-		labshop.addSelectOptions($("#dateForm_month"),
-			["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]);
-	});
-
-	function getButtonPressed(){
-		var input = $("#dateForm").serializeJson();
-		var mv = labshop.toMonthValue(input.year, input.month);
-
-		$("#msgArea").text("読み込み中... " + input.year + "/" + input.month);
-		labshop.getMonthlyMemberSalesChart(mv, getCallback);
-	}
-
-	function getCallback(ret){
-		if( labshop.assertError(ret) ) return;
-
-		setChartTable($("#chartTable"), ret);
-		$("#msgArea").empty();
-	}
-
 
 
 	</script>
@@ -68,14 +44,29 @@
 
 		対象の月を選択してください:&nbsp;
 		<form id="dateForm" style="display: inline">
-			<select id="dateForm_year" name="year"></select>年&nbsp;
-			<select id="dateForm_month" name="month"></select>月&nbsp;
+			<select id="dateForm_year" name="year" disabled="disabled">
+			<option value="2001">2001</option></select>年&nbsp;
+			<select id="dateForm_month" name="month" disabled="disabled">
+			<option value="1">1</option></select>月&nbsp;
 		</form>
-		<button type="button" onclick="getButtonPressed()">取得</button>
+		<button type="button">検索</button>
 
 		<hr/>
-		<div id="msgArea"></div>
-		<table id="chartTable"></table>
+
+		<table id="chartTable">
+		<tr><th rowspan="2">メンバー名</th><th rowspan="2">金額</th>
+			<th>100401</th><th>100402</th><th>100403</th>
+		</tr><tr>
+			<th>ジャンジルーエ</th><th>選ばれし者の知的飲料</th><th>コラコーカ</th>
+		</tr>
+
+		<tr><th>(213001)山本徹</th><th>120</th>
+			<td>0</td><td>0</td><td><b>3</b>(120)</td></tr>
+		<tr><th>213002</th><th>140</th>
+			<td><b>1</b>(60)</td><td>0</td><td><b>2</b>(80)</td></tr>
+		<tr><th >213003</th><th>720</th>
+			<td><b>4</b>(240)</td><td><b>4</b>(480)</td><td>0</td></tr>
+		</table>
 
 		<hr/>
 
