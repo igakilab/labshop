@@ -34,7 +34,6 @@ public class WebAdminAccountAggregate {
 		}
 
 		Calendar cal = AccountDataMonthlyQueryForm.toCalendar(monthVal);
-		System.out.println(cal);
 		chart.buildChart(aadb, DateFilters.oneMonth("timestamp", cal));
 		aadb.close();
 

@@ -29,6 +29,9 @@
 	</style>
 
 	<script type="text/javascript">
+	var TMP_YEAR;
+	var TMP_MONTH;
+
 	$(function(){
 		labshop.addSelectOptions($("#dateForm_year"),
 			["2016"]);
@@ -39,6 +42,8 @@
 	function getButtonPressed(){
 		var input = $("#dateForm").serializeJson();
 		var mv = labshop.toMonthValue(input.year, input.month);
+		TMP_YEAR = input.year;
+		TMP_MONTH = input.month;
 
 		$("#msgArea").text("読み込み中... " + input.year + "/" + input.month);
 		labshop.getMonthlyMemberSalesChart(mv, getCallback);
@@ -48,7 +53,7 @@
 		if( labshop.assertError(ret) ) return;
 
 		setChartTable($("#chartTable"), ret);
-		$("#msgArea").empty();
+		$("#msgArea").text(TMP_YEAR + "年 " + TMP_MONTH + "月");
 	}
 
 
@@ -74,7 +79,7 @@
 		<button type="button" onclick="getButtonPressed()">取得</button>
 
 		<hr/>
-		<div id="msgArea"></div>
+		<h4 id="msgArea"></h4>
 		<table id="chartTable"></table>
 
 		<hr/>

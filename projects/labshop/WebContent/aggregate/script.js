@@ -30,7 +30,7 @@ function setChartTable(jquery_table_elem, chart){
 					$("<td></td>").append(
 						$("<b></b>").text(memberObj.itemCounts[j])
 					).append(
-						"(" + memberObj.itemPrices[j] + ")"
+						" (" + memberObj.itemPrices[j] + ")"
 					)
 				);
 			}else{
@@ -52,7 +52,7 @@ function setChartTable(jquery_table_elem, chart){
 				$("<td></td>").append(
 					$("<b></b>").text(itemObj.count)
 				).append(
-					"(" + itemObj.sumPrice + ")"
+					" (" + itemObj.sumPrice + ")"
 				)
 			);
 		}else{
