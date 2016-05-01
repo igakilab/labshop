@@ -1,22 +1,43 @@
 package jp.ac.oit.igakilab.labshop.webservice.forms;
 
+import jp.ac.oit.igakilab.labshop.dbcontroller.DBConnector;
+import jp.ac.oit.igakilab.labshop.dbcontroller.ItemDBController;
+import jp.ac.oit.igakilab.labshop.dbcontroller.MemberDBController;
 import jp.ac.oit.igakilab.labshop.shopping.MemberSalesChart;
 
 public class MemberSalesChartForm {
 
-	public static MemberSalesChartForm getInstance(MemberSalesChart chart){
+	public static MemberSalesChartForm getInstance(MemberSalesChart chart, DBConnector dbc){
 		MemberSalesChartForm form = new MemberSalesChartForm();
 
-		Integer[] tmp = chart.getMemberList();
-		form.memberList = new int[tmp.length];
-		for(int i=0; i<tmp.length; i++){
-			form.memberList[i] = tmp[i];
+		Integer[] mlist= chart.getMemberList();
+		form.memberList = new int[mlist.length];
+		for(int i=0; i<mlist.length; i++){
+			form.memberList[i] = mlist[i];
 		}
 
-		tmp = chart.getItemList();
-		form.itemList = new int[tmp.length];
-		for(int i=0; i<tmp.length; i++){
-			form.itemList[i] = tmp[i];
+		if( dbc != null ){
+			MemberDBController mdb = new MemberDBController(dbc);
+			form.memberNameList = new String[mlist.length];
+			for(int i=0; i<mlist.length; i++){
+				form.memberNameList[i] = mdb.getMemberById(mlist[i]).getName();
+			}
+			mdb.close();
+		}
+
+		Integer[] ilist = chart.getItemList();
+		form.itemList = new int[ilist.length];
+		for(int i=0; i<ilist.length; i++){
+			form.itemList[i] = ilist[i];
+		}
+
+		if( dbc != null ){
+			ItemDBController idb = new ItemDBController(dbc);
+			form.itemNameList= new String[ilist.length];
+			for(int i=0; i<ilist.length; i++){
+				form.itemNameList[i] = idb.getItemById(ilist[i]).getName();
+			}
+			idb.close();
 		}
 
 		form.members = new MemberSalesChartMemberForm[chart.getMemberCount()];
@@ -42,7 +63,9 @@ public class MemberSalesChartForm {
 
 
 	private int[] memberList;
+	private String[] memberNameList;
 	private int[] itemList;
+	private String[] itemNameList;
 	private MemberSalesChartMemberForm[] members;
 	private MemberSalesChartItemForm[] items;
 	private int sumPrice;
@@ -54,11 +77,23 @@ public class MemberSalesChartForm {
 	public void setMemberList(int[] memberList) {
 		this.memberList = memberList;
 	}
+	public String[] getMemberNameList() {
+		return memberNameList;
+	}
+	public void setMemberNameList(String[] memberNameList) {
+		this.memberNameList = memberNameList;
+	}
 	public int[] getItemList() {
 		return itemList;
 	}
 	public void setItemList(int[] itemList) {
 		this.itemList = itemList;
+	}
+	public String[] getItemNameList() {
+		return itemNameList;
+	}
+	public void setItemNameList(String[] itemNameList) {
+		this.itemNameList = itemNameList;
 	}
 	public MemberSalesChartMemberForm[] getMembers() {
 		return members;

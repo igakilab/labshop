@@ -38,7 +38,8 @@ public class WebAdminAccountAggregate {
 		chart.buildChart(aadb, DateFilters.oneMonth("timestamp", cal));
 		aadb.close();
 
+		MemberSalesChartForm form = MemberSalesChartForm.getInstance(chart, sm.getDBConnector());
 		sm.close();
-		return MemberSalesChartForm.getInstance(chart);
+		return form;
 	}
 }
