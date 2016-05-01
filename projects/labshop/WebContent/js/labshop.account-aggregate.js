@@ -34,11 +34,11 @@ labshop.getMonthlyMemberPriceList = function(monthVal, fcallback){
 	});
 };
 
-labshop.getMonthlyItemSalesList = function(monthVal, id, f_callback){
+labshop.getMonthlyItemSalesList = function(monthVal, f_callback){
 	var localId = labshop.getClientSessionId();
 	if( labshop.assertUndefined(localId, "セッションが開いていません") )return;
 
-	WebAdminAccountAggregate.getMonthlyItemSalesList(localId, monthVal, id, {
+	WebAdminAccountAggregate.getMonthlyItemSalesList(localId, monthVal, {
 		callback: function(ret){
 			var sum = 0;
 			for(var i=0; i<ret.length; i++) sum += ret[i].price;
@@ -51,11 +51,11 @@ labshop.getMonthlyItemSalesList = function(monthVal, id, f_callback){
 };
 
 
-labshop.getMonthlyMemberItemAccount = function(monthVal, mid, iid, fcallback){
+labshop.getMonthlyMemberItemAccounts = function(monthVal, mid, iid, f_callback){
 	var localId = labshop.getClientSessionId();
 	if( labshop.assertUndefined(localId, "セッションが開いていません") )return;
 
-	WebAdminAccountAggregate.getMonthlyMemberAccount(localId, monthVal, mid, iid, {
+	WebAdminAccountAggregate.getMonthlyMemberItemAccounts(localId, monthVal, mid, iid, {
 		callback: function(ret){
 			var sum = 0;
 			for(var i=0; i<ret.length; i++){
@@ -69,11 +69,11 @@ labshop.getMonthlyMemberItemAccount = function(monthVal, mid, iid, fcallback){
 	});
 }
 
-labshop.getMonthlyMemberAccount = function(monthVal, id, f_callback){
+labshop.getMonthlyMemberAccounts = function(monthVal, id, f_callback){
 	var localId = labshop.getClientSessionId();
 	if( labshop.assertUndefined(localId, "セッションが開いていません") )return;
 
-	WebAdminAccountAggregate.getMonthlyMemberAccount(localId, monthVal, id, {
+	WebAdminAccountAggregate.getMonthlyMemberAccounts(localId, monthVal, id, {
 		callback: function(ret){
 			var sum = 0;
 			for(var i=0; i<ret.length; i++){
@@ -87,11 +87,11 @@ labshop.getMonthlyMemberAccount = function(monthVal, id, f_callback){
 	});
 };
 
-labshop.getMonthlyItemAccount = function(year, month, id, f_callback){
+labshop.getMonthlyItemAccounts = function(monthVal, id, f_callback){
 	var localId = labshop.getClientSessionId();
 	if( labshop.assertUndefined(localId, "セッションが開いていません") )return;
 
-	WebAdminAccountAggregate.getMonthlyMemberAccount(localId, monthVal, id, {
+	WebAdminAccountAggregate.getMonthlyItemAccounts(localId, monthVal, id, {
 		callback: function(ret){
 			var sum = 0;
 			for(var i=0; i<ret.length; i++) sum += ret[i].sellPrice;
