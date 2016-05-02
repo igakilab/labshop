@@ -11,6 +11,7 @@ import jp.ac.oit.igakilab.labshop.webservice.forms.NamedItemSalesForm;
 import jp.ac.oit.igakilab.labshop.webservice.forms.NamedMemberPriceForm;
 
 public class WebAccountAggregate {
+	@Deprecated
 	public NamedMemberPriceForm[] getMonthlyMemberPriceList(int y, int m){
 		AggregateAccountDB aadb = new AggregateAccountDB();
 		List<HashMap<String, Integer>> result =
@@ -27,6 +28,7 @@ public class WebAccountAggregate {
 		return forms;
 	}
 
+	@Deprecated
 	public NamedItemSalesForm[] getMonthlyItemSalesList(int y, int m){
 		AggregateAccountDB aadb = new AggregateAccountDB();
 		List<HashMap<String, Integer>> result =
@@ -44,6 +46,7 @@ public class WebAccountAggregate {
 		return forms;
 	}
 
+	@Deprecated
 	public NamedAccountDataForm[] getMonthlyMemberAccounts(int y, int m, int id){
 		AggregateAccountDB aadb = new AggregateAccountDB();
 		List<AccountData> result =
@@ -55,6 +58,7 @@ public class WebAccountAggregate {
 		return forms;
 	}
 
+	@Deprecated
 	public NamedAccountDataForm[] getMonthlyItemAccounts(int y, int m, int id){
 		AggregateAccountDB aadb = new AggregateAccountDB();
 		List<AccountData> result =

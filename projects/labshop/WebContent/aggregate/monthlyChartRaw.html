@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ラボショップシステム</title>
+	<meta charset="utf-8"/>
+
+	<link rel="stylesheet" href="../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../css/github-markdown.css" type="text/css"/>
+
+	<script type="text/javascript" src="../dwr/engine.js"></script>
+	<script type="text/javascript" src="../dwr/util.js"></script>
+	<script type="text/javascript" src="../dwr/interface/WebAdminAccountAggregate.js"></script>
+
+	<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.serialize.js"></script>
+	<script type="text/javascript" src="../js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="../js/labshop.js"></script>
+	<script type="text/javascript" src="../js/labshop.util.js"></script>
+	<script type="text/javascript" src="../js/labshop.account-aggregate.js"></script>
+
+	<script type="text/javascript" src="script.js"></script>
+
+	<style>
+	table{
+		border-collapse: collapse;
+		font-family: monospace;
+		table-layout: fixed;
+	}
+
+	th, td{
+		border: 1px #000 solid;
+		width: 100px;
+		max-width: 100px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.mc_mname{
+		width: 150px;
+		max-width: 150px;
+	}
+
+	.mc_mprice{
+		width: 50px;
+		max-width: 50px;
+	}
+
+
+	</style>
+
+	<script type="text/javascript">
+
+	$(function(){
+		var urlParam = labshop.getUrlParameters();
+		if( urlParam.value != undefined ){
+			var aval = labshop.monthValueToMonthAndDate(urlParam.value);
+			setMemberSalesChart(aval.year, aval.month);
+		}else{
+			alert("パラメータエラー");
+		}
+
+	});
+
+	function setMemberSalesChart(year, month){
+		$("#chartTitle").text("Monthly Member Sales Chart (" + year + "年" + month + "月)");
+		labshop.getMonthlyMemberSalesChart(
+			labshop.toMonthValue(year, month), setMemberSalesChartCallback);
+	}
+
+	function setMemberSalesChartCallback(ret){
+		if( labshop.assertError(ret) ) return;
+
+		setChartTable($("#chartTable"), ret);
+	}
+	</script>
+</head>
+
+<body>
+	<div>
+	<h3 id="chartTitle"></h3>
+	<table id="chartTable">
+	</table>
+
+	</div>
+</body>
+</html>

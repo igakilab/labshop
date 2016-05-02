@@ -22,7 +22,8 @@
     var HISTORY_MONTH_VALUE;
 
     function init(){
-    	HISTORY_MONTH_VALUE = labshop.toMonthValue(2016, 1);
+    	var today = new Date();
+    	HISTORY_MONTH_VALUE = labshop.toMonthValue(today.getFullYear(), today.getMonth());
 
     	labshop.getClientSessionState(setMemberProfile);
     }

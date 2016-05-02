@@ -8,6 +8,10 @@ header {
 	border-bottom: 10px solid #08e;
 }
 
+table {
+	line-height: normal;
+}
+
 .page_header{
 	padding:2px 15px;
 	border-bottom: 15px solid #08e;

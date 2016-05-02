@@ -17,6 +17,8 @@
     <script type="text/javascript">
     function init(){
     	labshop.getClientSessionState(loginCheck);
+    	$("#idHelp").hide();
+		$("#passwdHelp").hide();
     }
 
     function loginCheck(result){
@@ -41,6 +43,17 @@
 		}
 	}
 
+	function showIdhelp(){
+		$("#passwdHelp").hide();
+		$("#idHelp").show();
+	}
+
+	function showPasswdhelp(){
+
+    	$("#idHelp").hide();
+		$("#passwdHelp").show();
+	}
+
 	$(document).ready(function(){
 		init();
 	});
@@ -61,10 +74,29 @@
 
 		<p id="message_area" style="background-color: #fcc; color: #c00;"></p>
 
+		<!-- ID HELP -->
+		<blockquote id="idHelp" style="text-align:left;">
+		IDは学籍番号をもとに6桁の数字になっています。<br/>
+		また、先頭のアルファベット一文字は下記にならって数字として入力します。
+		<table><tr><th>先頭一文字</th><td>B</td><td>C</td><td>N</td><td>Q</td></tr>
+		<tr><th>数字</th><td>2</td><td>3</td><td>4</td><td>5</td></tr></table>
+		<ul><li>例1: B13001の時: 213001</li>
+		<li>例2: Q14054の時: 514054</li>
+		<li>例3: 井垣先生: 900101</li></ul>
+		</blockquote>
+
+		<!-- PASSWORD HELP -->
+		<blockquote id="passwdHelp" style="text-align:left;">
+		パスワードの初期値は何も設定されてません。<br/>
+		パスワードを忘れた場合は、管理者に問い合わせてパスワードリセットを行って下さい。
+		</blockquote>
+
 		<form id="login_form">
-			<h6>メンバーID</h6>
+			<h6>メンバーID
+			<a href="javascript:void(0);" onclick="showIdhelp()">?</a></h6>
 			<input type="text" name="memberId" tabindex="1"/>
-			<h6>パスワード</h6>
+			<h6>パスワード
+			<a href="javascript:void(0);" onclick="showPasswdhelp()">?</a></h6>
 			<input type="password" name="passwd" tabindex="2"/>
 			<br/><br/>
 			<p><input id="loginForm_isHold" type="checkbox" name="isHold" checked="checked"/>
@@ -74,7 +106,12 @@
 		<button type="button" onclick="loginButtonPressed()" tabindex="3">ログイン</button>
 
 		<p><br/><a href="../index.html">トップページへ戻る</a></p>
+
+		<br/>
+		<i>igakilab labshop system</i>
 	</div>
+
+
 
 	</div>
   </body>

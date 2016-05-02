@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ラボショップシステム</title>
+	<meta charset="utf-8"/>
+
+	<link rel="stylesheet" href="../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../css/github-markdown.css" type="text/css"/>
+
+	<script type="text/javascript" src="../dwr/engine.js"></script>
+	<script type="text/javascript" src="../dwr/util.js"></script>
+	<script type="text/javascript" src="../dwr/interface/WebAdminAccountAggregate.js"></script>
+
+	<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.serialize.js"></script>
+	<script type="text/javascript" src="../js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="../js/labshop.js"></script>
+	<script type="text/javascript" src="../js/labshop.util.js"></script>
+	<script type="text/javascript" src="../js/labshop.session.js"></script>
+	<script type="text/javascript" src="../js/labshop.account-aggregate.js"></script>
+
+	<script type="text/javascript" src="script.js"></script>
+
+	<style>
+	.page_wide{
+		padding:0px 20px;
+	}
+
+	</style>
+
+	<script type="text/javascript">
+	var TMP_YEAR;
+	var TMP_MONTH;
+
+	$(function(){
+		labshop.addSelectOptions($("#dateForm_year"),
+			["2016"]);
+		labshop.addSelectOptions($("#dateForm_month"),
+			["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]);
+	});
+
+	function getButtonPressed(){
+		var input = $("#dateForm").serializeJson();
+		var mv = labshop.toMonthValue(input.year, input.month);
+		TMP_YEAR = input.year;
+		TMP_MONTH = input.month;
+
+		$("#msgArea").text("読み込み中... " + input.year + "/" + input.month);
+		labshop.getMonthlyMemberSalesChart(mv, getCallback);
+	}
+
+	function getCallback(ret){
+		if( labshop.assertError(ret) ) return;
+
+		setChartTable($("#chartTable"), ret);
+		$("#msgArea").text(TMP_YEAR + "年 " + TMP_MONTH + "月");
+	}
+
+	function viewrawButtonPressed(){
+		var input = $("#dateForm").serializeJson();
+		window.open("monthlyChartRaw.html?value=" +
+			labshop.toMonthValue(input.year, input.month));
+	}
+
+
+
+	</script>
+</head>
+
+<body>
+	<div class="page_header">
+		<div class="page_wide">
+			<img src="../images/logo2.png"/>
+		</div>
+	</div>
+
+	<div class="page_wide markdown-body">
+		<h1>Monthly Member Sales Chart</h1>
+		<div class="text-right"><a href="../testTop.html">テストトップへ</a></div>
+
+		対象の月を選択してください:&nbsp;
+		<form id="dateForm" style="display: inline">
+			<select id="dateForm_year" name="year"></select>年&nbsp;
+			<select id="dateForm_month" name="month"></select>月&nbsp;
+		</form>
+		<button type="button" onclick="getButtonPressed()">取得</button>
+		<a href="javascript:void(0);" onclick="viewrawButtonPressed()">
+		表のみを表示する</a>
+
+		<hr/>
+		<h4 id="msgArea"></h4>
+		<table id="chartTable"></table>
+
+		<hr/>
+
+	</div>
+
+	<div class="page_header text-center markdown-body">
+	<i>igakilab labshop system</i></div>
+</body>
+</html>

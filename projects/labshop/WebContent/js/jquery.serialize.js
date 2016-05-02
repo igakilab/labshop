@@ -35,7 +35,7 @@ $.fn.extend({
 							+ 'の入力フォームのname属性が重複しています．シリアライズを無視します．');
 					return;
 				}
-				if( type.match(/^checkbox/i) ){
+				if( type != undefined && type.match(/^checkbox/i) ){
 					$(json).attr(name, $(this).prop("checked"));
 				}else{
 					$(json).attr(name, $(this).val());
