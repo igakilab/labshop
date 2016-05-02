@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+  	<title>ラボショップシステム</title>
+  	<meta charset="utf-8"/>
+
+	<link rel="stylesheet" href="../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../css/github-markdown.css" type="text/css"/>
+
+	<script type="text/javascript" src="../dwr/engine.js"></script>
+	<script type="text/javascript" src="../dwr/util.js"></script>
+    <script type="text/javascript" src="../dwr/interface/WebSessionManager.js"></script>
+    <script type="text/javascript" src="../dwr/interface/WebAdminDBEditor.js"></script>
+
+	<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.serialize.js"></script>
+    <script type="text/javascript" src="../js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../js/labshop.js"></script>
+    <script type="text/javascript" src="../js/labshop.util.js"></script>
+    <script type="text/javascript" src="../js/labshop.session.js"></script>
+    <script type="text/javascript" src="../js/labshop.admin.dbedit.js"></script>
+
+    <script type="text/javascript">
+
+    $(function(){
+    	initItemDataForm();
+    	updateItemList();
+    });
+
+    function initItemDataForm(itemId){
+    	if( itemId !== undefined ){
+    		var sid = labshop.getClientSessionId();
+    		labshop.getItemData(sid, itemId, initItemDataFormCallback);
+    	}
+    	initItemDataFormCallback();
+    }
+
+	function initItemDataFormCallback(ret){
+		var input_id = $("<input></input>")
+			.attr("type", "text")
+			.attr("name", "id");
+		var input_name = $("<input></input>")
+			.attr("type", "text")
+			.attr("name", "name");
+		var input_price = $("<input></input>")
+			.attr("type", "text")
+			.attr("name", "price");
+		var button_submit = $("<button></button>")
+			.attr("type", "button")
+			.attr("onclick", "addButtonPressed()")
+			.text("追加");
+
+		if( ret !== undefined ){
+			if( ret.isErr ){
+				alert(ret.errMsg);
+				return;
+			}
+
+			input_id.val(ret.data.id)
+				.attr("readonly", "readonly");
+			input_name.val(ret.data.name);
+			input_price.val(ret.data.price);
+			button_submit.attr("onclick", "updateButtonPressed()")
+				.text("更新");
+		}
+
+		$("#itemDataForm_id_cell").empty()
+			.append(input_id);
+		$("#itemDataForm_name_cell").empty()
+			.append(input_name);
+		$("#itemDataForm_price_cell").empty()
+			.append(input_price);
+		$("#itemDataForm_submit_wrap").empty()
+			.append(button_submit);
+    }
+
+	function updateItemList(){
+		var sid = labshop.getClientSessionId();
+		labshop.getItemList(sid, updateItemListCallback);
+	}
+
+	function updateItemListCallback(ret){
+		if( ret.isErr ){
+			alert(ret.errMsg + ": " + labshop.getClientSessionId());
+			return;
+		}
+
+		var itemList = ret.list;
+		var table = $("#itemListTable");
+
+		table.empty();
+		table.append(labshop.createLabelsRow(["ID", "アイテム名", "販売価格", "操作"]));
+
+		for(var i=0; i<itemList.length; i++){
+			var btn_edit = $("<button></button>").text("編集")
+				.attr("type", "button")
+				.attr("onclick", "editButtonPressed(" + itemList[i].id + ")")
+			var btn_remove = $("<button></button>").text("削除")
+				.attr("type", "button")
+				.attr("onclick", "removeButtonPressed(" + itemList[i].id + ")");
+
+			table.append(
+				$("<tr></tr>").append(
+					$("<td></td>").text(itemList[i].id)
+				).append(
+					$("<td></td>").text(itemList[i].name)
+				).append(
+					$("<td></td>").text(itemList[i].price)
+				).append(
+					$("<td></td>").append(btn_edit)
+						.append(btn_remove)
+				)
+			);
+		}
+	}
+
+	function createButtonPressed(){
+		initItemDataForm();
+	}
+
+	function addButtonPressed(){
+		var input = $("#itemDataForm").serializeJson();
+		var sid = labshop.getClientSessionId();
+		labshop.editItemDB(sid, "add", input, editExcuteCallback);
+	}
+
+	function updateButtonPressed(){
+		var input = $("#itemDataForm").serializeJson();
+		var sid = labshop.getClientSessionId();
+		labshop.editItemDB(sid, "update", input, editExcuteCallback);
+	}
+
+	function editButtonPressed(itemId){
+		initItemDataForm(itemId);
+	}
+
+	function removeButtonPressed(itemId){
+		if( !confirm("ID番号[" + itemId + "]のデータを削除してもよろしいですか？") ){
+			return;
+		}
+
+		var sid = labshop.getClientSessionId();
+		labshop.editItemDB(sid, "remove", {id: itemId}, editExcuteCallback);
+	}
+
+	function editExcuteCallback(ret){
+		if( ret.isErr ){ alert(ret.errMsg); return;}
+		if( !ret.isSuccess ){ alert("処理が正常に終了しませんでした"); }
+		updateItemList();
+	}
+    </script>
+
+</head>
+<body>
+	<div class="page_header">
+		<div class="page_centering">
+			<img src="../images/logo2.png"/>
+		</div>
+	</div>
+
+	<div class="markdown-body page_centering">
+		<h1>item database editor</h1>
+
+		<button type="button" onclick="createButtonPressed()">新規作成</button>
+
+		<form id="itemDataForm">
+		<table>
+			<tr><td>ID</td>
+				<td id="itemDataForm_id_cell"></td>
+			</tr>
+			<tr><td>アイテム名</td>
+				<td id="itemDataForm_name_cell"></td>
+			</tr>
+			<tr><td>標準価格</td>
+				<td id="itemDataForm_price_cell"></td>
+			</tr>
+		</table>
+		<div id="itemDataForm_submit_wrap"></div>
+		</form>
+
+		<h3>アイテムリスト</h3>
+		<table id="itemListTable"></table>
+
+	</div>
+
+
+  </body>
+</html>

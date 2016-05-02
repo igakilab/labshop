@@ -76,7 +76,7 @@ public class SessionDBController extends DBConnector {
 		return collection.count(Filters.eq("id", id_val)) > 0;
 	}
 
-	public List<SessionData> getAllMemberList(){
+	public List<SessionData> getAllSessionList(){
 		FindIterable<Document> result = collection.find();
 
 		return toSessionData(result);

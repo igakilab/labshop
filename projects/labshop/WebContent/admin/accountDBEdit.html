@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+  	<title>ラボショップシステム</title>
+  	<meta charset="utf-8"/>
+
+	<link rel="stylesheet" href="../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../css/github-markdown.css" type="text/css"/>
+
+	<script type="text/javascript" src="../dwr/engine.js"></script>
+	<script type="text/javascript" src="../dwr/util.js"></script>
+    <script type="text/javascript" src="../dwr/interface/WebSessionManager.js"></script>
+    <script type="text/javascript" src="../dwr/interface/WebAdminDBEditor.js"></script>
+
+	<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.serialize.js"></script>
+    <script type="text/javascript" src="../js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../js/labshop.js"></script>
+    <script type="text/javascript" src="../js/labshop.util.js"></script>
+    <script type="text/javascript" src="../js/labshop.session.js"></script>
+    <script type="text/javascript" src="../js/labshop.admin.dbedit.js"></script>
+
+    <script type="text/javascript">
+
+    $(function(){
+    	initAccountDataForm();
+    	updateAccountList();
+    });
+
+    function initAccountDataForm(accountId){
+    	if( accountId !== undefined ){
+    		var sid = labshop.getClientSessionId();
+    		labshop.getAccountData(sid, accountId, initAccountDataFormCallback);
+    	}
+    	initAccountDataFormCallback();
+    }
+
+	function initAccountDataFormCallback(ret){
+		var input_memberId= $("#accountDataForm_memberId");
+		var input_itemId = $("#accountDataForm_itemId");
+		var input_sellPrice = $("#accountDataForm_sellPrice");
+		var button_submit = $("<button></button>")
+			.attr("type", "button")
+			.attr("onclick", "registButtonPressed()")
+			.text("追加");
+
+		$("#accountDataForm_registModeArea").text("新規登録");
+
+		if( ret !== undefined ){
+			if( ret.isErr ){
+				alert(ret.errMsg);
+				return;
+			}
+
+			input_memberId.val(ret.data.memberId);
+			input_itemId.val(ret.data.itemId);
+			input_sellPrice.val(ret.data.sellPrice);
+			button_submit.attr("onclick", "updateButtonPressed("+ ret.data.id + ")")
+				.text("更新");
+
+			$("#accountDataForm_registModeArea").text(
+				"登録情報修正 (id:" + ret.data.id + ", timestamp:" + ret.data.timestamp + ")");
+		}
+
+		$("#accountDataForm_submit_cell").empty()
+			.append(button_submit);
+    }
+
+	function updateAccountList(){
+		var sid = labshop.getClientSessionId();
+		labshop.getAccountList(sid, updateAccountListCallback);
+	}
+
+	function updateAccountListCallback(ret){
+		if( ret.isErr ){
+			alert(ret.errMsg + ": " + labshop.getClientSessionId());
+			return;
+		}
+
+		var accountList = ret.list;
+		var table = $("#accountListTable");
+
+		table.empty();
+		table.append(labshop.createLabelsRow(
+			["ID", "日時", "メンバーID", "アイテムID", "購入価格", "操作"]));
+
+		for(var i=0; i<accountList.length; i++){
+			var btn_edit = $("<button></button>").text("編集")
+				.attr("type", "button")
+				.attr("onclick", "editButtonPressed(" + accountList[i].id + ")")
+			var btn_remove = $("<button></button>").text("削除")
+				.attr("type", "button")
+				.attr("onclick", "removeButtonPressed(" + accountList[i].id + ")");
+
+			table.append(
+				$("<tr></tr>").append(
+					$("<td></td>").text(accountList[i].id)
+				).append(
+					$("<td></td>").text(accountList[i].timestamp)
+				).append(
+					$("<td></td>").text(accountList[i].memberId)
+				).append(
+					$("<td></td>").text(accountList[i].itemId)
+				).append(
+					$("<td></td>").text(accountList[i].sellPrice)
+				).append(
+					$("<td></td>").append(btn_edit)
+						.append(btn_remove)
+				)
+			);
+		}
+	}
+
+	function createButtonPressed(){
+		initAccountDataForm();
+	}
+
+	function registButtonPressed(){
+		var input = $("#accountDataForm").serializeJson();
+		var sid = labshop.getClientSessionId();
+		labshop.registAccount(sid, input, registAccountCallback);
+	}
+
+	function updateButtonPressed(accountId){
+		var input = $("#accountDataForm").serializeJson();
+		var sid = labshop.getClientSessionId();
+		labshop.getAccountData(sid, accountId, function(ret){
+			if( ret.isErr ){ alert(ret.errMsg); return;}
+			input.id = ret.data.id;
+			input.timestamp = ret.data.timestamp;
+			labshop.editAccountDB(sid, "update", input, editExcuteCallback);
+		});
+	}
+
+	function editButtonPressed(accountId){
+		initAccountDataForm(accountId);
+	}
+
+	function removeButtonPressed(accountId){
+		if( !confirm("ID番号[" + accountId + "]のデータを削除してもよろしいですか？") ){
+			return;
+		}
+
+		var sid = labshop.getClientSessionId();
+		labshop.editAccountDB(sid, "remove", {id: accountId}, editExcuteCallback);
+	}
+
+	function editExcuteCallback(ret){
+		if( ret.isErr ){ alert(ret.errMsg); return;}
+		if( !ret.isSuccess ){ alert("処理が正常に終了しませんでした"); }
+		updateAccountList();
+	}
+
+	function registAccountCallback(ret){
+		if( ret.isErr ){ alert(ret.errMsg); return;}
+		alert("(id:" + ret.registedData.id + ", timestamp:" + ret.registedData.timestamp + ")\n" +
+			"新しいアカウントを登録しました");
+		updateAccountList();
+	}
+    </script>
+
+</head>
+<body>
+	<div class="page_header">
+		<div class="page_centering">
+			<img src="../images/logo2.png"/>
+		</div>
+	</div>
+
+	<div class="markdown-body page_centering">
+		<h1>account database editor</h1>
+
+
+		<p><button type="button" onclick="createButtonPressed()">新規登録</button>
+
+		<form id="accountDataForm">
+		<p id="accountDataForm_registModeArea"></p>
+
+		<table>
+			<tr><th>メンバーID</th>
+			<th>アイテムID</th>
+			<th>購入価格</th>
+			<th>登録</th></tr>
+			<tr>
+				<td><input id="accountDataForm_memberId" type="text" name="memberId"/></td>
+				<td><input id="accountDataForm_itemId" type="text" name="itemId"/></td>
+				<td><input id="accountDataForm_sellPrice" type="text" name="sellPrice"/></td>
+				<td id="accountDataForm_submit_cell"></td>
+			</tr>
+		</table>
+		</form>
+
+		<h3>伝票リスト</h3>
+		<table id="accountListTable"></table>
+
+	</div>
+
+
+  </body>
+</html>

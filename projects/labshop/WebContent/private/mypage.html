@@ -13,18 +13,19 @@
     <script type="text/javascript" src="../js/jquery.cookie.js"></script>
     <script type="text/javascript" src="../dwr/interface/WebSessionManager.js"></script>
     <script type="text/javascript" src="../dwr/interface/WebAccountHistory.js"></script>
-    <script type="text/javascript" src="../js/LabshopUtil.js"></script>
-    <script type="text/javascript" src="../js/LabshopSession.js"></script>
+    <script type="text/javascript" src="../js/labshop.js"></script>
+    <script type="text/javascript" src="../js/labshop.util.js"></script>
+    <script type="text/javascript" src="../js/labshop.session.js"></script>
     <script type="text/javascript" src="../accountHistory/JsAccountHistory.js"></script>
     <script type="text/javascript">
     var LOGIN_MEMBER_ID;
 
     function init(){
-    	LabshopUtil.addSelectOptions($("#history_form_year"), ["2016"]);
-    	LabshopUtil.addSelectOptions($("#history_form_month"),
+    	labshop.addSelectOptions($("#history_form_year"), ["2016"]);
+    	labshop.addSelectOptions($("#history_form_month"),
     		["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]);
 
-    	LabshopSession.getClientSessionStatus(setMemberProfile);
+    	labshop.getClientSessionState(setMemberProfile);
     }
 
     function setMemberProfile(session_state){
@@ -54,7 +55,7 @@
 
 		var table = $("#history_table");
 		table.append(
-			LabshopUtil.createLabelsRow(["日時", "商品ID", "商品名", "価格"]));
+			labshop.createLabelsRow(["日付", "商品ID", "商品名", "価格"]));
 		for(var i=0; i<result.histories.length; i++){
 			table.append(
 				createHistoryTableRow(result.histories[i]));
@@ -67,17 +68,16 @@
     }
 
     function createHistoryTableRow(account){
-    	var dateStr = (account.timestamp.getMonth()+1) + " / " + account.timestamp.getDate();
     	return $("<tr></tr>")
-    		.append($("<td></td>").text(dateStr))
+    		.append($("<td></td>").text(labshop.formatDate(account.timestamp, "MM月DD日")))
     		.append($("<td></td>").text(account.itemId))
     		.append($("<td></td>").text(account.itemName))
     		.append($("<td></td>").text(account.sellPrice));
     }
 
     function logoutButtonPressed(){
-    	LabshopSession.closeClientSession(function(ret){
-    		if( ret.result ){
+    	labshop.closeClientSession(function(ret){
+    		if( ret.isSuccess ){
     			alert("ログアウトしました");
     			window.location.href="../index.html";
     		}else{

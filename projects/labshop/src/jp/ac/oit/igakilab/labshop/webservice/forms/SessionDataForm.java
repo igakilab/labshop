@@ -83,4 +83,15 @@ public class SessionDataForm {
 		return form;
 	}
 
+	public static SessionDataForm[] getInstance(SessionData[] list, DBConnector dbc){
+		if( list == null ) return null;
+
+		SessionDataForm[] forms = new SessionDataForm[list.length];
+		for(int i=0; i<list.length; i++){
+			forms[i] = getInstance(list[i], dbc);
+		}
+
+		return forms;
+	}
+
 }
