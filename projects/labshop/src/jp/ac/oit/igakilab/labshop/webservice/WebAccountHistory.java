@@ -11,6 +11,9 @@ import jp.ac.oit.igakilab.labshop.webservice.forms.MemberDataForm;
 import jp.ac.oit.igakilab.labshop.webservice.forms.NamedAccountDataForm;
 
 public class WebAccountHistory {
+
+
+	/*古いインタフェース*/
 	public NamedAccountDataForm[] getMonthlyHistoryByMemberId(int year, int month, int mid)
 	throws ExcuteFailedException{
 		AggregateAccountDB aadb = new AggregateAccountDB();
@@ -27,6 +30,7 @@ public class WebAccountHistory {
 		return nlist;
 	}
 
+	/*古いインタフェース*/
 	public MemberDataForm[] getAllMemberList(){
 		MemberDBController mdb = new MemberDBController();
 		MemberDataForm[] list =
@@ -37,6 +41,7 @@ public class WebAccountHistory {
 		return list;
 	}
 
+	/*古いインタフェース*/
 	public String getMemberName(int mid)
 	throws ExcuteFailedException{
 		MemberDBController mdb = new MemberDBController();

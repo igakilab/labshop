@@ -32,6 +32,7 @@ public class AuthMemberData extends MemberData {
 		AuthMemberData amd = new AuthMemberData();
 		amd.setId(md.getId());
 		amd.setName(md.getName());
+		amd.setIsAdmin(md.getIsAdmin());
 		amd.setPasswordHash(md.getPasswordHash());
 		return amd;
 	}

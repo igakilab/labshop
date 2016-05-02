@@ -45,6 +45,15 @@
     <create creator="new" javascript="WebAdminSessionManager">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.admin.WebAdminSessionManager"/>
     </create>
+    <create creator="new" javascript="WebAdminCsvAccountRegister">
+      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.admin.WebAdminCsvAccountRegister"/>
+    </create>
+    <create creator="new" javascript="WebAccountListFinder">
+      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebAccountListFinder"/>
+    </create>
+    <create creator="new" javascript="WebMemberConfigure">
+      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebMemberConfigure"/>
+    </create>
     <!-- テスト用 -->
     <create creator="new" javascript="TestDBCounter">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.test.TestDBCounter"/>
