@@ -5,6 +5,7 @@ import jp.ac.oit.igakilab.labshop.item.ItemData;
 public class ItemDataForm {
 	private int id;
 	private String name;
+	private boolean isOnSale;
 	private int price;
 
 	public ItemDataForm(){}
@@ -25,6 +26,14 @@ public class ItemDataForm {
 		this.name = name;
 	}
 
+	public boolean getIsOnSale(){
+		return isOnSale;
+	}
+
+	public void setIsOnSale(boolean b0){
+		isOnSale = b0;
+	}
+
 	public int getPrice() {
 		return price;
 	}
@@ -40,6 +49,7 @@ public class ItemDataForm {
 		form.setId(data.getId());
 		form.setName(data.getName());
 		form.setPrice(data.getPrice());
+		form.setIsOnSale(data.getIsOnSale());
 		return form;
 	}
 
@@ -54,6 +64,7 @@ public class ItemDataForm {
 	public static ItemData toItemData(ItemDataForm form){
 		ItemData data = new ItemData(form.getId(), form.getName());
 		data.setPrice(form.getPrice());
+		data.setIsOnSale(form.getIsOnSale());
 		return data;
 	}
 }

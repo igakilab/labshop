@@ -8,6 +8,7 @@ public class MemberData {
 	private int id;
 	private String name;
 	private boolean isAdmin;
+	private boolean isPrimary;
 	private String passwordHash;
 
 	public MemberData(){
@@ -43,6 +44,13 @@ public class MemberData {
 	}
 	public void setIsAdmin(boolean a0){
 		isAdmin = a0;
+	}
+
+	public boolean getIsPrimary() {
+		return isPrimary;
+	}
+	public void setIsPrimary(boolean isPrimary) {
+		this.isPrimary = isPrimary;
 	}
 
 	public String getPasswordHash(){

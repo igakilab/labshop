@@ -7,12 +7,14 @@ public class ItemData {
 	/*いんすたんす*/
 	private int id;
 	private String name;
+	private boolean isOnSale;
 	private int price;
 
 	public ItemData(){
 		id = 0;
 		name = "noname";
 		setPrice(0);
+		setIsOnSale(true);
 	}
 
 	public ItemData(int i0, String n0){
@@ -35,6 +37,13 @@ public class ItemData {
 	}
 	public void setName(String n0){
 		name = n0;
+	}
+
+	public boolean getIsOnSale(){
+		return isOnSale;
+	}
+	public void setIsOnSale(boolean a0){
+		isOnSale = a0;
 	}
 
 	public int getPrice(){

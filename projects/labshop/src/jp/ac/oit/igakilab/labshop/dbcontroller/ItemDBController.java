@@ -26,6 +26,7 @@ implements DBCsvExportable{
 		doc = new Document()
 			.append("id", data.getId())
 			.append("name", data.getName())
+			.append("isOnSale", data.getIsOnSale())
 			.append("price", data.getPrice());
 
 		return doc;
@@ -35,6 +36,7 @@ implements DBCsvExportable{
 		if( doc != null ){
 			ItemData data = new ItemData(
 				doc.getInteger("id", 0), doc.getString("name"));
+			data.setIsOnSale(doc.getBoolean("isOnSale", true));
 			data.setPrice(doc.getInteger("price", 0));
 			return data;
 		}
