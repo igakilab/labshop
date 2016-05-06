@@ -24,17 +24,11 @@
     <create creator="new" javascript="DBCsvManager">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.config.DBCsvManager"/>
     </create>
-    <create creator="new" javascript="WebAccountHistory">
-      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebAccountHistory"/>
-    </create>
     <create creator="new" javascript="WebAccountAggregate">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebAccountAggregate"/>
     </create>
     <create creator="new" javascript="WebSimpleAuthentication">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebSimpleAuthentication"/>
-    </create>
-    <create creator="new" javascript="WebMemberAuthentication">
-      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebMemberAuthentication"/>
     </create>
     <create creator="new" javascript="WebSessionManager">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebSessionManager"/>
