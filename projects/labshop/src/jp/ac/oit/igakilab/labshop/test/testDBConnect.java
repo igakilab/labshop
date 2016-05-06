@@ -13,9 +13,9 @@ public class testDBConnect {
 			client.getDatabase("labshop").getCollection("member");
 		FindIterable<Document> result = collection.find();
 
-		/*for(Document doc : result){
+		for(Document doc : result){
 			System.out.println(doc.toString());
-		}*/
+		}
 
 		client.close();
 		return;
