@@ -51,7 +51,7 @@ public class MemberDataForm {
 		form.setId(data.getId());
 		form.setName(data.getName());
 		form.setIsAdmin(data.getIsAdmin());
-		data.setIsPrimary(form.getIsPrimary());
+		form.setIsPrimary(data.getIsPrimary());
 		return form;
 	}
 
