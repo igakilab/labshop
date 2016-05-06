@@ -4,7 +4,7 @@ import java.io.File;
 
 import jp.ac.oit.igakilab.marsh.util.XmlConfig;
 
-public class LabshopProperties {
+public class LabshopProperties{
 	static public String ROOT_DIR_PATH = "/var/log/tomcat7/labshop/";
 	static public String CONFIG_FILE = "config.xml";
 
@@ -46,5 +46,9 @@ public class LabshopProperties {
 
 	public boolean isPropertyRegisted(String key){
 		return config.containsKey(key);
+	}
+
+	public XmlConfig getXmlConfig(){
+		return config;
 	}
 }
