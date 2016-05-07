@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -94,6 +95,13 @@ implements DBCsvExportable{
 
 	public List<MemberData> getAllMemberList(){
 		FindIterable<Document> result = collection.find();
+
+		return toMemberData(result);
+	}
+
+	public List<MemberData> getPrimaryMemberList(){
+		Bson query = Filters.eq("isPrimary", true);
+		FindIterable<Document> result = collection.find(query);
 
 		return toMemberData(result);
 	}

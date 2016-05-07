@@ -62,7 +62,7 @@ public class WebAdminAccountAggregate {
 		return form;
 	}
 
-	public NamedMemberPriceForm[] getMonthlyMemberPriceList(String sid, int monthVal, boolean isAllMember){
+	public NamedMemberPriceForm[] getMonthlyMemberPriceList(String sid, int monthVal, boolean primaryMember){
 		AggregateAccountDB aadb = new AggregateAccountDB();
 
 		if( !authAdmin(sid, aadb) ){
@@ -74,9 +74,9 @@ public class WebAdminAccountAggregate {
 				"timestamp", AccountDataMonthlyQueryForm.toCalendar(monthVal)));
 
 		List<NamedMemberPriceForm> forms = new ArrayList<NamedMemberPriceForm>();
-		if( isAllMember ){
+		if( primaryMember){
 			MemberDBController mdb = new MemberDBController(aadb);
-			List<MemberData> mlist = mdb.getAllMemberList();
+			List<MemberData> mlist = mdb.getPrimaryMemberList();
 			for(MemberData md : mlist){
 				forms.add(NamedMemberPriceForm.getInstance(md.getId(), 0, aadb));
 			}
