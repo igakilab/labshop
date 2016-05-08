@@ -21,20 +21,25 @@
 	<script type="text/javascript" src="script.js"></script>
 
 	<script type="text/javascript">
-	var TARGET_ITEM_ID;
-	var TARGET_MEMBER_ID;
-	var TARGET_MEBMER_NAME;
-
 	$(function(){
 		var param = labshop.getUrlParameters();
 		if( param.accountid != undefined ){
-
+			labshop.getAccountData(param.accountid, getAccountDataCallback);
 		}
 	});
 
 	function aborting(msg){
 		alert(msg);
 		location.href = "/";
+	}
+
+	function getAccountDataCallback(ret){
+		if( ret.isErr ) aborting(ret.errMsg);
+
+		var table = $("#accountTable");
+		table.append(
+			$("<tr></tr>").append(
+				$("<td></td>").text("")
 	}
 
 
@@ -57,6 +62,9 @@
 	<table id="accountTable">
 	</table>
 
+	<div class="text-center">
+		<a href="/">トップページに戻る</a>
+	</div>
 	</div>
 
 	<div class="page_header text-center markdown-body">
