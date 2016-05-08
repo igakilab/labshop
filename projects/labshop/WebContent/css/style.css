@@ -31,3 +31,7 @@ table {
 .text-right{
 	text-align:right;
 }
+
+.text-large{
+	font-size: x-large;
+}
