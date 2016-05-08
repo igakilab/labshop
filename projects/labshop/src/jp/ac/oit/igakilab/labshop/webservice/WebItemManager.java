@@ -9,6 +9,7 @@ import jp.ac.oit.igakilab.labshop.webservice.forms.ItemDataForm;
 public class WebItemManager {
 	public WebItemManager(){}
 
+	@Deprecated
 	public boolean addItem(ItemDataForm form)
 	throws ExcuteFailedException{
 		ItemDBController ctrl = new ItemDBController();
@@ -23,6 +24,7 @@ public class WebItemManager {
 		return ret;
 	}
 
+	@Deprecated
 	public boolean updateItem(ItemDataForm form)
 	throws ExcuteFailedException{
 		ItemDBController ctrl = new ItemDBController();
@@ -37,6 +39,7 @@ public class WebItemManager {
 		return ret;
 	}
 
+	@Deprecated
 	public boolean deleteItem(int item_id)
 	throws ExcuteFailedException {
 		ItemDBController ctrl = new ItemDBController();
@@ -71,5 +74,12 @@ public class WebItemManager {
 
 		ctrl.close();
 		return forms;
+	}
+
+	public ItemDataForm[] getOnSaleItemList(){
+		ItemDBController idb = new ItemDBController();
+		List<ItemData> list = idb.getOnSaleItemList();
+		idb.close();
+		return ItemDataForm.toItemDataForm(list.toArray(new ItemData[list.size()]));
 	}
 }

@@ -9,16 +9,14 @@
 
 	<script type="text/javascript" src="../dwr/engine.js"></script>
 	<script type="text/javascript" src="../dwr/util.js"></script>
-	<script type="text/javascript" src="../dwr/interface/WebAdminAccountAggregate.js"></script>
+	<script type="text/javascript" src="../dwr/interface/WebAccountListFinder.js"></script>
 
 	<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.serialize.js"></script>
 	<script type="text/javascript" src="../js/jquery.cookie.js"></script>
 	<script type="text/javascript" src="../js/labshop.js"></script>
 	<script type="text/javascript" src="../js/labshop.util.js"></script>
-	<script type="text/javascript" src="../js/labshop.account-aggregate.js"></script>
-
-	<script type="text/javascript" src="script.js"></script>
+	<script type="text/javascript" src="../js/labshop.account-finder.js"></script>
 
 	<script type="text/javascript">
 	$(function(){
@@ -30,7 +28,7 @@
 
 	function aborting(msg){
 		alert(msg);
-		location.href = "/";
+		location.href = "/labshop";
 	}
 
 	function getAccountDataCallback(ret){
@@ -39,12 +37,14 @@
 		var table = $("#accountTable");
 		table.append(
 			$("<tr></tr>").append(
-				$("<td></td>").text("")
+				$("<td></td>").text("会計ID"),
+				$("<td></td>").text(ret.account.id))
+		).append(
+			$("<tr></tr>").append(
+				$("<td></td>").text("日時"),
+				$("<td></td>").text(ret.account.timestamp))
+		);
 	}
-
-
-
-
 
 
 	</script>
@@ -63,7 +63,7 @@
 	</table>
 
 	<div class="text-center">
-		<a href="/">トップページに戻る</a>
+		<a href="/labshop/">トップページに戻る</a>
 	</div>
 	</div>
 

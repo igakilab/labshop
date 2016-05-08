@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -83,6 +84,13 @@ implements DBCsvExportable{
 
 	public List<ItemData> getAllItemList(){
 		FindIterable<Document> result = collection.find();
+
+		return toItemData(result);
+	}
+
+	public List<ItemData> getOnSaleItemList() {
+		Bson query = Filters.eq("isOnSale", true);
+		FindIterable<Document> result = collection.find(query);
 
 		return toItemData(result);
 	}

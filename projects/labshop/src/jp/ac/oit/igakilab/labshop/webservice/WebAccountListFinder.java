@@ -7,6 +7,7 @@ import org.bson.conversions.Bson;
 
 import com.mongodb.client.model.Filters;
 
+import jp.ac.oit.igakilab.labshop.dbcontroller.AccountDBController;
 import jp.ac.oit.igakilab.labshop.dbcontroller.extension.AggregateAccountDB;
 import jp.ac.oit.igakilab.labshop.sessions.SessionData;
 import jp.ac.oit.igakilab.labshop.sessions.SessionManager;
@@ -16,6 +17,7 @@ import jp.ac.oit.igakilab.labshop.webservice.forms.NamedAccountDataForm;
 
 public class WebAccountListFinder {
 	public static String ERRMSG_AUTH_FAILED = "認証に失敗しました";
+	public static String ERRMSG_ACCOUNT_NOTFOUND = "アカウントデータが見つかりません";
 
 	void dateSorting(List<AccountData> list){
 		list.sort(new Comparator<AccountData>(){
@@ -68,5 +70,21 @@ public class WebAccountListFinder {
 		aadb.close();
 		sm.close();
 		return forms;
+	}
+
+	public NamedAccountDataForm getAccountData(int id)
+	throws ExcuteFailedException{
+		AccountDBController adb = new AccountDBController();
+		AccountData data = adb.getAccountById(id);
+		if( data == null ){
+			adb.close();
+			throw new ExcuteFailedException(ERRMSG_ACCOUNT_NOTFOUND);
+		}
+
+		NamedAccountDataForm form =
+			NamedAccountDataForm.toNamedAccountDataForm(data, adb);
+
+		adb.close();
+		return form;
 	}
 }

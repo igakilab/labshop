@@ -9,6 +9,7 @@ import jp.ac.oit.igakilab.labshop.member.AuthMemberData;
 import jp.ac.oit.igakilab.labshop.sessions.SessionData;
 import jp.ac.oit.igakilab.labshop.sessions.SessionManager;
 import jp.ac.oit.igakilab.labshop.shopping.AccountData;
+import jp.ac.oit.igakilab.labshop.webservice.forms.AccountDataForm;
 
 public class WebAccountRegister {
 	public static String ERRMSG_AUTH_FAILED = "認証に失敗しました";
@@ -33,7 +34,7 @@ public class WebAccountRegister {
 
 	boolean authPassword(int mid, String passwd, DBConnector dbc){
 		MemberDBController mdb = new MemberDBController(dbc);
-		AuthMemberData amd = (AuthMemberData)mdb.getMemberById(mid);
+		AuthMemberData amd = AuthMemberData.getInstance(mdb.getMemberById(mid));
 		if( amd != null ){
 			return amd.authentication(passwd);
 		}else{
@@ -57,7 +58,7 @@ public class WebAccountRegister {
 		}
 	}
 
-	public boolean registAccountBySession(String sid, int itemId)
+	public AccountDataForm registAccountBySession(String sid, int itemId)
 	throws ExcuteFailedException{
 		SessionManager sm = new SessionManager();
 		SessionData session = sm.getSession(sid);
@@ -70,14 +71,14 @@ public class WebAccountRegister {
 			session.getMemberId(), itemId, sm.getDBConnector());
 
 		AccountDBController adb = new AccountDBController(sm.getDBConnector());
-		boolean r = adb.addAccount(acc, true, true) != null;
+		AccountData adata = adb.addAccount(acc, true, true);
 		adb.close();
 
 		sm.close();
-		return r;
+		return AccountDataForm.toAccountDataForm(adata);
 	}
 
-	public boolean registAccountByPassword(int mid, String passwd, int itemId)
+	public AccountDataForm registAccountByPassword(int mid, String passwd, int itemId)
 	throws ExcuteFailedException{
 		DBConnector dbc = new DBConnector();
 		if( !authPassword(mid, passwd, dbc) ){
@@ -88,10 +89,10 @@ public class WebAccountRegister {
 		AccountData acc = createAccount(mid, itemId, dbc);
 
 		AccountDBController adb = new AccountDBController(dbc);
-		boolean r = adb.addAccount(acc, true, true) != null;
+		AccountData adata = adb.addAccount(acc, true, true);
 		adb.close();
 
 		dbc.close();
-		return r;
+		return AccountDataForm.toAccountDataForm(adata);
 	}
 }

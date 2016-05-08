@@ -29,6 +29,7 @@ public class AuthMemberData extends MemberData {
 	}
 
 	public static AuthMemberData getInstance(MemberData md){
+		if( md == null ) return null;
 		AuthMemberData amd = new AuthMemberData();
 		amd.setId(md.getId());
 		amd.setName(md.getName());

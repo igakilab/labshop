@@ -24,3 +24,28 @@ labshop.registAccountCsvText = function(text, fcallback){
 		}
 	});
 };
+
+
+labshop.registAccountBySession = function(itemid, fcallback){
+	var localId = labshop.getClientSessionId();
+
+	WebAccountRegister.registAccountBySession(localId, itemid, {
+		callback: function(ret){
+			fcallback({isErr:false, account:ret});
+		},
+		errorHandler: function(msg){
+			fcallback({isErr:true, errMsg:msg});
+		}
+	});
+}
+
+labshop.registAccountByPassword = function(mid, passwd, itemid, fcallback){
+	WebAccountRegister.registAccountByPassword(mid, passwd, itemid, {
+		callback: function(ret){
+			fcallback({isErr:false, account:ret});
+		},
+		errorHandler: function(msg){
+			fcallback({isErr:true, errMsg:msg});
+		}
+	});
+}
