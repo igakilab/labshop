@@ -24,6 +24,8 @@
 	<script type="text/javascript" src="../js/labshop.member.js"></script>
 	<script type="text/javascript" src="../js/labshop.account-register.js"></script>
 
+	<script type="text/javascript" src="script.js"></script>
+
 	<script type="text/javascript">
 	var TARGET_ITEM_ID;
 	var TARGET_MEMBER_ID;
@@ -54,7 +56,7 @@
 			if( ret.isErr ) aborting(ret.errMsg);
 
 			$("#itemName").text("[" + ret.item.id + "] " + ret.item.name);
-			$("#itemPrice").text(ret.item.price);
+			$("#itemPrice").text(ret.item.price + "円");
 		});
 
 		labshop.getClientSessionState(function(ret){
@@ -70,53 +72,19 @@
 		var wrap = $("#authFormWrap");
 		wrap.empty();
 
-		if( TARGET_MEMBER_ID == undefined ){
-			var form = $("<form></form>");
-			form.append(
-				$("<table></table>").append(
-					$("<tr></tr>").append(
-						$("<td></td>").text("メンバーID")
-					).append(
-						$("<td></td>").append(
-							$("<input></input>").attr("type", "text")
-							.attr("name", "memberId")
-							.attr("style", "font-size: x-large;")
-						)
-					)
-				).append(
-					$("<tr></tr>").append(
-						$("<td></td>").text("パスワード")
-					).append(
-						$("<td></td>").append(
-							$("<input></input>").attr("type", "text")
-							.attr("name", "password")
-							.attr("style", "font-size: x-large;")
-						)
-					)
-				).attr("class", "text-large")
-			);
-			form.attr("id", "authForm");
+		var otherLoginBtn = $("<a></a>").text("他のメンバーで購入")
+			.attr("href", "javascript:void(0)")
+			.attr("onclick", "otherMemberLoginButtonPressed()");
 
-			wrap.append(form);
-		}
-		else
-		{
+		if( TARGET_MEMBER_ID == undefined ){
+			wrap.append(generateAuthForm("authForm"));
+		}else{
+			wrap.append(generateLoginedTable(TARGET_MEMBER_ID, TARGET_MEMBER_NAME));
 			wrap.append(
-				$("<table></table>").append(
-					$("<tr></tr>").append(
-						$("<td></td>").text("購入者")
-					).append(
-						$("<td></td>").text(
-						"[" + TARGET_MEMBER_ID + "] " + TARGET_MEMBER_NAME)
-					)
-				).attr("class", "text-large")
-			).append(
 				$("<p></p>").append("購入者を確認して下さい")
-					.append($("<br></br>"))
-					.append($("<a></a>").text("他のメンバーで購入")
-						.attr("href", "javascript:void(0)")
-						.attr("onclick", "otherMemberLoginButtonPressed()"))
-					.attr("class", "text-center")
+				.append($<"<br></br>"))
+				.append(otherLoginBtn)
+				.attr("class", "text-center")
 			);
 		}
 	}
