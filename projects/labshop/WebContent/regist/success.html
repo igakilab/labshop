@@ -35,14 +35,31 @@
 		if( ret.isErr ) aborting(ret.errMsg);
 
 		var table = $("#accountTable");
+		var acc = ret.account;
 		table.append(
 			$("<tr></tr>").append(
 				$("<td></td>").text("会計ID"),
-				$("<td></td>").text(ret.account.id))
+				$("<td></td>").text(acc.id))
 		).append(
 			$("<tr></tr>").append(
 				$("<td></td>").text("日時"),
-				$("<td></td>").text(ret.account.timestamp))
+				$("<td></td>").text(
+					labshop.formatDate(acc.timestamp,
+					"YYYY/MM/DD hh:mm")))
+		).append(
+			$("<tr></tr>").append(
+				$("<td></td>").text("購入者"),
+				$("<td></td>").text(
+					"(" + acc.memberId + ") " + acc.memberName))
+		).append(
+			$("<tr></tr>").append(
+				$("<td></td>").text("購入商品"),
+				$("<td></td>").text(
+					"(" + acc.itemId + ") " + acc.itemName))
+		).append(
+			$("<tr></tr>").append(
+				$("<td></td>").text("金額"),
+				$("<td></td>").text(acc.sellPrice))
 		);
 	}
 
