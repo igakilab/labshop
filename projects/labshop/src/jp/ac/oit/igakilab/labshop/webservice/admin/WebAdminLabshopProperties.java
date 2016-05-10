@@ -5,7 +5,7 @@ import jp.ac.oit.igakilab.labshop.sessions.SessionManager;
 import jp.ac.oit.igakilab.labshop.webservice.ExcuteFailedException;
 import jp.ac.oit.igakilab.labshop.webservice.forms.KeyValueMapForm;
 
-public class WebAdminLabshopPropaties {
+public class WebAdminLabshopProperties {
 	public static String ERRMSG_AUTH_FAILED = "認証に失敗しました";
 
 	void assertAdmin(String sid)
@@ -16,7 +16,7 @@ public class WebAdminLabshopPropaties {
 		if( !result ) throw new ExcuteFailedException(ERRMSG_AUTH_FAILED);
 	}
 
-	public KeyValueMapForm[] getProperyList(String sid)
+	public KeyValueMapForm[] getPropertyList(String sid)
 	throws ExcuteFailedException{
 		assertAdmin(sid);
 

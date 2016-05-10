@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ラボショップシステム</title>
+	<meta charset="utf-8"/>
+
+	<link rel="stylesheet" href="../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../css/github-markdown.css" type="text/css"/>
+
+	<script type="text/javascript" src="../dwr/engine.js"></script>
+	<script type="text/javascript" src="../dwr/util.js"></script>
+	<script type="text/javascript" src="../dwr/interface/WebAdminLabshopProperties.js"></script>
+
+	<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.serialize.js"></script>
+	<script type="text/javascript" src="../js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="../js/labshop.js"></script>
+	<script type="text/javascript" src="../js/labshop.configure.js"></script>
+
+	<script type="text/javascript">
+	$(function(){
+		getPropertyList();
+	});
+
+	function getPropertyList(){
+		labshop.getPropertyList(getPropertyListCallback);
+	}
+
+	function getPropertyListCallback(re){
+		if( re.isErr ) return;
+
+		var table = $("#propertyTable");
+		table.empty();
+
+		for(var i=0; i<re.list.length; i++){
+			var editBtn = $("<button></button>").text("編集")
+				.attr("type", "button")
+				.attr("onclick", "editButtonPressed(" + re.list[i].key + ")");
+
+			table.append(
+				$("<tr></tr>").append(
+					$("<td></td>").text(re.list[i].key),
+					$("<td></td>").text(re.list[i].value),
+					$("<td></td>").append(editBtn)
+			));
+		}
+	}
+
+	function addButtonPressed(){
+		var input_key = prompt("キーを入力して下さい");
+		if( input_key == undefined ) return;
+		var input_value = prompt("値を入力して下さい");
+		if( input_value == undefined ) return;
+
+		labshop.setProperty(input_key, input_value);
+		getPropertyList();
+	}
+
+	function editButtonPressed(key){
+		var input_value = prompt("新しい値を入力してください");
+		labshop.setProperty(key, input_value);
+		getPropertyList();
+	}
+
+	function reloadButtonPressed(){
+		getPropertyList();
+	}
+
+	</script>
+</head>
+
+<body>
+	<div class="page_header">
+		<div class="page_centering">
+			<img src="../images/logo2.png"/>
+		</div>
+	</div>
+
+	<div class="page_centering markdown-body">
+		<h1>Property Configure</h1>
+
+		<p>
+			<button type="button" onclick="reloadButtonPressed()">更新</button>
+			<button type="button" onclick="addButtonPressed()">追加</button>
+		</p>
+
+		<h3>パラメータ一覧</h3>
+		<table id="propertyTable">
+		</table>
+
+	</div>
+
+	<div class="page_header text-center markdown-body">
+	<i>igakilab labshop system</i></div>
+</body>
+</html>
