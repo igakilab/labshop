@@ -62,12 +62,8 @@ public class WebAdminAccountAggregate {
 		return form;
 	}
 
-	public NamedMemberPriceForm[] getMonthlyMemberPriceList(String sid, int monthVal, boolean primaryMember){
+	public NamedMemberPriceForm[] getMonthlyMemberPriceList(int monthVal, boolean primaryMember){
 		AggregateAccountDB aadb = new AggregateAccountDB();
-
-		if( !authAdmin(sid, aadb) ){
-			return new NamedMemberPriceForm[0];
-		}
 
 		List<HashMap<String, Integer>> result =
 			aadb.getMemberChargeList(DateFilters.oneMonth(
