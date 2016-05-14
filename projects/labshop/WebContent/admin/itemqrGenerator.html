@@ -42,10 +42,10 @@
 					$("<td></td>").text(ret.list[i].id),
 					$("<td></td>").text(ret.list[i].name),
 					$("<td></td>").append(
-						$("<img></img>").attr("src", ret.list[i].qrUrl),
-						$("<br></br>"),
-						ret.list[i].qrUrl
-					)
+						$("<a></a>").append(
+							$("<img></img>").attr("src", ret.list[i].qrUrl))
+							.attr("href", ret.list[i].qrUrl)
+							.attr("target", "_blank"))
 				)
 			);
 		}

@@ -10,7 +10,7 @@ import jp.ac.oit.igakilab.labshop.webservice.forms.ItemDataForm;
 public class WebItemManager {
 	public WebItemManager(){}
 
-	void sortItem(List<ItemData> list){
+	public static void sortItem(List<ItemData> list){
 		list.sort(new Comparator<ItemData>(){
 			@Override
 			public int compare(ItemData o1, ItemData o2) {

@@ -46,6 +46,8 @@ public class WebItemqrGenerator {
 			list = idb.getOnSaleItemList();
 		}
 
+		WebItemManager.sortItem(list);
+
 		QrItemDataForm[] forms = new QrItemDataForm[list.size()];
 		for(int i=0; i<list.size(); i++){
 			forms[i] = getQrItemDataForm(list.get(i), hostUrl);
