@@ -36,6 +36,9 @@
     <create creator="new" javascript="WebAccountRegister">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebAccountRegister"/>
     </create>
+    <create creator="new" javascript="WebLabshopProperties">
+      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebLabshopProperties"/>
+    </create>
     <create creator="new" javascript="WebAdminDBEditor">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.admin.WebAdminDBEditor"/>
     </create>

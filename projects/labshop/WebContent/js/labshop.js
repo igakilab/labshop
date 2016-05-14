@@ -36,12 +36,17 @@ labshop.toMonthValue = function(year, month){
 	return (year * 12) + (month - 1);
 };
 
+//deprecated
 labshop.monthValueToMonthAndDate = function(val){
+	return labshop.revertMonthValue(val);
+};
+
+labshop.revertMonthValue = function(val){
 	return {
 		year: Math.floor(val / 12),
 		month: ((val % 12) + 1)
 	};
-};
+}
 
 
 labshop.getClientSessionId = function(){

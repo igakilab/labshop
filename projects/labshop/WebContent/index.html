@@ -1,91 +1,119 @@
-<html lang="ja">
-  <head>
-  	<title>ラボショップシステム</title>
-  	<meta charset="utf-8"/>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ラボショップシステム</title>
+	<meta charset="utf-8"/>
 
 	<link rel="stylesheet" href="css/style.css" type="text/css"/>
 	<link rel="stylesheet" href="css/github-markdown.css" type="text/css"/>
 
-    <script type="text/javascript" src="dwr/engine.js"></script>
-    <script type="text/javascript" src="dwr/util.js"></script>
-    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
-    <script type="text/javascript" src="js/jquery.serialize.js"></script>
-    <script type="text/javascript" src="js/jquery.cookie.js"></script>
-    <script type="text/javascript" src="dwr/interface/WebSimpleAuthentication.js"></script>
-    <script type="text/javascript" src="dwr/interface/WebAccountAggregate.js"></script>
-    <script type="text/javascript" src="dwr/interface/WebSessionManager.js"></script>
-    <script type="text/javascript" src="js/LabshopUtil.js"></script>
-    <script type="text/javascript" src="js/LabshopSession.js"></script>
-    <script type="text/javascript">
-    function pressAuthButton(){
-    	var pass = prompt("パスワードを入力", "");
-    	if( pass !== null ){
-    		WebSimpleAuthentication.getUrl(pass, {
-    			callback: function(url){
-    				window.location.href = url;
-    			},
-    			errorHandler: function(msg){alert(msg);}
-    		});
-    	}
-    }
+	<script type="text/javascript" src="dwr/engine.js"></script>
+	<script type="text/javascript" src="dwr/util.js"></script>
+	<script type="text/javascript" src="dwr/interface/WebSessionManager.js"></script>
+	<script type="text/javascript" src="dwr/interface/WebAdminAccountAggregate.js"></script>
+	<script type="text/javascript" src="dwr/interface/WebLabshopProperties.js"></script>
 
-    function setClaimList(result){
-		var table = $("#claimList_table");
-		table.empty();
-		table.append(
-			LabshopUtil.createLabelsRow(["名前(id)", "利用金額"])
+	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="js/jquery.serialize.js"></script>
+	<script type="text/javascript" src="js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="js/labshop.js"></script>
+	<script type="text/javascript" src="js/labshop.util.js"></script>
+	<script type="text/javascript" src="js/labshop.session.js"></script>
+	<script type="text/javascript" src="js/labshop.properties.js"></script>
+	<script type="text/javascript" src="js/labshop.account-aggregate.js"></script>
+
+	<script type="text/javascript">
+	$(function(){
+		checkLogin();
+		setClaimSelector();
+	});
+
+	function setClaimList(monthVal){
+		labshop.getMonthlyMemberPriceList(monthVal, true, function(ret){
+			if( labshop.assertError(ret) ) return;
+
+			var subject = $("#claimList_month");
+			var table = $("#claimList_table");
+
+			subject.empty();
+			var mon = labshop.revertMonthValue(monthVal);
+			subject.text(mon.year + "年 " + mon.month + "月");
+
+			table.empty();
+			table.append(labshop.createLabelsRow(
+				["名前", "請求金額"]
+			));
+			var claims = ret.list;
+			for(var i=0; i<claims.length; i++){
+				table.append(
+					$("<tr></tr>").append(
+						$("<td></td>").text(claims[i].memberName + "(" + claims[i].id + ")"),
+						$("<td></td>").text(claims[i].price)));
+			}
+		});
+	}
+
+	function setClaimSelector(){
+		labshop.getProperties(
+			["disclosure.year", "disclosure.month", "topclaim.count"],
+			function(ret){
+				if( labshop.assertError(ret) )return;
+				var vals = ret.values;
+
+				var year=2016, month=3, count=3;
+				if( vals[0] !== undefined && vals[0] != "" ){
+					year = vals[0];
+				}
+				if( vals[1] !== undefined && vals[1] != "" ){
+					month = vals[1];
+				}
+				if( vals[2] !== undefined && vals[2] != "" ){
+					count = vals[2];
+				}
+
+				var select = $("#claimList_selector");
+				select.empty();
+
+				var topm = labshop.toMonthValue(year, month);
+				for(var i=(count - 1); i>=0; i--){
+					var d = labshop.revertMonthValue(topm - i);
+					select.append(
+						$("<li></li>").append(
+							$("<a></a>").text(d.year + "年" + d.month + "月")
+								.attr("href", "javascript:void(0)")
+								.attr("onclick", "setClaimList(" + (topm - i) + ")")));
+				}
+
+				console.log("y=" + year + ",m=" + month + ",c=" + count);
+				console.log("topm=" + topm);
+
+				setClaimList(topm);
+			}
 		);
-		for(var i=0; i<result.length; i++){
-			table.append(
-				createClaimRow(result[i])
-			);
-		}
-    }
+	}
 
-    function loadClaimList(year, month){
-    	$("#claimList_month").text(year + " 年 " + month + " 月の利用金額");
-    	WebAccountAggregate.getMonthlyMemberPriceList(year, month, {
-    		callback: setClaimList,
-    		errorHandler: function(msg){alert(msg);}
-    	});
-    }
+	function checkLogin(){
+		labshop.getClientSessionState(function(re){
+			if( re.isOpened ){
+				$("#login_state").text(re.session.memberName + "さん でログイン中です");
+			}
+		});
+	}
 
-    function createClaimRow(namedMemberPriceForm){
-    	var tmp = namedMemberPriceForm;
-    	return $("<tr></tr>")
-    		.append($("<td></td>").text(tmp.memberName + " (" + tmp.id + ")"))
-    		.append($("<td></td>").text(tmp.price));
-    }
 
-    function checkLogin(){
-    	LabshopSession.getClientSessionStatus(function(status){
-    		if( status.isOpened ){
-    			$("#login_state").text(
-    				status.session.memberName + "でログイン中です"
-    			);
-    		}
-    	});
-    }
 
-    $(document).ready(function(){
-    	loadClaimList(2016, 1);
-    	checkLogin();
-    });
-    </script>
-  </head>
+	</script>
+</head>
 
-	<body>
-	<div class="page_header">
-		<div class="page_centering">
-			<img src="images/logo2.png"/>
-		</div>
-	</div>
+<body>
+	<div class="page_header"><div class="page_centering">
+		<img src="images/logo2.png"/>
+	</div></div>
 
 	<div class="page_centering markdown-body">
 
-	<h6 class="text-center">井垣研ラボショップシステムへようこそ<br/>
-	現在システムはテスト稼働中です
-	</h6>
+	<h6 class="text-center">井垣ラボショップシステムへようこそ
+	ログインは下のメンバーページのリンクから行って下さい</h6>
 
 	<h2>メンバーページ</h2>
 	<p>各メンバー専用マイページです<br/>
@@ -95,32 +123,17 @@
 	</blockquote>
 	<a href="private/mypage.html">メンバーページ</a>
 
-	<!--
-	<h2>利用履歴検索</h2>
-	<p>ただいま利用履歴表示ページを試験運用しています。<br/>
-	下記のリンクからジャンプすることができます</p>
-	<a href="accountHistory/history.html">利用履歴確認ページ</a>
-	-->
-
-
-
 	<h2>最近の利用金額</h2>
 	<p>今月の請求額一覧です。</p>
-	<ul>
-		<li><a href="#claimList_month" onclick="loadClaimList(2016, 1)">2016年1月</a></li>
-		<li><a href="#claimList_month" onclick="loadClaimList(2016, 2)">2016年2月</a></li>
+	<ul id="claimList_selector">
 	</ul>
 	<h3 id="claimList_month"></h3>
 	<table id="claimList_table"></table>
 
-	<h2>管理者用ページ</h2>
-	<p>テスト/管理用ページです<br/>
-	パスワード認証が必要です</p>
-	<a href="javascript:void(0);" onclick="pressAuthButton()">パスワード認証</a>
 
 	</div>
 
 	<div class="page_header text-center markdown-body">
 	<i>igakilab labshop system</i></div>
-  </body>
+</body>
 </html>
