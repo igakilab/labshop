@@ -89,7 +89,9 @@ implements DBCsvExportable{
 	}
 
 	public List<ItemData> getOnSaleItemList() {
-		Bson query = Filters.eq("isOnSale", true);
+		Bson query = Filters.or(
+			Filters.eq("isOnSale", true),
+			Filters.eq("isOnSale", null));
 		FindIterable<Document> result = collection.find(query);
 
 		return toItemData(result);
