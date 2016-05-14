@@ -5,8 +5,8 @@ import java.io.File;
 import jp.ac.oit.igakilab.marsh.util.XmlConfig;
 
 public class LabshopProperties{
-	static public String ROOT_DIR_PATH = "/var/log/tomcat7/labshop/";
-	static public String CONFIG_FILE = "config.xml";
+	static public String ROOT_DIR_PATH = "/var/lib/tomcat7/labshop/";
+	static public String CONFIG_FILE = ROOT_DIR_PATH + "config.xml";
 
 
 	public static void sSetProperty(String key, String value){

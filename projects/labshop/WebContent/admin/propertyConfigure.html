@@ -15,6 +15,7 @@
 	<script type="text/javascript" src="../js/jquery.serialize.js"></script>
 	<script type="text/javascript" src="../js/jquery.cookie.js"></script>
 	<script type="text/javascript" src="../js/labshop.js"></script>
+	<script type="text/javascript" src="../js/labshop.util.js"></script>
 	<script type="text/javascript" src="../js/labshop.configure.js"></script>
 
 	<script type="text/javascript">
@@ -32,10 +33,14 @@
 		var table = $("#propertyTable");
 		table.empty();
 
+		table.append(labshop.createLabelsRow(
+			["項目", "値", "操作"]
+		));
+
 		for(var i=0; i<re.list.length; i++){
 			var editBtn = $("<button></button>").text("編集")
 				.attr("type", "button")
-				.attr("onclick", "editButtonPressed(" + re.list[i].key + ")");
+				.attr("onclick", "editButtonPressed(\"" + re.list[i].key + "\")");
 
 			table.append(
 				$("<tr></tr>").append(
@@ -58,6 +63,7 @@
 
 	function editButtonPressed(key){
 		var input_value = prompt("新しい値を入力してください");
+		if( input_value === null ) return;
 		labshop.setProperty(key, input_value);
 		getPropertyList();
 	}

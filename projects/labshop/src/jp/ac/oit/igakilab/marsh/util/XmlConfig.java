@@ -44,6 +44,10 @@ public class XmlConfig {
 		this(f0, DEFAULT_AUTOSAVE_ENABLED);
 	}
 
+	boolean exceptionLog(Exception e0){
+		DebugLog.logm("XmlConfig", DebugLog.LS_EXCEPTION, e0.toString());
+		return false;
+	}
 
 	public boolean load(){
 		params.clear();
@@ -56,13 +60,13 @@ public class XmlConfig {
 			FileInputStream stream = new FileInputStream(targetFile);
 			doc = db.parse(stream);
 		}catch(FileNotFoundException e0){
-			return false;
+			return exceptionLog(e0);
 		}catch(ParserConfigurationException e1){
-			return false;
+			return exceptionLog(e1);
 		}catch(IOException e2){
-			return false;
+			return exceptionLog(e2);
 		}catch(SAXException e3){
-			return false;
+			return exceptionLog(e3);
 		}
 
 		Element root = doc.getDocumentElement();
@@ -90,7 +94,7 @@ public class XmlConfig {
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			doc = db.newDocument();
 		}catch(ParserConfigurationException e0){
-			return false;
+			return exceptionLog(e0);
 		}
 
 		Element root = doc.createElement("configs");
@@ -109,7 +113,7 @@ public class XmlConfig {
 			TransformerFactory tff = TransformerFactory.newInstance();
 			tf = tff.newTransformer();
 		}catch(TransformerConfigurationException e0){
-			return false;
+			return exceptionLog(e0);
 		}
 
 		tf.setOutputProperty(OutputKeys.ENCODING, "utf-8");
@@ -120,7 +124,7 @@ public class XmlConfig {
 		try{
 			tf.transform(new DOMSource(doc), target);
 		}catch(TransformerException e0){
-			return false;
+			return exceptionLog(e0);
 		}
 
 		return true;
