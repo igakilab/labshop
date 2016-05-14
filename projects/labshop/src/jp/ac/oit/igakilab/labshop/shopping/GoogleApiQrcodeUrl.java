@@ -42,6 +42,10 @@ public class GoogleApiQrcodeUrl {
 		params.put("chl", replaced);
 	}
 
+	public String getText(){
+		return params.get("chl");
+	}
+
 	public void setEncodint(String encoding){
 		params.put("choe", encoding);
 	}

@@ -23,6 +23,7 @@ public class QrItemDataForm extends ItemDataForm{
 		return form;
 	}
 
+	private String url;
 	private String qrUrl;
 
 	public String getQrUrl() {
@@ -31,5 +32,13 @@ public class QrItemDataForm extends ItemDataForm{
 
 	public void setQrUrl(String qrUrl) {
 		this.qrUrl = qrUrl;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 }

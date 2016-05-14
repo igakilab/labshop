@@ -82,7 +82,7 @@
 			wrap.append(generateLoginedTable(TARGET_MEMBER_ID, TARGET_MEMBER_NAME));
 			wrap.append(
 				$("<p></p>").append("購入者を確認して下さい")
-				.append($<"<br></br>"))
+				.append($("<br></br>"))
 				.append(otherLoginBtn)
 				.attr("class", "text-center")
 			);
@@ -114,7 +114,7 @@
 		}
 	}
 
-	function calcelButtonPressed(){
+	function cancelButtonPressed(){
 		aborting("キャンセルされました");
 	}
 
@@ -140,8 +140,11 @@
 	<h4>購入商品</h4>
 
 	<table class="text-large">
-		<tr><td id="itemName"></td>
-		<td id="itemPrice"></td></tr>
+		<tr><td rowspan="2">
+			<img src="../images/123.png" />
+		</td>
+			<td id="itemName"></td></tr><tr>
+			<td Id="itemPrice"></td></tr>
 	</table>
 
 	<h4>認証</h4>

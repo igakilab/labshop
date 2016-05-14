@@ -30,3 +30,25 @@ labshop.getAllItemList = function(fcallback){
 		}
 	});
 };
+
+labshop.getQrItemData = function(id, fcallback){
+	WebItemqrGenerator.getQrItemData(id, location.host, {
+		callback: function(re){
+			fcallback({isErr:false, qritem:re});
+		},
+		errorHandler: function(msg){
+			fcallback({isErr:true, errMsg:msg});
+		}
+	});
+};
+
+labshop.getQrItemDataList = function(all, fcallback){
+	WebItemqrGenerator.getQrItemDataList(all, location.host, {
+		callback: function(re){
+			fcallback({isErr:false, list:re});
+		},
+		errorHandler: function(msg){
+			fcallback({isErr:true, errMsg:msg});
+		}
+	});
+};

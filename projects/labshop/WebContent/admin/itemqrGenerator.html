@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ラボショップシステム</title>
+	<meta charset="utf-8"/>
+
+	<link rel="stylesheet" href="../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../css/github-markdown.css" type="text/css"/>
+
+	<script type="text/javascript" src="../dwr/engine.js"></script>
+	<script type="text/javascript" src="../dwr/util.js"></script>
+	<script type="text/javascript" src="../dwr/interface/WebItemqrGenerator.js"></script>
+
+	<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.serialize.js"></script>
+	<script type="text/javascript" src="../js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="../js/labshop.js"></script>
+	<script type="text/javascript" src="../js/labshop.util.js"></script>
+	<script type="text/javascript" src="../js/labshop.item.js"></script>
+
+	<script type="text/javascript">
+	$(function(){
+	});
+
+	function getQrList(){
+		labshop.getQrItemDataList(true, getQrListCallback);
+	}
+
+	function getQrListCallback(ret){
+		if( labshop.assertError(ret) ) return;
+
+		var table = $("#qrTable");
+
+		table.empty();
+		table.append(labshop.createLabelsRow(
+			["ID", "アイテム名", "qrコード"]
+		));
+
+		for(var i=0; i<ret.list.length; i++){
+			table.append(
+				$("<tr></tr>").append(
+					$("<td></td>").text(ret.list[i].id),
+					$("<td></td>").text(ret.list[i].name),
+					$("<td></td>").append(
+						$("<img></img>").attr("src", ret.list[i].qrUrl),
+						$("<br></br>"),
+						ret.list[i].qrUrl
+					)
+				)
+			);
+		}
+	}
+
+	function reloadButtonPressed(){
+		getQrList();
+	}
+
+	</script>
+</head>
+
+<body>
+	<div class="page_header">
+		<div class="page_centering">
+			<img src="../images/logo2.png"/>
+		</div>
+	</div>
+
+	<div class="page_centering markdown-body">
+		<h1>ItemqrGenerator</h1>
+
+		<h2>qrリスト</h2>
+		<button type="button" onclick="reloadButtonPressed()">更新</button>
+
+		<table id="qrTable"></table>
+
+	</div>
+
+	<div class="page_header text-center markdown-body">
+	<i>igakilab labshop system</i></div>
+</body>
+</html>

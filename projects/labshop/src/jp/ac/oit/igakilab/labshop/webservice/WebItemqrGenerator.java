@@ -11,7 +11,7 @@ public class WebItemqrGenerator {
 	public static String ERRMSG_ITEM_NOTFOUND = "アイテムが存在しません";
 
 	String createQrUrl(int itemId, String hostUrl){
-		String url = "http://" + hostUrl + ":8080/labshop/regist/";
+		String url = "http://" + hostUrl + "/labshop/regist/";
 		url += "?itemid=" + itemId;
 
 		GoogleApiQrcodeUrl qr = new GoogleApiQrcodeUrl(url);
