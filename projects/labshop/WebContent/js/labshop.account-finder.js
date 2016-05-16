@@ -62,3 +62,14 @@ labshop.getClientMonthlyAccountList = function(year, month, fcallback){
 		labshop.getAccountList(query, fcallback);
 	});
 };
+
+labshop.getAccountData = function(id, fcallback){
+	WebAccountListFinder.getAccountData(id, {
+		callback: function(retval){
+			fcallback({isErr:false, account:retval});
+		},
+		errorHandler: function(msg){
+			labshop.errorObjectCallback(fcallback, msg);
+		}
+	});
+}

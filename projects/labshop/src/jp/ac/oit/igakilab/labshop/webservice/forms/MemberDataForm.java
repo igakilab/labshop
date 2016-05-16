@@ -6,6 +6,7 @@ public class MemberDataForm {
 	private int id = 0;
 	private String name = "unknown";
 	private boolean isAdmin;
+	private boolean isPrimary;
 
 	public MemberDataForm(){}
 
@@ -30,10 +31,18 @@ public class MemberDataForm {
 		isAdmin = b0;
 	}
 
+	public boolean getIsPrimary(){
+		return isPrimary;
+	}
+	public void setIsPrimary(boolean b0){
+		isPrimary = b0;
+	}
+
 
 	public static MemberData toMemberData(MemberDataForm form){
 		MemberData data = new MemberData(form.getId(), form.getName());
 		data.setIsAdmin(form.getIsAdmin());
+		data.setIsPrimary(form.getIsPrimary());
 		return data;
 	}
 
@@ -42,6 +51,7 @@ public class MemberDataForm {
 		form.setId(data.getId());
 		form.setName(data.getName());
 		form.setIsAdmin(data.getIsAdmin());
+		form.setIsPrimary(data.getIsPrimary());
 		return form;
 	}
 

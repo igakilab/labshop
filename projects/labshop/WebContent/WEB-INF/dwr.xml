@@ -33,6 +33,12 @@
     <create creator="new" javascript="WebSessionManager">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebSessionManager"/>
     </create>
+    <create creator="new" javascript="WebAccountRegister">
+      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebAccountRegister"/>
+    </create>
+    <create creator="new" javascript="WebLabshopProperties">
+      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebLabshopProperties"/>
+    </create>
     <create creator="new" javascript="WebAdminDBEditor">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.admin.WebAdminDBEditor"/>
     </create>
@@ -50,6 +56,12 @@
     </create>
     <create creator="new" javascript="WebAdminAccountAggregate">
       <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.admin.WebAdminAccountAggregate"/>
+    </create>
+    <create creator="new" javascript="WebAdminLabshopProperties">
+      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.admin.WebAdminLabshopProperties"/>
+    </create>
+    <create creator="new" javascript="WebItemqrGenerator">
+      <param name="class" value="jp.ac.oit.igakilab.labshop.webservice.WebItemqrGenerator"/>
     </create>
     <!-- テスト用 -->
     <create creator="new" javascript="TestDBCounter">

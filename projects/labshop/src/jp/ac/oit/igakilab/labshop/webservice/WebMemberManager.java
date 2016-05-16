@@ -1,5 +1,7 @@
 package jp.ac.oit.igakilab.labshop.webservice;
 
+import java.util.List;
+
 import jp.ac.oit.igakilab.labshop.dbcontroller.MemberDBController;
 import jp.ac.oit.igakilab.labshop.member.MemberData;
 import jp.ac.oit.igakilab.labshop.webservice.forms.MemberDataForm;
@@ -7,6 +9,7 @@ import jp.ac.oit.igakilab.labshop.webservice.forms.MemberDataForm;
 public class WebMemberManager {
 	public WebMemberManager(){}
 
+	@Deprecated
 	public boolean addMember(MemberDataForm form)
 	throws ExcuteFailedException{
 		MemberData data = MemberDataForm.toMemberData(form);
@@ -31,6 +34,14 @@ public class WebMemberManager {
 		return list;
 	}
 
+	public MemberDataForm[] getPrimaryMemberList(){
+		MemberDBController dbc = new MemberDBController();
+		List<MemberData> list = dbc.getPrimaryMemberList();
+		dbc.close();
+		return MemberDataForm.toMemberDataForm(list.toArray(new MemberData[list.size()]));
+	}
+
+	@Deprecated
 	public boolean updateMember(MemberDataForm form)
 	throws ExcuteFailedException{
 		MemberDBController dbc = new MemberDBController();
@@ -45,6 +56,7 @@ public class WebMemberManager {
 		return rs;
 	}
 
+	@Deprecated
 	public boolean deleteMember(int id)
 	throws ExcuteFailedException{
 		MemberDBController dbc = new MemberDBController();
@@ -58,6 +70,7 @@ public class WebMemberManager {
 
 		return rs;
 	}
+
 
 	public MemberDataForm getMemberData(int id)
 	throws ExcuteFailedException{

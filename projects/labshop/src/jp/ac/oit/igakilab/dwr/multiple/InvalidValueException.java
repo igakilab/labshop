@@ -2,7 +2,9 @@ package jp.ac.oit.igakilab.dwr.multiple;
 
 
 public class InvalidValueException extends Exception{
-    public InvalidValueException(String message){
+	private static final long serialVersionUID = 1L;
+
+	public InvalidValueException(String message){
         super(message);
     }
 }

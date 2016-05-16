@@ -45,6 +45,9 @@
 		var input_isAdmin = $("<input></input>")
 			.attr("type", "checkbox")
 			.attr("name", "isAdmin");
+		var input_isPrimary = $("<input></input>")
+			.attr("type", "checkbox")
+			.attr("name", "isPrimary");
 		var button_submit = $("<button></button>")
 			.attr("type", "button")
 			.attr("onclick", "addButtonPressed()")
@@ -60,6 +63,7 @@
 				.attr("readonly", "readonly");
 			input_name.val(ret.data.name);
 			if( ret.data.isAdmin ) input_isAdmin.attr("checked", "checked");
+			if( ret.data.isPrimary ) input_isPrimary.attr("checked", "checked");
 			button_submit.attr("onclick", "updateButtonPressed()")
 				.text("更新");
 		}
@@ -70,6 +74,8 @@
 			.append(input_name);
 		$("#memberDataForm_isAdmin_cell").empty()
 			.append(input_isAdmin);
+		$("#memberDataForm_isPrimary_cell").empty()
+		.append(input_isPrimary);
 		$("#memberDataForm_submit_wrap").empty()
 			.append(button_submit);
     }
@@ -89,7 +95,7 @@
 		var table = $("#memberListTable");
 
 		table.empty();
-		table.append(labshop.createLabelsRow(["ID", "メンバー名", "権限", "操作"]));
+		table.append(labshop.createLabelsRow(["ID", "メンバー名", "権限", "主要", "操作"]));
 
 		for(var i=0; i<memberList.length; i++){
 			var btn_edit = $("<button></button>").text("編集")
@@ -109,6 +115,8 @@
 					$("<td></td>").text(memberList[i].name)
 				).append(
 					$("<td></td>").text(memberList[i].isAdmin)
+				).append(
+					$("<td></td>").text(memberList[i].isPrimary)
 				).append(
 					$("<td></td>").append(btn_edit)
 						.append(btn_remove)
@@ -186,6 +194,9 @@
 			</tr>
 			<tr><td>権限</td>
 				<td id="memberDataForm_isAdmin_cell"></td>
+			</tr>
+			<tr><td>主要メンバー</td>
+				<td id="memberDataForm_isPrimary_cell"></td>
 			</tr>
 		</table>
 		<div id="memberDataForm_submit_wrap"></div>

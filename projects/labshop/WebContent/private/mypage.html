@@ -13,19 +13,31 @@
     <script type="text/javascript" src="../js/jquery.cookie.js"></script>
     <script type="text/javascript" src="../dwr/interface/WebSessionManager.js"></script>
     <script type="text/javascript" src="../dwr/interface/WebAccountListFinder.js"></script>
+    <script type="text/javascript" src="../dwr/interface/WebLabshopProperties.js"></script>
     <script type="text/javascript" src="../js/labshop.js"></script>
     <script type="text/javascript" src="../js/labshop.util.js"></script>
     <script type="text/javascript" src="../js/labshop.session.js"></script>
+    <script type="text/javascript" src="../js/labshop.properties.js"></script>
     <script type="text/javascript" src="../js/labshop.account-finder.js"></script>
     <script type="text/javascript">
     var LOGIN_MEMBER_ID;
     var HISTORY_MONTH_VALUE;
 
     function init(){
-    	var today = new Date();
-    	HISTORY_MONTH_VALUE = labshop.toMonthValue(today.getFullYear(), today.getMonth());
+		labshop.getProperties(["disclosure.year", "disclosure.month"], function(ret){
+			if( labshop.assertError(ret) )return;
+			var vals = ret.values;
 
-    	labshop.getClientSessionState(setMemberProfile);
+			if( (vals[0] !== undefined && vals[0] != "") &&
+			(vals[1] !== undefined && vals[1] != "") ){
+				HISTORY_MONTH_VALUE = labshop.toMonthValue(vals[0], vals[1]);
+			}else{
+				var today = new Date();
+				HISTORY_MONTH_VALUE = labshop.toMonthValue(today.getFullYear(), today.getMonth() + 1);
+			}
+
+			labshop.getClientSessionState(setMemberProfile);
+		});
     }
 
     function setMemberProfile(session_state){

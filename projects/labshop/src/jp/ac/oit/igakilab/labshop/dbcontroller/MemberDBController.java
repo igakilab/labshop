@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -26,6 +27,7 @@ implements DBCsvExportable{
 			doc.getInteger("id", 0), doc.getString("name"));
 
 		data.setIsAdmin(doc.getBoolean("isAdmin", false));
+		data.setIsPrimary(doc.getBoolean("isPrimary", false));
 		String ph = doc.getString("passwordHash");
 		if( ph != null ){
 			data.setPasswordHash(ph);
@@ -46,7 +48,8 @@ implements DBCsvExportable{
 		Document doc = new Document();
 		doc.append("id", data.getId())
 			.append("name", data.getName())
-			.append("isAdmin", data.getIsAdmin());
+			.append("isAdmin", data.getIsAdmin())
+			.append("isPrimary", data.getIsPrimary());
 		if( data.getPasswordHash() != null ){
 			doc.append("passwordHash", data.getPasswordHash());
 		}
@@ -92,6 +95,13 @@ implements DBCsvExportable{
 
 	public List<MemberData> getAllMemberList(){
 		FindIterable<Document> result = collection.find();
+
+		return toMemberData(result);
+	}
+
+	public List<MemberData> getPrimaryMemberList(){
+		Bson query = Filters.eq("isPrimary", true);
+		FindIterable<Document> result = collection.find(query);
 
 		return toMemberData(result);
 	}

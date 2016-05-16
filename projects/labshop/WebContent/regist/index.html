@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ラボショップシステム</title>
+	<meta charset="utf-8"/>
+
+	<link rel="stylesheet" href="../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../css/github-markdown.css" type="text/css"/>
+
+	<script type="text/javascript" src="../dwr/engine.js"></script>
+	<script type="text/javascript" src="../dwr/util.js"></script>
+	<script type="text/javascript" src="../dwr/interface/WebSessionManager.js"></script>
+	<script type="text/javascript" src="../dwr/interface/WebItemManager.js"></script>
+	<script type="text/javascript" src="../dwr/interface/WebMemberManager.js"></script>
+	<script type="text/javascript" src="../dwr/interface/WebAccountRegister.js"></script>
+
+	<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.serialize.js"></script>
+	<script type="text/javascript" src="../js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="../js/labshop.js"></script>
+	<script type="text/javascript" src="../js/labshop.util.js"></script>
+	<script type="text/javascript" src="../js/labshop.session.js"></script>
+	<script type="text/javascript" src="../js/labshop.item.js"></script>
+	<script type="text/javascript" src="../js/labshop.member.js"></script>
+	<script type="text/javascript" src="../js/labshop.account-register.js"></script>
+
+	<script type="text/javascript" src="script.js"></script>
+
+	<script type="text/javascript">
+	var TARGET_ITEM_ID;
+	var TARGET_MEMBER_ID;
+	var TARGET_MEMBER_NAME;
+
+	$(function(){
+		init();
+	});
+
+	function aborting(msg){
+		alert(msg);
+		location.href = "/labshop";
+	}
+
+	function init(){
+		var param = labshop.getUrlParameters();
+		if( param.itemid == undefined ){
+			TARGET_ITEM_ID = prompt("アイテムIDを入力して下さい");
+		}else{
+			TARGET_ITEM_ID = param.itemid;
+		}
+		if( TARGET_ITEM_ID == undefined ){
+			aborting("アイテムIDが指定されていません");
+		}
+
+
+		labshop.getItemData(TARGET_ITEM_ID, function(ret){
+			if( ret.isErr ) aborting(ret.errMsg);
+
+			$("#itemName").text("[" + ret.item.id + "] " + ret.item.name);
+			$("#itemPrice").text(ret.item.price + "円");
+		});
+
+		labshop.getClientSessionState(function(ret){
+			if( ret.isOpened ){
+				TARGET_MEMBER_ID = ret.session.memberId;
+				TARGET_MEMBER_NAME = ret.session.memberName;
+			}
+			setAuthForm();
+		});
+	}
+
+	function setAuthForm(){
+		var wrap = $("#authFormWrap");
+		wrap.empty();
+
+		var otherLoginBtn = $("<a></a>").text("他のメンバーで購入")
+			.attr("href", "javascript:void(0)")
+			.attr("onclick", "otherMemberLoginButtonPressed()");
+
+		if( TARGET_MEMBER_ID == undefined ){
+			wrap.append(generateAuthForm("authForm"));
+		}else{
+			wrap.append(generateLoginedTable(TARGET_MEMBER_ID, TARGET_MEMBER_NAME));
+			wrap.append(
+				$("<p></p>").append("購入者を確認して下さい")
+				.append($("<br></br>"))
+				.append(otherLoginBtn)
+				.attr("class", "text-center")
+			);
+		}
+	}
+
+	function registCallback(ret){
+		if( ret.isErr ){
+			$("#errMsg").text(ret.errMsg);
+			setAuthForm();
+			return;
+		}
+
+		if( ret.account != null ){
+			location.href = "success.html?accountid=" + ret.account.id;
+		}else{
+			aborting("登録に失敗しました");
+		}
+	}
+
+	function registButtonPressed(){
+		if( TARGET_MEMBER_ID == undefined ){
+			var input = $("#authForm").serializeJson();
+			labshop.registAccountByPassword(
+				input.memberId, input.password, TARGET_ITEM_ID, registCallback);
+		}else{
+			var sid = labshop.getClientSessionId();
+			labshop.registAccountBySession(TARGET_ITEM_ID, registCallback);
+		}
+	}
+
+	function cancelButtonPressed(){
+		aborting("キャンセルされました");
+	}
+
+	function otherMemberLoginButtonPressed(){
+		TARGET_MEMBER_ID = undefined;
+		setAuthForm();
+	}
+
+
+
+
+	</script>
+</head>
+
+<body>
+	<div class="page_header"><div class="page_centering">
+		<img src="../images/logo2.png"/>
+	</div></div>
+
+	<div class="page_centering markdown-body">
+
+	<h1>購入画面</h1>
+	<h4>購入商品</h4>
+
+	<table class="text-large">
+		<tr><td rowspan="2">
+			<img src="../images/123.png" />
+		</td>
+			<td id="itemName"></td></tr><tr>
+			<td Id="itemPrice"></td></tr>
+	</table>
+
+	<h4>認証</h4>
+	<blockquote id="errMsg" style="color: red;">
+	</blockquote>
+
+	<div id="authFormWrap">
+	</div>
+
+	<div class="text-center">
+		<button type="button" style="font-size: x-large"
+			onclick="registButtonPressed()">購入する</button>
+		<button type="button" style="font-size: x-large"
+			onclick="cancelButtonPressed()">キャンセル</button>
+	</div>
+
+
+
+	</div>
+
+	<div class="page_header text-center markdown-body">
+	<i>igakilab labshop system</i></div>
+</body>
+</html>
