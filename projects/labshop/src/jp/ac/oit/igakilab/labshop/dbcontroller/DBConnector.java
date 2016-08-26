@@ -1,5 +1,8 @@
 package jp.ac.oit.igakilab.labshop.dbcontroller;
 
+import java.util.Map;
+import java.util.Set;
+
 import com.mongodb.MongoClient;
 
 public class DBConnector {
@@ -10,12 +13,15 @@ public class DBConnector {
 	private MongoClient createDefaultClient(){
 		String host = DEFAULT_HOST;
 		int port = DEFAULT_HOST_PORT;
+		flushEnvs();
 
 		String ehost = System.getenv("LABSHOP_DB_HOST");
+		System.out.println("ENV: " + ehost);
 		if( ehost != null && !ehost.equals("") ){
 			host = ehost;
 		}
 		String eport = System.getenv("LABSHOP_DB_PORT");
+		System.out.println("ENV: " + eport);
 		if( eport != null ){
 			try{
 				port = Integer.parseInt(eport);
@@ -23,7 +29,21 @@ public class DBConnector {
 				port = DEFAULT_HOST_PORT;
 			}
 		}
+
+		System.out.println(">> DB CONNECTION host:" + host + " port:" + port);
 		return new MongoClient(host, port);
+	}
+
+	private void flushEnvs(){
+		Map<String, String> params = System.getenv();
+		Set<String> keys = params.keySet();
+		for(String key : keys){
+			System.out.println("ENV " + key + ": " + params.get(key));
+		}
+	}
+
+	private void flushProps(){
+		System.getProperties().list(System.out);
 	}
 
 
