@@ -12,7 +12,7 @@ public class DBConnector {
 		int port = DEFAULT_HOST_PORT;
 
 		String ehost = System.getenv("LABSHOP_DB_HOST");
-		if( ehost != null ){
+		if( ehost != null && !ehost.equals("") ){
 			host = ehost;
 		}
 		String eport = System.getenv("LABSHOP_DB_PORT");
@@ -23,7 +23,6 @@ public class DBConnector {
 				port = DEFAULT_HOST_PORT;
 			}
 		}
-
 		return new MongoClient(host, port);
 	}
 
