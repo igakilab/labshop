@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ラボショップシステム</title>
+	<meta charset="utf-8"/>
+
+	<link rel="stylesheet" href="../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../css/github-markdown.css" type="text/css"/>
+
+	<script type="text/javascript" src="../dwr/engine.js"></script>
+	<script type="text/javascript" src="../dwr/util.js"></script>
+	<script type="text/javascript" src="../dwr/interface/WebAdminLabshopProperties.js"></script>
+
+	<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.serialize.js"></script>
+	<script type="text/javascript" src="../js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="../js/labshop.js"></script>
+	<script type="text/javascript" src="../js/labshop.util.js"></script>
+	<script type="text/javascript" src="../js/labshop.configure.js"></script>
+
+	<script type="text/javascript">
+	</script>
+</head>
+
+<body>
+	<div class="page_header">
+		<div class="page_centering">
+			<img src="../images/logo2.png"/>
+		</div>
+	</div>
+
+	<div class="page_centering markdown-body">
+		<h1>管理者用ホームページ</h1>
+
+		<h2>動作状況</h2>
+		<table>
+			<tr><th>項目</th><th>値</th></tr>
+		</table>
+
+		<h2>ショップ集計/会計</h2>
+
+		<h3>集計</h3>
+		<table>
+			<tr><td>
+				<a href="../aggregate/monthlyByMember.html">月別会員別集計</a>
+			</td></tr>
+			<tr><td>
+				<a href="../aggregate/monthlyByItem.html">月別商品別集計</a>
+			</td></tr>
+			<tr><td>
+				<a href="../aggregate/monthlyChart.html">月別売上チャート</a>
+			</td></tr>
+		</table>
+
+		<h3>会計登録</h3>
+		<table>
+			<tr><td>
+				<a href="csvTextAccountRegister.html">
+				csv形式入力画面(csv account register)</a>
+			</td></tr>
+		</table>
+
+		<h2>データベース</h2>
+		<table>
+			<tr><td>memberデータベース</td><td>
+				<a href="memberDBEdit.html">操作画面</a>
+			</td></tr>
+			<tr><td>itemデータベース</td><td>
+				<a href="itemDBEdit.html">操作画面</a>
+			</td></tr>
+			<tr><td>accountデータベース</td><td>
+				<a href="accountDBEdit.html">操作画面</a>
+			</td></tr>
+			<tr><td>sessionデータベース</td><td>
+				<a href="">操作画面</a>
+			</td></tr>
+		</table>
+
+		<h2>アプリケーション変数</h2>
+		<a href="propertyConfigure.html">
+			labshopアプリケーション変数設定画面
+		</a>
+
+
+
+	</div>
+
+	<div class="page_header text-center markdown-body">
+	<i>igakilab labshop system</i></div>
+</body>
+</html>
