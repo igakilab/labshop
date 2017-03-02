@@ -20,6 +20,16 @@
 	<script type="text/javascript" src="../js/labshop.session.js"></script>
 
 	<script type="text/javascript">
+	$(function(){
+    	labshop.getClientSessionState(checkLogin);
+    });
+
+    function checkLogin(session_state){
+    	if( !session_state.isOpened ){
+    		location.replace("../index.html");
+    		return;
+    	}
+    }
 	function getClientSessionInfoButtonPressed(){
 		$("#clientSessionInfo_isOpen").text("");
 		$("#clientSessionInfo_sessionId").text("");

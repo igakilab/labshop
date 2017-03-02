@@ -21,11 +21,18 @@
     <script type="text/javascript" src="../js/labshop.admin.dbedit.js"></script>
 
     <script type="text/javascript">
-
     $(function(){
+    	labshop.getClientSessionState(checkLogin);
+    });
+
+    function checkLogin(session_state){
+    	if( !session_state.isOpened ){
+    		location.replace("../index.html");
+    		return;
+    	}
     	initMemberDataForm();
     	updateMemberList();
-    });
+    }
 
     function initMemberDataForm(memberId){
     	if( memberId !== undefined ){

@@ -20,8 +20,16 @@
 
 	<script type="text/javascript">
 	$(function(){
+    	labshop.getClientSessionState(checkLogin);
+    });
+
+    function checkLogin(session_state){
+    	if( !session_state.isOpened ){
+    		location.replace("../index.html");
+    		return;
+    	}
 		getPropertyList();
-	});
+	}
 
 	function getPropertyList(){
 		labshop.getPropertyList(getPropertyListCallback);

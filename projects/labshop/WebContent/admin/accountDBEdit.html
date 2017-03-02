@@ -23,9 +23,17 @@
     <script type="text/javascript">
 
     $(function(){
+    	labshop.getClientSessionState(checkLogin);
+    });
+
+    function checkLogin(session_state){
+    	if( !session_state.isOpened ){
+    		location.replace("../index.html");
+    		return;
+    	}
     	initAccountDataForm();
     	updateAccountList();
-    });
+    }
 
     function initAccountDataForm(accountId){
     	if( accountId !== undefined ){

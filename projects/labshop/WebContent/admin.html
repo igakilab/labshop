@@ -11,6 +11,16 @@
     <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="js/jquery.serialize.js"></script>
     <script type="text/javascript">
+    $(function(){
+    	labshop.getClientSessionState(checkLogin);
+    });
+
+    function checkLogin(session_state){
+    	if( !session_state.isOpened ){
+    		location.replace("index.html");
+    		return;
+    	}
+    }
     </script>
   </head>
 
@@ -32,12 +42,6 @@
 
 	<h4>現在テスト中のページ</h4>
     <ul>
-    	<li><a href="member/editor.html">member/editor.html</a>(廃止予定)</li>
-    	<li><a href="item/editor.html">item/editor.html</a>(廃止予定)</li>
-    	<li><a href="account/editor.html">account/editor.html</a>(廃止予定)</li>
-    	<li><a href="test/memberPrice.html">test/memberPrice.html</a></li>
-    	<li><a href="test/itemSales.html">test/itemSales.html</a></li>
-    	<li><a href="test/sessionTest.html">test/sessionTest.html</a>(廃止予定)</li>
     	<li><a href="test/session.html">test/session.html</a></li>
     </ul>
 
@@ -53,7 +57,6 @@
     	<li><a href="admin/accountDBEdit.html">admin/accountDBEdit.html</a></li>
     	<li><a href="admin/itemDBEdit.html">admin/itemDBEdit.html</a></li>
     	<li><a href="admin/memberDBEdit.html">admin/memberDBEdit.html</a></li>
-    	<li><a href="admin/csvtextAccountRegister.html">admin/csvtextAccountRegister.html</a></li>
     </ul>
 
     <p>dwrのテストページは
