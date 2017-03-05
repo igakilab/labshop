@@ -7,6 +7,7 @@ public class MemberDataForm {
 	private String name = "unknown";
 	private boolean isAdmin;
 	private boolean isPrimary;
+	private int balance;
 
 	public MemberDataForm(){}
 
@@ -38,11 +39,19 @@ public class MemberDataForm {
 		isPrimary = b0;
 	}
 
+	public int getBalance() {
+		return balance;
+	}
+
+	public void setBalance(int balance) {
+		this.balance = balance;
+	}
 
 	public static MemberData toMemberData(MemberDataForm form){
 		MemberData data = new MemberData(form.getId(), form.getName());
 		data.setIsAdmin(form.getIsAdmin());
 		data.setIsPrimary(form.getIsPrimary());
+		data.setBalance(form.getBalance());
 		return data;
 	}
 
@@ -52,6 +61,7 @@ public class MemberDataForm {
 		form.setName(data.getName());
 		form.setIsAdmin(data.getIsAdmin());
 		form.setIsPrimary(data.getIsPrimary());
+		form.setBalance(data.getBalance());
 		return form;
 	}
 
@@ -64,4 +74,5 @@ public class MemberDataForm {
 
 		return forms;
 	}
+
 }

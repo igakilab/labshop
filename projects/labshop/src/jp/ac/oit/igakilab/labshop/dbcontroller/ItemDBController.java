@@ -28,7 +28,10 @@ implements DBCsvExportable{
 			.append("id", data.getId())
 			.append("name", data.getName())
 			.append("isOnSale", data.getIsOnSale())
-			.append("price", data.getPrice());
+			.append("price", data.getPrice())
+			.append("count", data.getCount())
+			.append("isFood", data.getIsFood())
+			.append("isDrink", data.getIsDrink());
 
 		return doc;
 	}
@@ -37,8 +40,11 @@ implements DBCsvExportable{
 		if( doc != null ){
 			ItemData data = new ItemData(
 				doc.getInteger("id", 0), doc.getString("name"));
-			data.setIsOnSale(doc.getBoolean("isOnSale", true));
+			data.setIsOnSale(doc.getBoolean("isOnSale", false));
 			data.setPrice(doc.getInteger("price", 0));
+			data.setCount(doc.getInteger("count", 0));
+			data.setIsFood(doc.getBoolean("isFood", false));
+			data.setIsDrink(doc.getBoolean("isDrink", false));
 			return data;
 		}
 

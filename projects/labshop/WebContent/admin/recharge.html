@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+  	<title>ラボショップシステム</title>
+  	<meta charset="utf-8"/>
+
+	<link rel="stylesheet" href="../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../css/github-markdown.css" type="text/css"/>
+
+	<script type="text/javascript" src="../dwr/engine.js"></script>
+	<script type="text/javascript" src="../dwr/util.js"></script>
+    <script type="text/javascript" src="../dwr/interface/WebSessionManager.js"></script>
+    <script type="text/javascript" src="../dwr/interface/WebAdminDBEditor.js"></script>
+
+	<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.serialize.js"></script>
+    <script type="text/javascript" src="../js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../js/labshop.js"></script>
+    <script type="text/javascript" src="../js/labshop.util.js"></script>
+    <script type="text/javascript" src="../js/labshop.session.js"></script>
+    <script type="text/javascript" src="../js/labshop.admin.dbedit.js"></script>
+
+    <script type="text/javascript">
+    $(function(){
+    	labshop.getClientSessionState(checkLogin);
+    });
+
+    function checkLogin(session_state){
+    	if( !session_state.isOpened ){
+    		location.replace("../index.html");
+    		return;
+    	}
+    	updateMemberList();
+    }
+
+	function updateMemberList(){
+		var sid = labshop.getClientSessionId();
+		labshop.getMemberList(sid, updateMemberListCallback);
+	}
+
+	function updateMemberListCallback(ret){
+		if( ret.isErr ){
+			alert(ret.errMsg + ": " + labshop.getClientSessionId());
+			return;
+		}
+
+		var memberList = ret.list;
+		var table = $("#memberListTable");
+
+		table.empty();
+		table.append(labshop.createLabelsRow(["ID", "メンバー名", "残金", "操作"]));
+
+		for(var i=0; i<memberList.length; i++){
+			var btn_recharge = $("<button></button>").text("入金")
+				.attr("type", "button")
+				.attr("onclick", "rechargeButtonPressed(" + memberList[i].id + ")");
+
+			table.append(
+				$("<tr></tr>").append(
+					$("<td></td>").text(memberList[i].id)
+				).append(
+					$("<td></td>").text(memberList[i].name)
+				).append(
+					$("<td></td>").text(memberList[i].balance)
+				).append(
+					$("<td></td>").append(btn_recharge)
+				)
+			);
+		}
+	}
+
+	function rechargeButtonPressed(memberId) {
+		var sid = labshop.getClientSessionId();
+		price = window.prompt("金額を入力してください", "");
+		labshop.recharge(sid, memberId, price, editExcuteCallback);
+	}
+
+	function editExcuteCallback(ret){
+		if( ret.isErr ){ alert(ret.errMsg); return;}
+		if( !ret.isSuccess ){ alert("処理が正常に終了しませんでした"); }
+		updateMemberList();
+		if( ret.isSuccess ) alert("入金が完了しました．");
+	}
+    </script>
+
+</head>
+<body>
+	<div class="page_header">
+		<div class="page_centering">
+			<img src="../images/logo2.png"/>
+		</div>
+	</div>
+
+	<div class="markdown-body page_centering">
+
+		<h3>メンバーリスト</h3>
+		<table id="memberListTable"></table>
+
+	</div>
+
+	<div class="page_header text-center markdown-body">
+	<i>igakilab labshop system</i></div>
+
+
+  </body>
+</html>

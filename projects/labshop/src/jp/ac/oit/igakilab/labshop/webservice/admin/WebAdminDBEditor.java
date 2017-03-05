@@ -7,11 +7,13 @@ import jp.ac.oit.igakilab.labshop.dbcontroller.AccountDBController;
 import jp.ac.oit.igakilab.labshop.dbcontroller.DBConnector;
 import jp.ac.oit.igakilab.labshop.dbcontroller.ItemDBController;
 import jp.ac.oit.igakilab.labshop.dbcontroller.MemberDBController;
+import jp.ac.oit.igakilab.labshop.dbcontroller.PrepaidDBController;
 import jp.ac.oit.igakilab.labshop.item.ItemData;
 import jp.ac.oit.igakilab.labshop.member.MemberData;
 import jp.ac.oit.igakilab.labshop.sessions.SessionData;
 import jp.ac.oit.igakilab.labshop.sessions.SessionManager;
 import jp.ac.oit.igakilab.labshop.shopping.AccountData;
+import jp.ac.oit.igakilab.labshop.shopping.PrepaidData;
 import jp.ac.oit.igakilab.labshop.webservice.ExcuteFailedException;
 import jp.ac.oit.igakilab.labshop.webservice.forms.AccountDataForm;
 import jp.ac.oit.igakilab.labshop.webservice.forms.ItemDataForm;
@@ -331,4 +333,20 @@ public class WebAdminDBEditor {
 			throw new ExcuteFailedException(ERRMSG_AUTH_FAILED);
 		}
 	}
+
+	public boolean recharge(String sid, int memberId, int price)
+	throws ExcuteFailedException{
+		PrepaidDBController pdb = new PrepaidDBController();
+		MemberDBController mdb = new MemberDBController();
+		if( authAdmin(pdb, sid) ){
+			mdb.recharge(memberId, price);
+			PrepaidData result = pdb.addPrepaid(new PrepaidData(memberId, price), true, true);
+			pdb.close();
+			return result != null;
+		}else{
+			pdb.close();
+			throw new ExcuteFailedException(ERRMSG_AUTH_FAILED);
+		}
+	}
+
 }

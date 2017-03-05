@@ -9,12 +9,14 @@ public class MemberData {
 	private String name;
 	private boolean isAdmin;
 	private boolean isPrimary;
+	private int balance;
 	private String passwordHash;
 
 	public MemberData(){
 		id = 0;
 		name = "unknown";
 		isAdmin = false;
+		balance = 0;
 	}
 
 	public MemberData(int i0, String n0){
@@ -58,5 +60,13 @@ public class MemberData {
 	}
 	public void setPasswordHash(String h0){
 		passwordHash = h0;
+	}
+
+	public int getBalance() {
+		return balance;
+	}
+
+	public void setBalance(int balance) {
+		this.balance = balance;
 	}
 }

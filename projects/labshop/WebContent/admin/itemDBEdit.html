@@ -56,6 +56,15 @@
 		var input_price = $("<input></input>")
 			.attr("type", "text")
 			.attr("name", "price");
+		var input_count = $("<input></input>")
+			.attr("type", "text")
+			.attr("name", "count");
+		var input_isFood = $("<input></input>")
+			.attr("type", "checkbox")
+			.attr("name", "isFood");
+		var input_isDrink = $("<input></input>")
+			.attr("type", "checkbox")
+			.attr("name", "isDrink");
 		var button_submit = $("<button></button>")
 			.attr("type", "button")
 			.attr("onclick", "addButtonPressed()")
@@ -72,6 +81,9 @@
 			input_name.val(ret.data.name);
 			if( ret.data.isOnSale ) input_isOnSale.attr("checked", "checked");
 			input_price.val(ret.data.price);
+			input_count.val(ret.data.count);
+			if( ret.data.isFood ) input_isFood.attr("checked", "checked");
+			if( ret.data.isDrink ) input_isDrink.attr("checked", "checked");
 			button_submit.attr("onclick", "updateButtonPressed()")
 				.text("更新");
 		}
@@ -84,6 +96,12 @@
 			.append(input_isOnSale);
 		$("#itemDataForm_price_cell").empty()
 			.append(input_price);
+		$("#itemDataForm_count_cell").empty()
+			.append(input_count);
+		$("#itemDataForm_isFood_cell").empty()
+			.append(input_isFood);
+		$("#itemDataForm_isDrink_cell").empty()
+			.append(input_isDrink);
 		$("#itemDataForm_submit_wrap").empty()
 			.append(button_submit);
     }
@@ -103,7 +121,7 @@
 		var table = $("#itemListTable");
 
 		table.empty();
-		table.append(labshop.createLabelsRow(["ID", "アイテム名", "販売中", "販売価格", "操作"]));
+		table.append(labshop.createLabelsRow(["ID", "アイテム名", "販売中", "販売価格", "在庫数", "食品", "飲料", "操作"]));
 
 		for(var i=0; i<itemList.length; i++){
 			var btn_edit = $("<button></button>").text("編集")
@@ -122,6 +140,12 @@
 					$("<td></td>").text(itemList[i].isOnSale)
 				).append(
 					$("<td></td>").text(itemList[i].price)
+				).append(
+					$("<td></td>").text(itemList[i].count)
+				).append(
+					$("<td></td>").text(itemList[i].isFood)
+				).append(
+					$("<td></td>").text(itemList[i].isDrink)
 				).append(
 					$("<td></td>").append(btn_edit)
 						.append(btn_remove)
@@ -192,6 +216,15 @@
 			</tr>
 			<tr><td>標準価格</td>
 				<td id="itemDataForm_price_cell"></td>
+			</tr>
+			<tr><td>在庫数</td>
+				<td id="itemDataForm_count_cell"></td>
+			</tr>
+			<tr><td>食品</td>
+				<td id="itemDataForm_isFood_cell"></td>
+			</tr>
+			<tr><td>飲料</td>
+				<td id="itemDataForm_isDrink_cell"></td>
 			</tr>
 		</table>
 		<div id="itemDataForm_submit_wrap"></div>

@@ -109,3 +109,14 @@ labshop.getAccountList = function(sid, fcallback){
 		}
 	});
 }
+
+labshop.recharge = function(sid, memberId, price, fcallback){
+	WebAdminDBEditor.recharge(sid, memberId, price, {
+		callback: function(ret){
+			fcallback({isErr: false, isSuccess: ret});
+		},
+		errorHandler: function(msg){
+			fcallback({isErr: true, errMsg: msg});
+		}
+	});
+}

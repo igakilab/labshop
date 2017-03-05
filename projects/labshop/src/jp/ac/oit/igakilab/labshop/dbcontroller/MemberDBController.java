@@ -28,6 +28,7 @@ implements DBCsvExportable{
 
 		data.setIsAdmin(doc.getBoolean("isAdmin", false));
 		data.setIsPrimary(doc.getBoolean("isPrimary", false));
+		data.setBalance(doc.getInteger("balance", 0));
 		String ph = doc.getString("passwordHash");
 		if( ph != null ){
 			data.setPasswordHash(ph);
@@ -49,7 +50,8 @@ implements DBCsvExportable{
 		doc.append("id", data.getId())
 			.append("name", data.getName())
 			.append("isAdmin", data.getIsAdmin())
-			.append("isPrimary", data.getIsPrimary());
+			.append("isPrimary", data.getIsPrimary())
+			.append("balance", data.getBalance());
 		if( data.getPasswordHash() != null ){
 			doc.append("passwordHash", data.getPasswordHash());
 		}
@@ -109,6 +111,14 @@ implements DBCsvExportable{
 	public boolean addMember(MemberData data){
 		if( canDataInsert(data) ){
 			collection.insertOne(toDocument(data));
+			return true;
+		}
+		return false;
+	}
+
+	public boolean recharge(int memberId, int price) {
+		if (isIdRegisted(memberId)) {
+			collection.updateOne(new Document("id", memberId), new Document("$inc", new Document("balance", price)));
 			return true;
 		}
 		return false;

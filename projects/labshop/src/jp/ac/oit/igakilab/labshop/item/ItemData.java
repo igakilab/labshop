@@ -9,12 +9,18 @@ public class ItemData {
 	private String name;
 	private boolean isOnSale;
 	private int price;
+	private int count;
+	private boolean isFood;
+	private boolean isDrink;
 
 	public ItemData(){
 		id = 0;
 		name = "noname";
-		setPrice(0);
-		setIsOnSale(true);
+		price = 0;
+		count = 0;
+		isOnSale = false;
+		isFood = false;
+		isDrink = false;
 	}
 
 	public ItemData(int i0, String n0){
@@ -51,5 +57,29 @@ public class ItemData {
 	}
 	public void setPrice(int p0){
 		price = p0;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	public boolean getIsFood() {
+		return isFood;
+	}
+
+	public void setIsFood(boolean isFood) {
+		this.isFood = isFood;
+	}
+
+	public boolean getIsDrink() {
+		return isDrink;
+	}
+
+	public void setIsDrink(boolean isDrink) {
+		this.isDrink = isDrink;
 	}
 }
