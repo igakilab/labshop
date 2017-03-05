@@ -72,6 +72,10 @@
 	function rechargeButtonPressed(memberId) {
 		var sid = labshop.getClientSessionId();
 		price = window.prompt("金額を入力してください", "");
+		if (price == null || price == 0 || price == "") {
+			alert("キャンセルしました．");
+			return;
+		}
 		labshop.recharge(sid, memberId, price, editExcuteCallback);
 	}
 
